@@ -1,34 +1,84 @@
-# Toxicity → Assay Recommender — one-page summary
+# Toxicity Assay Recommender - Short Plan Summary
 
-*Full detail: [`toxicity-assay-recommender.md`](toxicity-assay-recommender.md) · evidence: [`experiments/`](experiments/)*
+## One-line idea
 
-## What it is
-Paste a drug candidate's structure → the tool **re-orders your in-vitro safety-assay plan so the test most likely to catch a real liability runs first.** It does this by linking the candidate to **drugs that actually failed in the clinic for toxicity**, via the off-target mechanism they share. It prioritizes experiments — it does **not** claim a molecule is safe.
+Rank the in-vitro safety assays a team should run first for a small-molecule candidate, using evidence from known clinical failures, off-target liability signals, outcome models, and coverage-aware confidence tags.
 
-## How it works (3 layers, plain version)
-1. **Find the mechanism, not the lookalike.** A candidate rarely *looks* like the drug it will fail alongside (2D similarity of real failure-pairs is near-zero, 0.05–0.19). Instead we score the candidate against the **whole class of known ligands** for each "safety panel" off-target (hERG, 5-HT2B, …). Resembling *some* hERG blocker ⇒ likely hERG liability — even when it resembles no single one.
-2. **Weight by consequence, not just likelihood.** A hit isn't automatically a killer. Each off-target carries a **severity/action tag** (no-go / counter-screen / monitor), boosted when the candidate resembles drugs that were *actually withdrawn* for that mechanism.
-3. **Recommend the assay + tell the truth about confidence.** Map mechanism → named assay, tagged **mechanism-linked / model-predicted / abstain**. A validated engine (M1) covers off-target liabilities across cardiac/CNS/GI/endocrine/immune; wrapped models (M2) cover the liver/mito gap at a lower, clearly-labeled tier.
+## What problem it solves
 
-## What we already proved (cheap experiments, all in `experiments/`)
-- **It discriminates:** separates toxic from non-toxic — **ROC-AUC 0.89 (hERG)**, replicated **SERT 0.95, AChE 0.92, MAO-A 0.88** across transporter/enzyme classes. No "flags everything" failure.
-- **It's broad:** **37/39** safety-panel targets have enough data to serve.
-- **It finds the non-obvious:** recovers 7 real withdrawn-drug pairs that 2D structure search completely misses (e.g. terfenadine↔cisapride, z = +6.4 to the hERG class, leave-one-out).
-- **We know the limits:** liver (BSEP/mito) is a data desert for this method; truly novel scaffolds degrade (AUC → 0.67).
+Drug teams often face a broad safety panel and limited time. The tool does not claim to prove a molecule is toxic or safe. It helps answer a more practical question:
+
+**Which assays are most likely to produce an early decision signal: kill, redesign, counter-screen, or monitor?**
+
+## Core plan
+
+The system is a tiered evidence portfolio:
+
+1. **M1: Off-target mechanism linkage**
+   - Uses a secondary-pharmacology safety panel.
+   - Scores whether the candidate resembles known active ligands for targets such as hERG, 5-HT2B, SERT, AChE, MAO-A, and other rich safety targets.
+   - Links predicted target liabilities to drugs that failed or were withdrawn through the same mechanism.
+   - Output tier: **mechanism-linked**.
+
+2. **M2: Outcome and alert models**
+   - Covers areas where off-target similarity is weak: DILI, mitochondrial toxicity, reactive metabolites, and phenotypic pathway assays.
+   - Uses DILIrank/Tox21/ToxCast-style models, structural alerts, and optional ADMET-AI/ProTox endpoints.
+   - Output tier: **model-predicted / alert-based**.
+
+3. **Fusion and ranking**
+   - Combines evidence strength, target severity, clinical-failure grounding, exposure-margin context when available, assay actionability, and coverage flags.
+   - Produces a ranked assay panel with labels such as **no-go**, **counter-screen**, **monitor**, **weak coverage**, or **abstain**.
 
 ## Main selling points
-- **Grounded in real clinical failures**, not textbook alerts — "you resemble drugs that *died* for this, run this assay first."
-- **A number, not a vibe:** the demo shows we move the killer assay from rank N → **top-3**.
-- **Honest by construction:** evidence tiers + an **abstain** option turn the coverage limit into a trust feature.
-- **Broad but validated:** works across many off-target liabilities, with discrimination measured on 4 targets — not a single-endpoint predictor.
-- **Cheap to build:** retrieval + light reasoning over public data (ChEMBL, DILIrank/DICTrank); no model training needed for v1.
 
-## Main risks (and the honest answer)
-- **Curation is the real bottleneck** — labeling *why* a drug failed (organ/mechanism/provenance) is ~2 person-weeks for a 200-drug set, not a same-day merge. → scope to the auto-derivable off-target drugs first.
-- **Liver/mito/reactive-metabolite ≠ off-target binding** — the core engine can't reach them. → served by lower-tier wrapped models (M2), clearly flagged, not oversold.
-- **Novel chemotypes degrade** — it's a similarity method; a molecule far from all known ligands gets weak signal. → abstain + confidence flags.
-- **Breadth partly unmeasured** — 4 targets validated, ~33 rich ones still assumed. → Phase-3 work; don't overclaim "all 37."
-- **Some GPCRs lack clean negatives** in ChEMBL (e.g. 5-HT2B) → specificity there rests on external decoys, not a clean AUC.
+- **It improves experiment planning, not just tox scoring.**
+  The headline metric is whether the tool moves the assay that would catch a fatal liability into the top 1-3 tests.
 
-## Status
-De-risking **done** (verdict: viable, broad within off-target space, honest liver/mito gap). No product code yet. Build order: **M1 off-target core + assay-ranking demo → M2 breadth → hardening.**
+- **It is grounded in real clinical failures.**
+  The reference layer prioritizes toxicity-causal failures and withdrawals, not only assay-positive compounds.
+
+- **It is broad where public data is actually broad.**
+  The off-target engine covers much of the secondary-pharmacology safety panel across cardiac, CNS, GI, endocrine, immune, and respiratory liabilities.
+
+- **It is honest about weaker areas.**
+  Liver, mitochondrial, reactive-metabolite, dose/exposure, and idiosyncratic risks are lower-confidence modules, not overclaimed mechanism links.
+
+- **It explains recommendations.**
+  Each assay is tied to a mechanism, failed-drug precedent, evidence tier, confidence level, and actionability label.
+
+## Demo angle
+
+Run a retrospective leave-one-out demo:
+
+1. Hide the known failure label for a historical failed drug.
+2. Paste it as a candidate.
+3. Show that 2D similarity alone misses the clinically relevant relationship.
+4. Show the mechanism/off-target engine recovers the liability.
+5. Show the ranked assay plan.
+6. Report the key value metric:
+
+**The killer assay moved from rank N in a naive/default plan to top 3 in our plan.**
+
+Example: terfenadine should move hERG patch-clamp and iPSC-cardiomyocyte assays to the front because the candidate lands in hERG-liability space linked to withdrawn QT/TdP drugs.
+
+## Key validation metrics
+
+- **Top-1 / top-3 killer-assay recovery** on blinded historical failures.
+- **Mean assay-rank improvement** versus a naive broad panel or generic safety workflow.
+- **Time/cost to first decision signal** compared with an unranked assay plan.
+- Supporting metrics: per-target AUC, scaffold-split performance, precision@k, calibration, ablation, and abstention rate.
+
+## Main risks
+
+- **Curation bottleneck:** toxicity-causal failure reason, organ, mechanism, evidence link, and label tier need manual or semi-manual curation.
+- **M2 is weaker than M1:** DILI, mitochondrial, reactive-metabolite, and idiosyncratic risks are less directly mechanistic and should be tagged lower confidence.
+- **Novel chemotypes:** off-target similarity can degrade when a molecule is far from known ligand space, so applicability-domain flags and abstention are essential.
+- **Severity scoring needs expert review:** the no-go / counter-screen / monitor table must be credible, not arbitrary.
+- **Exposure margin is often missing:** off-target potency only becomes a kill signal relative to efficacious exposure.
+- **Licensing and provenance:** DrugBank, SIDER, and OFFSIDES may constrain commercial use; withdrawn status must not be confused with toxicity-causal failure.
+
+## Soundness score
+
+**8.2 / 10**
+
+The plan is scientifically plausible and product-relevant if positioned as assay triage under uncertainty. The biggest thing to prove is not absolute toxicity prediction, but that the system consistently ranks decision-relevant assays earlier than a default plan.
