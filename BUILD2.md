@@ -103,7 +103,7 @@ app/
 
 ## 5. MILESTONES (work in order; each independently demoable; commit per milestone)
 
-### [ ] N1 — 2D structure depiction (`render.py`)
+### [x] N1 — 2D structure depiction (`render.py`)
 - `render.py`: `mol_png(smiles, size=(320,240)) -> bytes|None` using RDKit
   `rdMolDraw2D.MolDraw2DCairo` (fallback `Draw.MolToImage` → PNG bytes); return `None` on
   unparseable SMILES.

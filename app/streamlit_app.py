@@ -15,8 +15,14 @@ import streamlit as st
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import json
+
 from core import EXAMPLES, build_plan, score_candidate  # noqa: E402
 from agent import narrative_report  # noqa: E402
+from render import mol_png  # noqa: E402
+
+_REF_FAILURES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                             "data", "reference_failures.json")))
 
 st.set_page_config(page_title="Toxicity Assay Recommender", page_icon="🧪", layout="wide")
 
@@ -69,6 +75,12 @@ run = st.button("Score candidate", type="primary")
 if run or smiles:
     result = score_candidate(smiles, metabolite_smiles=metabolite or None)
 
+    # ---- candidate structure depiction (N1) ----
+    cand_png = mol_png(smiles)
+    if cand_png:
+        st.markdown("### Candidate structure")
+        st.image(cand_png, caption="Candidate", width=320)
+
     # ---------------- ABSTAIN ----------------
     if result.get("status") == "abstain":
         st.error(
@@ -115,6 +127,17 @@ if run or smiles:
               delta_color="normal")
     st.caption(f"Organ / phenotype: {head['organ']}  ·  recommended action: **{head['action']}**  ·  "
                f"marginal value vs default panel: **{head['marginal_value']}**")
+
+    # ---- side-by-side: candidate vs headline linked failed drug (N1) ----
+    head_row = next((r for r in plan["rows"] if r["target_key"] == head["target_key"]), None)
+    head_drug = (head_row["evidence"][0]["name"] if head_row and head_row["evidence"] else None)
+    if cand_png and head_drug and head_drug in _REF_FAILURES:
+        drug_png = mol_png(_REF_FAILURES[head_drug]["smiles"])
+        if drug_png:
+            st.markdown("#### Candidate vs linked failed drug")
+            ic1, ic2 = st.columns(2)
+            ic1.image(cand_png, caption="Candidate", width=300)
+            ic2.image(drug_png, caption=f"{head_drug} (withdrawn/failed at {head['assay_name']})", width=300)
 
     # ---- reordered plan table ----
     st.markdown("### Reordered assay plan")
