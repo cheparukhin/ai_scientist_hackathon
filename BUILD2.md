@@ -137,7 +137,7 @@ app/
   `nearest_analog["name"] != "rimonabant"`. And `loo=False` still gives `known_analog True`
   (regression). Existing 10 tests stay green.
 
-### [ ] N3 — Scope & limits expander (`streamlit_app.py`)
+### [x] N3 — Scope & limits expander (`streamlit_app.py`)
 - Add `st.expander("Scope & limits — read before trusting this")` containing the §7/§0 caveats
   in plain language: (a) covers *off-target-mediated* failures only; blind to metabolite-driven
   and liver tox → those are the *model-predicted (M2)* modules at a lower tier; (b) narrow

@@ -55,6 +55,26 @@ st.caption(
     "(hepatotox) toxicity** - those are weak-coverage, not 'clear'."
 )
 
+# ---- scope & limits (N3) ----
+with st.expander("⚠️ Scope & limits — read before trusting this"):
+    st.markdown(
+        "- **Covers off-target-mediated failures only.** The engine ranks in-vitro assays by "
+        "structural resemblance to ligands of known safety off-targets. It is **blind to "
+        "metabolite-driven toxicity and to liver (hepatotox) injury** — those are handled, at a "
+        "**lower evidence tier**, by the *model-predicted (M2)* modules below, which are less "
+        "validated than the off-target core.\n"
+        "- **Narrow addressable population.** Most historical withdrawals are off-panel — on-target "
+        "mechanism-based, idiosyncratic hepatotox, or metabolite-driven — which this tool does not "
+        "address. The validated value is specifically the *buried off-target* slice.\n"
+        "- **No value on hERG / cardiac channels.** Standard panels already front-load hERG at "
+        "rank 1, so we add nothing there — hERG is a **validation anchor only**, not a win.\n"
+        "- **Advantage is conditional on novelty.** For a candidate that is a close analog of a "
+        "known failed drug, cheap similarity already flags it (see the *known-analog* flag); the "
+        "engine adds most value for **novel chemotypes**.\n"
+        "- **No score here is a probability of harm** — everything is enrichment z-score / "
+        "0–100 priority index / rank."
+    )
+
 # ---- input ----
 if "smiles" not in st.session_state:
     st.session_state.smiles = EXAMPLES["rimonabant"]

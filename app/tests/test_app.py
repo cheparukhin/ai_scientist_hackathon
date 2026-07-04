@@ -39,3 +39,12 @@ def test_app_renders_candidate_structure_image():
     at = _run(EXAMPLES["rimonabant"])
     assert not at.exception
     assert len(at.get("imgs")) >= 1
+
+
+# ---------------- N3 ----------------
+
+def test_app_has_scope_expander():
+    at = _run(EXAMPLES["rimonabant"])
+    assert not at.exception
+    labels = [e.label for e in at.expander]
+    assert any("Scope" in (lbl or "") for lbl in labels), labels
