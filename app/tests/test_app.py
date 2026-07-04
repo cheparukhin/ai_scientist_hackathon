@@ -117,7 +117,7 @@ def test_app_troglitazone_m2_section_and_m1_headline():
     assert "liver" in blob.lower(), blob[:600]
     # off-target ranking headline still renders (metric elements present)
     metric_labels = [m.label for m in at.metric]
-    assert "Top-priority test" in metric_labels, metric_labels
+    assert "We'd run it" in metric_labels, metric_labels
 
 
 def test_troglitazone_narrative_fallback_mentions_m2_no_probability(monkeypatch):

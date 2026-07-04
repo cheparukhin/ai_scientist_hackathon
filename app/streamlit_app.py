@@ -56,6 +56,18 @@ ACTION_PLAIN = {
 }
 ENDPOINT_PLAIN = {"hepatotox": "Liver injury", "mito": "Mitochondrial"}
 
+
+def _resemblance(z, blank_if_low=False):
+    """Plain-English 'how much does this look like drugs that failed?' — hides the raw
+    z-score, which means nothing to a non-expert. Flag threshold is z ≥ 2."""
+    if z >= 6:
+        return "Strong"
+    if z >= 3:
+        return "Moderate"
+    if z >= 2:
+        return "Weak"
+    return "" if blank_if_low else "None"
+
 # ======================================================================================
 #  HEADER
 # ======================================================================================
@@ -80,8 +92,8 @@ with lc:
             "run late.\n"
             "- **Best on genuinely new molecules.** If a candidate is nearly identical to a known "
             "bad drug, a simple lookup already catches it — we earn our keep on novel structures.\n"
-            "- **Nothing here is a probability of harm.** Everything is a *match-strength* signal "
-            "and a *ranking*."
+            "- **Nothing here is a probability of harm.** Every result is a *resemblance* to known "
+            "failed drugs and a *test ordering* — not a chance the molecule is toxic."
         )
 with rc:
     with st.expander("Track record — measured on 20 real drug failures"):
@@ -198,28 +210,30 @@ if run or smiles:
         elif flagged_head and is_herg:
             st.subheader(f"▶ {head['assay_name']} (already standard)")
             st.markdown(
-                "The strongest signal is the **heart-rhythm (hERG) test** — but every panel "
+                "The closest match is the **heart-rhythm (hERG) test** — but every panel "
                 "already runs that first, so there's little to reorder here. This tool's real "
                 "value is the *buried* off-targets, not hERG."
             )
         else:
             st.subheader("No strong off-target red flag")
             st.markdown(
-                f"Nothing scores as a clear off-target risk (the strongest is the "
-                f"**{head['assay_name']}**, on a weak signal). Treat this as **low confidence, "
-                f"not a clean bill of health** — and check the liver/metabolism section below."
+                f"This candidate doesn't clearly resemble drugs that failed for an off-target "
+                f"reason (closest is the **{head['assay_name']}**, and only weakly). Treat this as "
+                f"**low confidence, not a clean bill of health** — and check the liver/metabolism "
+                f"section below."
             )
 
-        m1, m2c, m3 = st.columns(3)
-        m1.metric("Top-priority test", head["assay_name"])
-        m2c.metric("Our order", f"#{head['our_rank']}")
         delta = head["default_rank"] - head["our_rank"]
-        m3.metric("Standard panel order", f"#{head['default_rank']}",
-                  delta=(f"+{delta} tests earlier" if delta > 0 else "already up front"),
-                  delta_color="normal")
+        head_z = head_row["z"] if head_row else 0.0
+        m1, m2c, m3 = st.columns(3)
+        m1.metric("We'd run it", f"#{head['our_rank']}", help="Where our tool puts this test in the queue. #1 = run first.")
+        m2c.metric("A standard panel runs it", f"#{head['default_rank']}", help="Where a default safety panel would run the same test.")
+        m3.metric("Looks like failed drugs?", _resemblance(head_z),
+                  help="How closely the candidate resembles drugs that failed at this target. "
+                       "Strong / Moderate / Weak — not a probability of harm.")
         if flagged_head and not is_herg and delta > 0:
             st.markdown(
-                f"➜ **≈{delta} fewer experiments** before you'd reach the go/no-go decision.  "
+                f"➜ You reach the go/no-go decision **≈{delta} experiments sooner**.  "
                 f"Recommended call: **{ACTION_PLAIN.get(head['action'], head['action'])}**."
             )
 
@@ -281,27 +295,27 @@ if run or smiles:
 
     # ---------------- FULL REORDERED PLAN ----------------
     st.markdown("### The full reordered test plan")
-    st.caption("Every test in the panel, reordered. **#1 = run first.** "
-               "*Match strength* is how strongly the candidate resembles known bad actors at that "
-               "target (higher = stronger; not a probability).")
+    st.caption("Every test in the panel, in the order we'd run them. **#1 = run first.** "
+               "The last column says how much this candidate looks like drugs that failed at that "
+               "target — blank means no meaningful resemblance.")
     rows = plan["rows"]
     df = pd.DataFrame([{
-        "#": r["our_rank"],
+        "Run in this order": r["our_rank"],
         "Safety test": r["assay_name"],
         "What to do": ACTION_PLAIN.get(r["action"], r["action"]),
-        "Match strength": r["z"],
-        "Standard order": r["default_rank"],
-        "Moved earlier": r["delta"],
         "Organ / effect": r["organ"],
+        "A standard panel runs it": r["default_rank"],
+        "Spots moved up": r["delta"],
+        "Looks like failed drugs?": _resemblance(r["z"], blank_if_low=True),
     } for r in rows])
     st.dataframe(
         df, hide_index=True, width="stretch",
         column_config={
-            "Match strength": st.column_config.NumberColumn(
-                help="Std deviations above a typical drug. Higher = stronger match to known "
-                     "bad actors. Not a probability of harm.", format="%.1f"),
-            "Moved earlier": st.column_config.NumberColumn(
-                help="Positions moved up vs a standard panel.", format="%+d"),
+            "Run in this order": st.column_config.NumberColumn(help="#1 = run first."),
+            "A standard panel runs it": st.column_config.NumberColumn(
+                help="Where a default safety panel would run this test."),
+            "Spots moved up": st.column_config.NumberColumn(
+                help="How many places earlier we run it vs a standard panel.", format="%+d"),
         })
 
     # mechanism map — optional, tucked in an expander so it never clutters the main flow
@@ -326,16 +340,14 @@ if run or smiles:
     lcol, rcol = st.columns(2)
 
     with lcol:
-        st.markdown("**Organ-toxicity look-alikes**")
+        st.markdown("**Does it look like drugs toxic to these organs?**")
         ep_df = pd.DataFrame([{
-            "Concern": ENDPOINT_PLAIN.get(ep, ep),
-            "Signal": d["z"],
-            "Flag": "⚠️ elevated" if d["flagged"] else "—",
+            "Organ concern": ENDPOINT_PLAIN.get(ep, ep),
+            "Resemblance": ("⚠️ " if d["flagged"] else "") + (_resemblance(d["z"]) or "None"),
             "Most similar known-toxic drug": f"{d['nearest']['name'].title()} "
                                              f"({int(d['nearest']['sim'] * 100)}% similar)",
         } for ep, d in m2["endpoints"].items()])
-        st.dataframe(ep_df, hide_index=True, width="stretch",
-                     column_config={"Signal": st.column_config.NumberColumn(format="%.1f")})
+        st.dataframe(ep_df, hide_index=True, width="stretch")
 
     with rcol:
         st.markdown("**Reactive-metabolite alerts** — structural hunches to confirm in the lab")
