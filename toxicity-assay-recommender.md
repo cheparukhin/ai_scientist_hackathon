@@ -10,11 +10,12 @@
 
 - **Event:** a bio × AI hackathon. Deliverable is an **MVP + investor/judge-facing demo** (§6), not a validated product.
 - **The core value thesis — fail faster, fail cheaper.** In drug discovery most candidates die, and the expensive waste is *how long and how much you spend before the kill decision*. A broad in-vitro secondary-pharmacology panel is run largely in parallel or in a generic default order. If a candidate is doomed by a specific off-target liability, the assay that proves it is often **not** the one you run first. This tool reorders the plan so the program-ending experiment comes first → **less time, less spend, fewer animals, earlier go/no-go.** The product metric is **expected assays-to-culprit** (how many experiments until you hit the real liability), and we lower it.
-- **De-risking is DONE — 7 experiments, all on real ChEMBL data** (scripts + results in **[`experiments/`](experiments/)** and **[`experiments/derisk/`](experiments/derisk/)**). Headline results below; details in §4. The verdict: **build it — the value is real, but narrower and more honest than a first pass would claim.**
-- **What the de-risking changed about the pitch (both forced by our own data):**
+- **De-risking is DONE — 8 experiments, all on real ChEMBL data** (scripts + results in **[`experiments/`](experiments/)** and **[`experiments/derisk/`](experiments/derisk/)**). Headline results below; details in §4. The verdict: **build it — the value is real, but narrower and more honest than a first pass would claim.**
+- **What the de-risking changed about the pitch (all forced by our own data):**
   1. **The value is *buried* off-target liabilities, explicitly NOT hERG.** A standard panel already front-loads hERG; there we add nothing and are sometimes worse. Our measured value is on liabilities a default panel buries at rank 11–15 — **5-HT2B valvulopathy, CB1 psychiatric tox, 5-HT3 colitis** — which we lift to rank 1. Do **not** lead with the terfenadine/hERG story; keep it only as a clean recovery-validation anchor.
   2. **The engine's advantage is conditional on *novelty*.** Against a candidate that already resembles a known failure, cheap 2D similarity matches us. Our engine earns its keep — and wins decisively — on **novel chemotypes with no analog in the failure database**, which is precisely the real use case. State the claim conditionally; a judge who runs the obvious ablation will otherwise catch an overclaim.
-- **Repo state:** this doc, a short **[`SUMMARY.md`](SUMMARY.md)**, and **[`experiments/`](experiments/)** (feasibility scripts + the 7 de-risking experiments under `experiments/derisk/`, each with a `FINDINGS.md`). No product code yet — the pipeline (§4) is greenfield.
+  3. **The addressable population is *narrow* — the value metric does not generalize to all withdrawn drugs.** A blind hold-out (drugs *and* culprit labels selected by ChEMBL, not us — §4) confirmed the *magnitude* (assays-to-culprit 4.7 vs 11.4) but exposed the scope: when an objective source defines the culprit, most withdrawn drugs' dominant panel activity is **on-target pharmacology** or their withdrawal cause is **off-panel** (hepatotoxicity dominates: 224/1,014 warnings, R4's blind spot). Drugs withdrawn *specifically for an R4-reachable secondary-pharmacology off-target* (the pergolide/rimonabant/fen-phen class) are a **real but narrow slice**. Frame the value as *"for candidates whose failure mechanism is a secondary-pharmacology off-target"* — **not** "assays-to-culprit 11→4 across withdrawn drugs" broadly.
+- **Repo state:** this doc, a short **[`SUMMARY.md`](SUMMARY.md)**, and **[`experiments/`](experiments/)** (feasibility scripts + the 8 de-risking experiments under `experiments/derisk/`, each with a `FINDINGS.md`). No product code yet — the pipeline (§4) is greenfield.
 - **Parameters still TBD:** timeframe/deadline; team size & strengths; explicit judging criteria; target LLM + infra.
 - **Data caveat:** dataset sizes are **last-published figures** and several conflict across mirrors (e.g. ClinTox is **1,484** on TDC and **1,491** in the MoleculeNet paper). **Re-confirm every count and DOI against the primary source before quoting in a pitch.**
 
@@ -122,6 +123,15 @@ For each safety target, fetch its known actives from ChEMBL and score a query by
 | **Cardiac_hERG (n=10)** | 5 / 10 / 10 | 3.6 / 1.0 |
 
 **★ The value number:** on buried off-target liabilities, we move the killer assay from a mean rank of **11.3 → 3.8** — roughly a **3× reduction in assays-to-culprit**, i.e. in experiments (time, cost, animals) spent before the kill decision. **6/10 are genuine non-obvious wins** — Ours puts the killer in top-3 *and* the default panel does not — spanning **three distinct mechanisms**: 5-HT2B valvulopathy (pergolide, cabergoline, methysergide), CB1 psychiatric tox (rimonabant z=+10.8, taranabant z=+9.6), 5-HT3 colitis (alosetron). The earlier n=6 result (one win, pergolide) generalized.
+
+> **Scope qualifier (from the blind hold-out below — read before quoting the number).** This 11.3→3.8 is measured on cases where the culprit *is* a secondary-pharmacology off-target we can reach. It is **not** a claim about withdrawn drugs in general — most are withdrawn for off-panel liver/hematologic/idiosyncratic tox, or their dominant panel activity is on-target pharmacology. Quote the number as *"for candidates whose failure mechanism is an off-target liability,"* never unqualified.
+
+### Blind hold-out — the number survives external selection, but the addressable class is narrow
+*(`experiments/derisk/blind_holdout/` — the rigor check against the "you cherry-picked" critique.)*
+
+To remove human selection bias, **ChEMBL selected the drugs** (withdrawn `drug_warning` table → 224 safety withdrawals → 20 with a measured panel culprit, forced disjoint from our hand-picked set) **and ChEMBL labeled the culprit** (most-potent measured pChEMBL≥6 panel target). Result: buried top-3 **12/19 vs default 0/19**, assays-to-culprit **4.68 vs 11.37** — the magnitude **replicates** on a set we neither picked nor labeled, so the cherry-pick critique on *selection* is defeated.
+
+**But external labeling revealed the honest boundary:** only **1/20 drugs** is cleanly anchored to its actual withdrawal cause; for the other 17 the "objective culprit" is the drug's **on-target pharmacology** (4 NSAIDs→COX-1, remoxipride→D2, indalpine→SERT) or its true cause is **off-panel** (nefazodone/troglitazone/ketoconazole → withdrawn for hepatotoxicity, which R4 cannot reach). The one clean buried off-target surfaced on an unpicked drug: **lorcaserin → 5-HT2B**. **Takeaway:** the method is valid and the default panel genuinely buries non-cardiac liabilities, but the class of "withdrawn *for* an R4-reachable off-target" is a narrow slice of all withdrawals — position accordingly.
 
 **The honest boundary, measured not asserted:**
 - **On hERG/cardiac we add nothing and are sometimes worse** (Ours 5/10 vs default 10/10). Real panels already front-load hERG at rank 1; for phenothiazines the drug's own D2 on-target outranks hERG, and for fluoroquinolones ligand-similarity doesn't capture the atypical hERG block. **The tool's value is explicitly not hERG.**
@@ -290,7 +300,7 @@ Ranking ≈ (hit confidence) × (target severity) × (T1 grounding) × (margin, 
 
 ## 5. Roadmap (revised after de-risking)
 
-Phase 0 de-risking is **done and decisive** (7 experiments). Build the tiered portfolio: ship the validated off-target core (M1) framed as a cost-to-kill reorderer, add M2 for breadth, then harden.
+Phase 0 de-risking is **done and decisive** (8 experiments). Build the tiered portfolio: ship the validated off-target core (M1) framed as a cost-to-kill reorderer, add M2 for breadth, then harden.
 
 **Phase 0 — De-risking (DONE ✅ — §4 + [`experiments/`](experiments/) + [`experiments/derisk/`](experiments/derisk/))**
 - [x] 2D fails on mechanistic pairs; 3D/USRCAT a weak supplement.
@@ -300,6 +310,7 @@ Phase 0 de-risking is **done and decisive** (7 experiments). Build the tiered po
 - [x] **Necessity ablation:** R4 wins the novel-chemotype regime (naive 0/20 vs R4 12/20 strict-LOO); ties/loses where an analog exists.
 - [x] **ProTox competitor check:** partial cardiac overlap, structurally can't localize buried targets, no ranked panel → not redundant.
 - [x] **Novelty search log:** triple-combination white space survives; differentiate OTSA / Albert 2025 / ToxEvaluator.
+- [x] **Blind hold-out** (ChEMBL selects drugs *and* culprit labels): magnitude replicates (4.7 vs 11.4) but the addressable class is narrow — most withdrawals are off-panel/on-target. → qualify the value claim.
 - [x] **Abstain rule:** descriptor-box gate works (0/31, 0/11); NN rule fails. **Metabolite rule:** MAX(parent, metabolite), partial rescue.
 - → **Verdict: build it. Value is real, on buried off-target liabilities, for novel candidates. Honest about hERG (no value) and metabolite tox (blind).**
 
@@ -359,8 +370,9 @@ Framed honestly as a **retrospective leave-one-out demo** — hide a known failu
 7. **Off-target prediction is itself a model** — worst for novel scaffolds (AUC 0.667 diverse-isolated holdout vs 0.913 pooled). → report confidence + applicability-domain flag.
 8. **Some clinical killers are NOT off-target binding** — reactive/CYP metabolites, idiosyncratic mito tox, dose/exposure. Measured: our only misses (fenfluramine, dexfenfluramine, sibutramine) are metabolite-active. → these are the **M2 outcome-model modules**, served at a **lower evidence tier**; liver/mito is a *designed module boundary*, but M2 is less validated than M1 — don't oversell it.
 9. **Generalization.** Never quote a random-split number; report scaffold-split CV + AD abstention.
-10. **Proprietary gap.** Cleanest discontinued-for-safety data (Pharmaprojects/Citeline, Pharmapendium) is paywalled — note as gold standard if licensed.
-11. **Licenses:** DrugBank / SIDER / OFFSIDES non-commercial — flag for any commercialization.
+10. **Narrow addressable population.** Measured in a blind hold-out (§4): drugs withdrawn *specifically for an R4-reachable off-target* are a minority — the objective withdrawn population is dominated by off-panel hepato/hematologic/carcinogenic tox and on-target pharmacology. → the value metric (assays-to-culprit) applies to *off-target-mediated* failures, not "all safety failures"; size the market/claim on that slice, not on total withdrawals.
+11. **Proprietary gap.** Cleanest discontinued-for-safety data (Pharmaprojects/Citeline, Pharmapendium) is paywalled — note as gold standard if licensed.
+12. **Licenses:** DrugBank / SIDER / OFFSIDES non-commercial — flag for any commercialization.
 
 ---
 
@@ -406,4 +418,5 @@ All in [`experiments/`](experiments/) (env: `uv` venv, RDKit 2026.03.3). Each `e
 | **ProTox competitor** | `derisk/protox/` | partial cardiac; can't localize buried; not redundant |
 | Abstain / applicability domain | `derisk/abstain/` | descriptor-box rule 0/31, 0/11; NN rule fails |
 | Metabolite handling | `derisk/metabolite/` | MAX(parent,metab); fenfluramine +0.35→+1.22 |
+| **Blind hold-out (external selection + labels)** | `derisk/blind_holdout/` | magnitude replicates (4.7 vs 11.4); addressable class narrow — off-panel/on-target dominate |
 | Novelty search log | `novelty-search-log.md` | triple-combination white space survives |

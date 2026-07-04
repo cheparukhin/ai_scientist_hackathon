@@ -1,0 +1,513 @@
+{
+ "CHEMBL1077": {
+  "chembl_id": "CHEMBL1077",
+  "name": "BROMFENAC",
+  "smiles": "Nc1c(CC(=O)O)cccc1C(=O)c1ccc(Br)cc1",
+  "inchikey": "ZBPLOVFIXSTCRZ-UHFFFAOYSA-N",
+  "skeleton": "ZBPLOVFIXSTCRZ",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "Severe hepatitis and liver failure (some requiring transplantation); Hepatic Failure; Off-Label Abuse || Severe hepatitis and liver failure (some requiring transplantation); Hepatic Failure; Off-Label Abuse || Severe hepatitis and liver failure (some requiring transplantation); Hepatic Failure; Off-Label Abuse || Severe hepatitis and liver failure (some requiring transplantation); Hepatic Failure;",
+  "measured_culprits": {
+   "COX1_CHEMBL221": 8.07
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "COX1_CHEMBL221"
+  ],
+  "primary_culprit": "COX1_CHEMBL221",
+  "max_pchembl_culprit": "COX1_CHEMBL221",
+  "category": "buried"
+ },
+ "CHEMBL1177": {
+  "chembl_id": "CHEMBL1177",
+  "name": "PEMOLINE",
+  "smiles": "NC1=NC(=O)C(c2ccccc2)O1",
+  "inchikey": "NRNCYVBFPDDJNE-UHFFFAOYSA-N",
+  "skeleton": "NRNCYVBFPDDJNE",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "Liver toxicity || Hepatic toxicity || Liver toxicity || Hepatic toxicity",
+  "measured_culprits": {
+   "DAT_CHEMBL238": 6.38
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "DAT_CHEMBL238"
+  ],
+  "primary_culprit": "DAT_CHEMBL238",
+  "max_pchembl_culprit": "DAT_CHEMBL238",
+  "category": "buried"
+ },
+ "CHEMBL1411979": {
+  "chembl_id": "CHEMBL1411979",
+  "name": "METHAPYRILENE",
+  "smiles": "CN(C)CCN(Cc1cccs1)c1ccccn1",
+  "inchikey": "HNJJXZKZRAWDPF-UHFFFAOYSA-N",
+  "skeleton": "HNJJXZKZRAWDPF",
+  "warning_classes": [
+   "carcinogenicity"
+  ],
+  "warning_desc": "suspected carcinogenicity || was shown to be a potent carcinogen || health risks associated with use || Animal carcinogenicity (rodents) || Animal carcinogenicity (rodents)",
+  "measured_culprits": {
+   "H1_CHEMBL231": 8.74,
+   "SERT_CHEMBL228": 6.97,
+   "5HT2A_CHEMBL224": 6.75,
+   "5HT2B_CHEMBL1833": 6.27,
+   "M2_CHEMBL211": 6.23
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "H1_CHEMBL231"
+  ],
+  "primary_culprit": "H1_CHEMBL231",
+  "max_pchembl_culprit": "H1_CHEMBL231",
+  "category": "buried"
+ },
+ "CHEMBL157101": {
+  "chembl_id": "CHEMBL157101",
+  "name": "KETOCONAZOLE",
+  "smiles": "CC(=O)N1CCN(c2ccc(OCC3COC(Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1",
+  "inchikey": "XMAYWYJOQHXEEK-UHFFFAOYSA-N",
+  "skeleton": "XMAYWYJOQHXEEK",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "Liver toxicity is more frequent and severe than with other antifungal treatments; Elevated risk of early onset liver damage || Liver toxicity is more frequent and severe than with other antifungal treatments; Elevated risk of early onset liver damage",
+  "measured_culprits": {
+   "SERT_CHEMBL228": 6.55
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "SERT_CHEMBL228"
+  ],
+  "primary_culprit": "SERT_CHEMBL228",
+  "max_pchembl_culprit": "SERT_CHEMBL228",
+  "category": "buried"
+ },
+ "CHEMBL1909072": {
+  "chembl_id": "CHEMBL1909072",
+  "name": "PIPAMAZINE",
+  "smiles": "NC(=O)C1CCN(CCCN2c3ccccc3Sc3ccc(Cl)cc32)CC1",
+  "inchikey": "OSJJYEUEJRVVOD-UHFFFAOYSA-N",
+  "skeleton": "OSJJYEUEJRVVOD",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "associated with hepatic lesions || associated with hepatic lesions || associated with hepatic lesions",
+  "measured_culprits": {
+   "5HT2A_CHEMBL224": 9.26,
+   "H1_CHEMBL231": 8.94,
+   "D2_CHEMBL217": 8.87,
+   "5HT2B_CHEMBL1833": 7.51,
+   "SERT_CHEMBL228": 6.46,
+   "NET_CHEMBL222": 6.35
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "5HT2A_CHEMBL224"
+  ],
+  "primary_culprit": "5HT2A_CHEMBL224",
+  "max_pchembl_culprit": "5HT2A_CHEMBL224",
+  "category": "buried"
+ },
+ "CHEMBL22242": {
+  "chembl_id": "CHEMBL22242",
+  "name": "REMOXIPRIDE",
+  "smiles": "CCN1CCC[C@H]1CNC(=O)c1c(OC)ccc(Br)c1OC",
+  "inchikey": "GUJRSXAPGDDABA-NSHDSACASA-N",
+  "skeleton": "GUJRSXAPGDDABA",
+  "warning_classes": [
+   "hematological toxicity"
+  ],
+  "warning_desc": "Aplastic anemia || aplastic anaemia || Aplastic anemia",
+  "measured_culprits": {
+   "D2_CHEMBL217": 8.92
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "D2_CHEMBL217"
+  ],
+  "primary_culprit": "D2_CHEMBL217",
+  "max_pchembl_culprit": "D2_CHEMBL217",
+  "category": "buried"
+ },
+ "CHEMBL24072": {
+  "chembl_id": "CHEMBL24072",
+  "name": "PRENYLAMINE",
+  "smiles": "CC(Cc1ccccc1)NCCC(c1ccccc1)c1ccccc1",
+  "inchikey": "IFFPICMESYHZPQ-UHFFFAOYSA-N",
+  "skeleton": "IFFPICMESYHZPQ",
+  "warning_classes": [
+   "cardiotoxicity"
+  ],
+  "warning_desc": "Polymorphic Ventricular Tachycardia and Death || reports of polymorphic ventricular tachycardia || Polymorphic Ventricular Tachycardia and Death",
+  "measured_culprits": {
+   "hERG_CHEMBL240": 7.19
+  },
+  "organ_target_set": [
+   "Cav12_CHEMBL1940",
+   "Nav15_CHEMBL1980",
+   "hERG_CHEMBL240"
+  ],
+  "culprit_type": "organ",
+  "culprit_set": [
+   "hERG_CHEMBL240"
+  ],
+  "primary_culprit": "hERG_CHEMBL240",
+  "max_pchembl_culprit": "hERG_CHEMBL240",
+  "category": "cardiac"
+ },
+ "CHEMBL273575": {
+  "chembl_id": "CHEMBL273575",
+  "name": "NOMIFENSINE",
+  "smiles": "CN1Cc2c(N)cccc2C(c2ccccc2)C1",
+  "inchikey": "XXPANQJNYNUNES-UHFFFAOYSA-N",
+  "skeleton": "XXPANQJNYNUNES",
+  "warning_classes": [
+   "hematological toxicity",
+   "hepatotoxicity",
+   "immune system toxicity"
+  ],
+  "warning_desc": "Serious hypersensitive reactions; Hemolytic Anemia; Hepatotoxicity || rare cases of haemolytic anaemia - sometimes fatal - thrombocytopenia, hepatotoxicity || Serious hypersensitive reactions; Hemolytic Anemia; Hepatotoxicity || rare cases of haemolytic anaemia - sometimes fatal - thrombocytopenia, hepatotoxicity || Serious hypersensitive reactions; Hemolytic Anemia; Hepatotoxicity || Serious hype",
+  "measured_culprits": {
+   "NET_CHEMBL222": 8.42,
+   "DAT_CHEMBL238": 8.0,
+   "SERT_CHEMBL228": 6.06
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "NET_CHEMBL222"
+  ],
+  "primary_culprit": "NET_CHEMBL222",
+  "max_pchembl_culprit": "NET_CHEMBL222",
+  "category": "buried"
+ },
+ "CHEMBL276520": {
+  "chembl_id": "CHEMBL276520",
+  "name": "INDALPINE",
+  "smiles": "c1ccc2c(CCC3CCNCC3)c[nH]c2c1",
+  "inchikey": "SADQVAVFGNTEOD-UHFFFAOYSA-N",
+  "skeleton": "SADQVAVFGNTEOD",
+  "warning_classes": [
+   "hematological toxicity"
+  ],
+  "warning_desc": "Agranulocytosis || agranulocytosis and severe neutropenia || agranulocytosis and severe neutropenia",
+  "measured_culprits": {
+   "SERT_CHEMBL228": 7.52
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "SERT_CHEMBL228"
+  ],
+  "primary_culprit": "SERT_CHEMBL228",
+  "max_pchembl_culprit": "SERT_CHEMBL228",
+  "category": "buried"
+ },
+ "CHEMBL291338": {
+  "chembl_id": "CHEMBL291338",
+  "name": "3,3',4',5-TETRACHLOROSALICYLANILIDE",
+  "smiles": "O=C(Nc1ccc(Cl)c(Cl)c1)c1cc(Cl)cc(Cl)c1O",
+  "inchikey": "SJQBHPJLLIJASD-UHFFFAOYSA-N",
+  "skeleton": "SJQBHPJLLIJASD",
+  "warning_classes": [
+   "dermatological toxicity"
+  ],
+  "warning_desc": "potent photosensitizers and can cause disabling skin disorders || potent photosensitizers and can cause disabling skin disorders || Photosensitivity reactions || Photosensitivity reactions",
+  "measured_culprits": {
+   "COX1_CHEMBL221": 6.18
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "COX1_CHEMBL221"
+  ],
+  "primary_culprit": "COX1_CHEMBL221",
+  "max_pchembl_culprit": "COX1_CHEMBL221",
+  "category": "buried"
+ },
+ "CHEMBL295124": {
+  "chembl_id": "CHEMBL295124",
+  "name": "BERBERINE",
+  "smiles": "COc1ccc2cc3[n+](cc2c1OC)CCc1cc2c(cc1-3)OCO2",
+  "inchikey": "YBHILYKTIRIUTE-UHFFFAOYSA-N",
+  "skeleton": "YBHILYKTIRIUTE",
+  "warning_classes": [
+   "hematological toxicity",
+   "hepatotoxicity",
+   "neurotoxicity"
+  ],
+  "warning_desc": "Jaundice, haemolytic anemia and kernicterus with brain damage in infants with glucose 6-phosphate dehydrogenase deficiency who were exposed either in utero or post-natally || Jaundice, haemolytic anemia and kernicterus with brain damage in infants with glucose 6-phosphate dehydrogenase deficiency who were exposed either in utero or post-natally || Jaundice, haemolytic anemia and kernicterus with b",
+  "measured_culprits": {
+   "AChE_CHEMBL220": 7.0
+  },
+  "organ_target_set": [
+   "5HT2A_CHEMBL224",
+   "AChE_CHEMBL220",
+   "CB1_CHEMBL218",
+   "D2_CHEMBL217",
+   "DAT_CHEMBL238",
+   "H1_CHEMBL231",
+   "M2_CHEMBL211",
+   "MAOA_CHEMBL1951",
+   "NET_CHEMBL222",
+   "SERT_CHEMBL228",
+   "muOpioid_CHEMBL233"
+  ],
+  "culprit_type": "organ",
+  "culprit_set": [
+   "AChE_CHEMBL220"
+  ],
+  "primary_culprit": "AChE_CHEMBL220",
+  "max_pchembl_culprit": "AChE_CHEMBL220",
+  "category": "buried"
+ },
+ "CHEMBL360328": {
+  "chembl_id": "CHEMBL360328",
+  "name": "LORCASERIN",
+  "smiles": "C[C@H]1CNCCc2ccc(Cl)cc21",
+  "inchikey": "XTTZERNUQAFMOF-QMMMGPOBSA-N",
+  "skeleton": "XTTZERNUQAFMOF",
+  "warning_classes": [
+   "carcinogenicity"
+  ],
+  "warning_desc": "Carcinogenicity",
+  "measured_culprits": {
+   "5HT2B_CHEMBL1833": 8.89,
+   "5HT2A_CHEMBL224": 8.89
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "5HT2B_CHEMBL1833"
+  ],
+  "primary_culprit": "5HT2B_CHEMBL1833",
+  "max_pchembl_culprit": "5HT2B_CHEMBL1833",
+  "category": "buried"
+ },
+ "CHEMBL395110": {
+  "chembl_id": "CHEMBL395110",
+  "name": "MEPAZINE",
+  "smiles": "CN1CCCC(CN2c3ccccc3Sc3ccccc32)C1",
+  "inchikey": "CBHCDHNUZWWAPP-UHFFFAOYSA-N",
+  "skeleton": "CBHCDHNUZWWAPP",
+  "warning_classes": [
+   "gastrointestinal toxicity",
+   "hepatotoxicity",
+   "immune system toxicity",
+   "nephrotoxicity",
+   "neurotoxicity",
+   "vascular toxicity"
+  ],
+  "warning_desc": "associated with granulocytopenia, granulocytosis, paralytic ileus, urinary retention, seizures, hypotension, and jaundice || associated with granulocytopenia, granulocytosis, paralytic ileus, urinary retention, seizures, hypotension, and jaundice || associated with granulocytopenia, granulocytosis, paralytic ileus, urinary retention, seizures, hypotension, and jaundice || associated with granulocy",
+  "measured_culprits": {
+   "H1_CHEMBL231": 8.51,
+   "5HT2A_CHEMBL224": 6.96,
+   "M2_CHEMBL211": 6.7,
+   "5HT2B_CHEMBL1833": 6.49
+  },
+  "organ_target_set": [
+   "5HT2A_CHEMBL224",
+   "5HT3_CHEMBL1899",
+   "AChE_CHEMBL220",
+   "CB1_CHEMBL218",
+   "COX1_CHEMBL221",
+   "D2_CHEMBL217",
+   "DAT_CHEMBL238",
+   "H1_CHEMBL231",
+   "M2_CHEMBL211",
+   "MAOA_CHEMBL1951",
+   "NET_CHEMBL222",
+   "SERT_CHEMBL228",
+   "alpha1A_CHEMBL229",
+   "muOpioid_CHEMBL233"
+  ],
+  "culprit_type": "organ",
+  "culprit_set": [
+   "5HT2A_CHEMBL224",
+   "H1_CHEMBL231",
+   "M2_CHEMBL211"
+  ],
+  "primary_culprit": "H1_CHEMBL231",
+  "max_pchembl_culprit": "H1_CHEMBL231",
+  "category": "buried"
+ },
+ "CHEMBL404108": {
+  "chembl_id": "CHEMBL404108",
+  "name": "LUMIRACOXIB",
+  "smiles": "Cc1ccc(Nc2c(F)cccc2Cl)c(CC(=O)O)c1",
+  "inchikey": "KHPKQFYUPIUARC-UHFFFAOYSA-N",
+  "skeleton": "KHPKQFYUPIUARC",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "Liver injury || Serious liver-related adverse events || serious liver side effects || Liver injury || Serious liver-related adverse events || serious liver side effects",
+  "measured_culprits": {
+   "COX1_CHEMBL221": 8.15
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "COX1_CHEMBL221"
+  ],
+  "primary_culprit": "COX1_CHEMBL221",
+  "max_pchembl_culprit": "COX1_CHEMBL221",
+  "category": "buried"
+ },
+ "CHEMBL404849": {
+  "chembl_id": "CHEMBL404849",
+  "name": "SULOCTIDIL",
+  "smiles": "CCCCCCCCNC(C)C(O)c1ccc(SC(C)C)cc1",
+  "inchikey": "BFCDFTHTSVTWOG-UHFFFAOYSA-N",
+  "skeleton": "BFCDFTHTSVTWOG",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "Hepatotoxicity || Hepatotoxicity || hepatitis || hepatitis",
+  "measured_culprits": {
+   "5HT2B_CHEMBL1833": 6.22,
+   "SERT_CHEMBL228": 6.18
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "5HT2B_CHEMBL1833"
+  ],
+  "primary_culprit": "5HT2B_CHEMBL1833",
+  "max_pchembl_culprit": "5HT2B_CHEMBL1833",
+  "category": "buried"
+ },
+ "CHEMBL408": {
+  "chembl_id": "CHEMBL408",
+  "name": "TROGLITAZONE",
+  "smiles": "Cc1c(C)c2c(c(C)c1O)CCC(C)(COc1ccc(CC3SC(=O)NC3=O)cc1)O2",
+  "inchikey": "GXPHKUHSUJUWKP-UHFFFAOYSA-N",
+  "skeleton": "GXPHKUHSUJUWKP",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "hepatic necrosis and failure, with a mean time to onset of 3 months. || hepatic necrosis and failure, with a mean time to onset of 3 months. || Hepatotoxicity || Severe hepatic adverse effects || hepatic necrosis and failure, with a mean time to onset of 3 months. || Severe hepatic adverse effects || Hepatotoxicity || hepatic necrosis and failure, with a mean time to onset of 3 months.",
+  "measured_culprits": {
+   "5HT2B_CHEMBL1833": 6.08
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "5HT2B_CHEMBL1833"
+  ],
+  "primary_culprit": "5HT2B_CHEMBL1833",
+  "max_pchembl_culprit": "5HT2B_CHEMBL1833",
+  "category": "buried"
+ },
+ "CHEMBL442": {
+  "chembl_id": "CHEMBL442",
+  "name": "ERGOTAMINE",
+  "smiles": "CN1C[C@H](C(=O)N[C@]2(C)O[C@@]3(O)[C@@H]4CCCN4C(=O)[C@H](Cc4ccccc4)N3C2=O)C=C2c3cccc4[nH]cc(c34)C[C@H]21",
+  "inchikey": "XCGSFFUVFURLIX-VFGNJEKYSA-N",
+  "skeleton": "XCGSFFUVFURLIX",
+  "warning_classes": [
+   "cardiotoxicity",
+   "vascular toxicity"
+  ],
+  "warning_desc": "benefits from using this medicine no longer outweigh the risks of harm. Cafergot can cause serious effects on the heart and arteries, especially in older people || benefits from using this medicine no longer outweigh the risks of harm. Cafergot can cause serious effects on the heart and arteries, especially in older people",
+  "measured_culprits": {
+   "D2_CHEMBL217": 8.84,
+   "5HT2A_CHEMBL224": 8.73,
+   "5HT2B_CHEMBL1833": 8.66
+  },
+  "organ_target_set": [
+   "Cav12_CHEMBL1940",
+   "NET_CHEMBL222",
+   "Nav15_CHEMBL1980",
+   "alpha1A_CHEMBL229",
+   "hERG_CHEMBL240"
+  ],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "D2_CHEMBL217"
+  ],
+  "primary_culprit": "D2_CHEMBL217",
+  "max_pchembl_culprit": "D2_CHEMBL217",
+  "category": "buried"
+ },
+ "CHEMBL469": {
+  "chembl_id": "CHEMBL469",
+  "name": "KETOROLAC",
+  "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+  "inchikey": "OZWKMVRBQXNZKK-UHFFFAOYSA-N",
+  "skeleton": "OZWKMVRBQXNZKK",
+  "warning_classes": [
+   "nephrotoxicity"
+  ],
+  "warning_desc": "severe adverse reactions including renal failure, some of which were fatal. || high frequency and seriousness of adverse drug reactions",
+  "measured_culprits": {
+   "COX1_CHEMBL221": 7.89
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "COX1_CHEMBL221"
+  ],
+  "primary_culprit": "COX1_CHEMBL221",
+  "max_pchembl_culprit": "COX1_CHEMBL221",
+  "category": "buried"
+ },
+ "CHEMBL623": {
+  "chembl_id": "CHEMBL623",
+  "name": "NEFAZODONE",
+  "smiles": "CCc1nn(CCCN2CCN(c3cccc(Cl)c3)CC2)c(=O)n1CCOc1ccccc1",
+  "inchikey": "VRBKIVRKKCLPHA-UHFFFAOYSA-N",
+  "skeleton": "VRBKIVRKKCLPHA",
+  "warning_classes": [
+   "hepatotoxicity"
+  ],
+  "warning_desc": "Adverse hepatic events || Adverse hepatic events || acute hepatic failure || life-threatening hepatotoxicity || Adverse hepatic events || acute hepatic failure",
+  "measured_culprits": {
+   "5HT2A_CHEMBL224": 8.24,
+   "SERT_CHEMBL228": 6.7,
+   "NET_CHEMBL222": 6.44,
+   "DAT_CHEMBL238": 6.44
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "5HT2A_CHEMBL224"
+  ],
+  "primary_culprit": "5HT2A_CHEMBL224",
+  "max_pchembl_culprit": "5HT2A_CHEMBL224",
+  "category": "buried"
+ },
+ "CHEMBL956": {
+  "chembl_id": "CHEMBL956",
+  "name": "SUPROFEN",
+  "smiles": "CC(C(=O)O)c1ccc(C(=O)c2cccs2)cc1",
+  "inchikey": "MDKGKXOCJGEUJW-UHFFFAOYSA-N",
+  "skeleton": "MDKGKXOCJGEUJW",
+  "warning_classes": [
+   "musculoskeletal toxicity",
+   "nephrotoxicity"
+  ],
+  "warning_desc": "Flank pain, decreased kidney function || Flank pain, decreased kidney function || Flank pain, decreased kidney function || Flank pain, decreased kidney function",
+  "measured_culprits": {
+   "COX1_CHEMBL221": 6.25
+  },
+  "organ_target_set": [],
+  "culprit_type": "max_pchembl",
+  "culprit_set": [
+   "COX1_CHEMBL221"
+  ],
+  "primary_culprit": "COX1_CHEMBL221",
+  "max_pchembl_culprit": "COX1_CHEMBL221",
+  "category": "buried"
+ }
+}

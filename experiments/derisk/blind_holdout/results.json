@@ -1,0 +1,1028 @@
+{
+ "assay": {
+  "hERG_CHEMBL240": "hERG patch-clamp",
+  "Nav15_CHEMBL1980": "Nav1.5 electrophysiology",
+  "Cav12_CHEMBL1940": "Cav1.2 electrophysiology",
+  "5HT2A_CHEMBL224": "5-HT2A binding",
+  "5HT2B_CHEMBL1833": "5-HT2B counter-screen",
+  "5HT3_CHEMBL1899": "5-HT3 binding",
+  "D2_CHEMBL217": "D2 binding",
+  "M2_CHEMBL211": "M2 muscarinic binding",
+  "alpha1A_CHEMBL229": "alpha1A binding",
+  "H1_CHEMBL231": "H1 binding",
+  "muOpioid_CHEMBL233": "mu-opioid binding",
+  "SERT_CHEMBL228": "SERT uptake",
+  "NET_CHEMBL222": "NET uptake",
+  "DAT_CHEMBL238": "DAT uptake",
+  "CB1_CHEMBL218": "CB1 counter-screen",
+  "AChE_CHEMBL220": "AChE inhibition",
+  "MAOA_CHEMBL1951": "MAO-A inhibition",
+  "COX1_CHEMBL221": "COX-1 inhibition"
+ },
+ "baseline_B_order": [
+  "hERG patch-clamp",
+  "Nav1.5 electrophysiology",
+  "Cav1.2 electrophysiology",
+  "5-HT2A binding",
+  "D2 binding",
+  "M2 muscarinic binding",
+  "alpha1A binding",
+  "H1 binding",
+  "mu-opioid binding",
+  "SERT uptake",
+  "5-HT2B counter-screen",
+  "5-HT3 binding",
+  "NET uptake",
+  "DAT uptake",
+  "CB1 counter-screen",
+  "AChE inhibition",
+  "MAO-A inhibition",
+  "COX-1 inhibition"
+ ],
+ "bg_stats": {
+  "hERG_CHEMBL240": [
+   0.22616128769118682,
+   0.05455577702765619
+  ],
+  "Nav15_CHEMBL1980": [
+   0.17369778207339304,
+   0.03372426574679393
+  ],
+  "Cav12_CHEMBL1940": [
+   0.16102890811712936,
+   0.05749215198958259
+  ],
+  "5HT2A_CHEMBL224": [
+   0.21917403336295496,
+   0.05223483977957813
+  ],
+  "5HT2B_CHEMBL1833": [
+   0.2326096459117087,
+   0.05753660826613677
+  ],
+  "5HT3_CHEMBL1899": [
+   0.19503633207287652,
+   0.04377254290031231
+  ],
+  "D2_CHEMBL217": [
+   0.22321068729554727,
+   0.0501991118852534
+  ],
+  "M2_CHEMBL211": [
+   0.22442595812528626,
+   0.0435281526215664
+  ],
+  "alpha1A_CHEMBL229": [
+   0.21327366797176692,
+   0.04947963176928343
+  ],
+  "H1_CHEMBL231": [
+   0.24021804508624914,
+   0.11590585945998817
+  ],
+  "muOpioid_CHEMBL233": [
+   0.2314072996665105,
+   0.06547287111073852
+  ],
+  "SERT_CHEMBL228": [
+   0.23993317040683274,
+   0.10784859633575736
+  ],
+  "NET_CHEMBL222": [
+   0.25260010937275595,
+   0.1074554300797216
+  ],
+  "DAT_CHEMBL238": [
+   0.25589111125949876,
+   0.11276025440580535
+  ],
+  "CB1_CHEMBL218": [
+   0.22902533602005995,
+   0.062266490046398185
+  ],
+  "AChE_CHEMBL220": [
+   0.23377422883323593,
+   0.08061480683900835
+  ],
+  "MAOA_CHEMBL1951": [
+   0.2419570312732773,
+   0.07244269592099452
+  ],
+  "COX1_CHEMBL221": [
+   0.2347825371931228,
+   0.0844660921167416
+  ]
+ },
+ "per_drug": {
+  "CHEMBL1077": {
+   "name": "BROMFENAC",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "COX1_CHEMBL221"
+   ],
+   "primary_culprit": "COX1_CHEMBL221",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 2,
+   "rank_B": 18,
+   "rank_ours_primary": 2,
+   "rank_B_primary": 18,
+   "killer_z": 0.6943828132102614,
+   "ours_top3": [
+    "M2 muscarinic binding",
+    "COX-1 inhibition",
+    "D2 binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": -0.35,
+    "Nav1.5 electrophysiology": -0.41,
+    "Cav1.2 electrophysiology": -0.03,
+    "5-HT2A binding": 0.04,
+    "5-HT2B counter-screen": -0.3,
+    "5-HT3 binding": -0.82,
+    "D2 binding": 0.31,
+    "M2 muscarinic binding": 0.88,
+    "alpha1A binding": -0.62,
+    "H1 binding": -0.09,
+    "mu-opioid binding": -0.52,
+    "SERT uptake": 0.01,
+    "NET uptake": -0.3,
+    "DAT uptake": -0.01,
+    "CB1 counter-screen": 0.24,
+    "AChE inhibition": -0.11,
+    "MAO-A inhibition": -0.25,
+    "COX-1 inhibition": 0.69
+   }
+  },
+  "CHEMBL1177": {
+   "name": "PEMOLINE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "DAT_CHEMBL238"
+   ],
+   "primary_culprit": "DAT_CHEMBL238",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 3,
+   "rank_B": 14,
+   "rank_ours_primary": 3,
+   "rank_B_primary": 14,
+   "killer_z": -0.17947480950470002,
+   "ours_top3": [
+    "MAO-A inhibition",
+    "Cav1.2 electrophysiology",
+    "DAT uptake"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": -0.4,
+    "Nav1.5 electrophysiology": -0.74,
+    "Cav1.2 electrophysiology": 0.41,
+    "5-HT2A binding": -0.68,
+    "5-HT2B counter-screen": -0.69,
+    "5-HT3 binding": -0.21,
+    "D2 binding": -0.71,
+    "M2 muscarinic binding": -0.53,
+    "alpha1A binding": -0.25,
+    "H1 binding": -0.34,
+    "mu-opioid binding": -0.67,
+    "SERT uptake": -0.41,
+    "NET uptake": -0.28,
+    "DAT uptake": -0.18,
+    "CB1 counter-screen": -0.3,
+    "AChE inhibition": -0.29,
+    "MAO-A inhibition": 0.44,
+    "COX-1 inhibition": -0.42
+   }
+  },
+  "CHEMBL1411979": {
+   "name": "METHAPYRILENE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "H1_CHEMBL231"
+   ],
+   "primary_culprit": "H1_CHEMBL231",
+   "warning_classes": [
+    "carcinogenicity"
+   ],
+   "rank_ours": 1,
+   "rank_B": 8,
+   "rank_ours_primary": 1,
+   "rank_B_primary": 8,
+   "killer_z": 1.6704345953212805,
+   "ours_top3": [
+    "H1 binding",
+    "M2 muscarinic binding",
+    "hERG patch-clamp"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.99,
+    "Nav1.5 electrophysiology": -0.38,
+    "Cav1.2 electrophysiology": -0.33,
+    "5-HT2A binding": 0.84,
+    "5-HT2B counter-screen": 0.21,
+    "5-HT3 binding": -0.12,
+    "D2 binding": 0.87,
+    "M2 muscarinic binding": 1.54,
+    "alpha1A binding": 0.34,
+    "H1 binding": 1.67,
+    "mu-opioid binding": -0.53,
+    "SERT uptake": -0.06,
+    "NET uptake": -0.24,
+    "DAT uptake": 0.39,
+    "CB1 counter-screen": -0.95,
+    "AChE inhibition": 0.03,
+    "MAO-A inhibition": -0.15,
+    "COX-1 inhibition": -0.58
+   }
+  },
+  "CHEMBL157101": {
+   "name": "KETOCONAZOLE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "SERT_CHEMBL228"
+   ],
+   "primary_culprit": "SERT_CHEMBL228",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 13,
+   "rank_B": 10,
+   "rank_ours_primary": 13,
+   "rank_B_primary": 10,
+   "killer_z": -0.013014287110936487,
+   "ours_top3": [
+    "alpha1A binding",
+    "D2 binding",
+    "5-HT2A binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.28,
+    "Nav1.5 electrophysiology": 0.41,
+    "Cav1.2 electrophysiology": 0.04,
+    "5-HT2A binding": 0.91,
+    "5-HT2B counter-screen": 0.12,
+    "5-HT3 binding": 0.03,
+    "D2 binding": 1.0,
+    "M2 muscarinic binding": 0.07,
+    "alpha1A binding": 1.98,
+    "H1 binding": 0.19,
+    "mu-opioid binding": -0.39,
+    "SERT uptake": -0.01,
+    "NET uptake": -0.3,
+    "DAT uptake": -0.16,
+    "CB1 counter-screen": 0.58,
+    "AChE inhibition": -0.41,
+    "MAO-A inhibition": 0.06,
+    "COX-1 inhibition": -0.29
+   }
+  },
+  "CHEMBL1909072": {
+   "name": "PIPAMAZINE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "5HT2A_CHEMBL224"
+   ],
+   "primary_culprit": "5HT2A_CHEMBL224",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 6,
+   "rank_B": 4,
+   "rank_ours_primary": 6,
+   "rank_B_primary": 4,
+   "killer_z": 2.811201643733626,
+   "ours_top3": [
+    "5-HT2B counter-screen",
+    "M2 muscarinic binding",
+    "D2 binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 2.32,
+    "Nav1.5 electrophysiology": 1.74,
+    "Cav1.2 electrophysiology": 0.17,
+    "5-HT2A binding": 2.81,
+    "5-HT2B counter-screen": 4.39,
+    "5-HT3 binding": 1.16,
+    "D2 binding": 3.3,
+    "M2 muscarinic binding": 3.92,
+    "alpha1A binding": 3.29,
+    "H1 binding": 3.13,
+    "mu-opioid binding": 0.6,
+    "SERT uptake": 0.83,
+    "NET uptake": -0.12,
+    "DAT uptake": -0.12,
+    "CB1 counter-screen": 0.63,
+    "AChE inhibition": 0.7,
+    "MAO-A inhibition": 0.29,
+    "COX-1 inhibition": 0.35
+   }
+  },
+  "CHEMBL22242": {
+   "name": "REMOXIPRIDE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "D2_CHEMBL217"
+   ],
+   "primary_culprit": "D2_CHEMBL217",
+   "warning_classes": [
+    "hematological toxicity"
+   ],
+   "rank_ours": 1,
+   "rank_B": 5,
+   "rank_ours_primary": 1,
+   "rank_B_primary": 5,
+   "killer_z": 6.12213766876624,
+   "ours_top3": [
+    "D2 binding",
+    "5-HT2A binding",
+    "5-HT3 binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 1.26,
+    "Nav1.5 electrophysiology": 0.96,
+    "Cav1.2 electrophysiology": 0.19,
+    "5-HT2A binding": 1.92,
+    "5-HT2B counter-screen": 1.25,
+    "5-HT3 binding": 1.81,
+    "D2 binding": 6.12,
+    "M2 muscarinic binding": 0.36,
+    "alpha1A binding": 1.19,
+    "H1 binding": 0.25,
+    "mu-opioid binding": 1.27,
+    "SERT uptake": -0.05,
+    "NET uptake": -0.07,
+    "DAT uptake": -0.05,
+    "CB1 counter-screen": 0.11,
+    "AChE inhibition": 0.34,
+    "MAO-A inhibition": -0.2,
+    "COX-1 inhibition": -0.56
+   }
+  },
+  "CHEMBL24072": {
+   "name": "PRENYLAMINE",
+   "category": "cardiac",
+   "culprit_type": "organ",
+   "culprit_set": [
+    "hERG_CHEMBL240"
+   ],
+   "primary_culprit": "hERG_CHEMBL240",
+   "warning_classes": [
+    "cardiotoxicity"
+   ],
+   "rank_ours": 2,
+   "rank_B": 1,
+   "rank_ours_primary": 2,
+   "rank_B_primary": 1,
+   "killer_z": 2.5229030009589044,
+   "ours_top3": [
+    "CB1 counter-screen",
+    "hERG patch-clamp",
+    "alpha1A binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 2.52,
+    "Nav1.5 electrophysiology": 0.96,
+    "Cav1.2 electrophysiology": -0.01,
+    "5-HT2A binding": 1.73,
+    "5-HT2B counter-screen": 0.29,
+    "5-HT3 binding": 0.1,
+    "D2 binding": 0.57,
+    "M2 muscarinic binding": 0.89,
+    "alpha1A binding": 1.8,
+    "H1 binding": 1.44,
+    "mu-opioid binding": 0.63,
+    "SERT uptake": 0.98,
+    "NET uptake": 0.98,
+    "DAT uptake": 0.67,
+    "CB1 counter-screen": 2.85,
+    "AChE inhibition": 1.06,
+    "MAO-A inhibition": 0.5,
+    "COX-1 inhibition": 0.41
+   }
+  },
+  "CHEMBL273575": {
+   "name": "NOMIFENSINE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "NET_CHEMBL222"
+   ],
+   "primary_culprit": "NET_CHEMBL222",
+   "warning_classes": [
+    "hematological toxicity",
+    "hepatotoxicity",
+    "immune system toxicity"
+   ],
+   "rank_ours": 10,
+   "rank_B": 13,
+   "rank_ours_primary": 10,
+   "rank_B_primary": 13,
+   "killer_z": 0.3654481127751863,
+   "ours_top3": [
+    "D2 binding",
+    "5-HT3 binding",
+    "5-HT2A binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.59,
+    "Nav1.5 electrophysiology": -0.54,
+    "Cav1.2 electrophysiology": 0.04,
+    "5-HT2A binding": 1.37,
+    "5-HT2B counter-screen": 1.1,
+    "5-HT3 binding": 1.74,
+    "D2 binding": 3.6,
+    "M2 muscarinic binding": 0.59,
+    "alpha1A binding": 0.99,
+    "H1 binding": 0.49,
+    "mu-opioid binding": 0.2,
+    "SERT uptake": 0.86,
+    "NET uptake": 0.37,
+    "DAT uptake": 0.32,
+    "CB1 counter-screen": 0.06,
+    "AChE inhibition": -0.2,
+    "MAO-A inhibition": 0.29,
+    "COX-1 inhibition": -0.38
+   }
+  },
+  "CHEMBL276520": {
+   "name": "INDALPINE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "SERT_CHEMBL228"
+   ],
+   "primary_culprit": "SERT_CHEMBL228",
+   "warning_classes": [
+    "hematological toxicity"
+   ],
+   "rank_ours": 1,
+   "rank_B": 10,
+   "rank_ours_primary": 1,
+   "rank_B_primary": 10,
+   "killer_z": 3.962180047765236,
+   "ours_top3": [
+    "SERT uptake",
+    "D2 binding",
+    "5-HT2A binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.61,
+    "Nav1.5 electrophysiology": -0.38,
+    "Cav1.2 electrophysiology": 0.06,
+    "5-HT2A binding": 3.23,
+    "5-HT2B counter-screen": 3.1,
+    "5-HT3 binding": 2.15,
+    "D2 binding": 3.69,
+    "M2 muscarinic binding": 0.87,
+    "alpha1A binding": 1.88,
+    "H1 binding": 1.34,
+    "mu-opioid binding": 1.12,
+    "SERT uptake": 3.96,
+    "NET uptake": 0.42,
+    "DAT uptake": 0.49,
+    "CB1 counter-screen": -0.86,
+    "AChE inhibition": 0.93,
+    "MAO-A inhibition": -0.29,
+    "COX-1 inhibition": 0.54
+   }
+  },
+  "CHEMBL291338": {
+   "name": "3,3',4',5-TETRACHLOROSALICYLANILIDE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "COX1_CHEMBL221"
+   ],
+   "primary_culprit": "COX1_CHEMBL221",
+   "warning_classes": [
+    "dermatological toxicity"
+   ],
+   "rank_ours": 4,
+   "rank_B": 18,
+   "rank_ours_primary": 4,
+   "rank_B_primary": 18,
+   "killer_z": 1.1477598132651448,
+   "ours_top3": [
+    "MAO-A inhibition",
+    "Nav1.5 electrophysiology",
+    "CB1 counter-screen"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.96,
+    "Nav1.5 electrophysiology": 1.83,
+    "Cav1.2 electrophysiology": -0.71,
+    "5-HT2A binding": 1.08,
+    "5-HT2B counter-screen": 0.31,
+    "5-HT3 binding": 0.97,
+    "D2 binding": -0.34,
+    "M2 muscarinic binding": 0.23,
+    "alpha1A binding": -0.17,
+    "H1 binding": -0.02,
+    "mu-opioid binding": -0.29,
+    "SERT uptake": 0.17,
+    "NET uptake": 0.03,
+    "DAT uptake": 0.5,
+    "CB1 counter-screen": 1.21,
+    "AChE inhibition": -0.24,
+    "MAO-A inhibition": 2.06,
+    "COX-1 inhibition": 1.15
+   }
+  },
+  "CHEMBL295124": {
+   "name": "BERBERINE",
+   "category": "buried",
+   "culprit_type": "organ",
+   "culprit_set": [
+    "AChE_CHEMBL220"
+   ],
+   "primary_culprit": "AChE_CHEMBL220",
+   "warning_classes": [
+    "hematological toxicity",
+    "hepatotoxicity",
+    "neurotoxicity"
+   ],
+   "rank_ours": 2,
+   "rank_B": 16,
+   "rank_ours_primary": 2,
+   "rank_B_primary": 16,
+   "killer_z": 1.9507801292749776,
+   "ours_top3": [
+    "alpha1A binding",
+    "AChE inhibition",
+    "5-HT2B counter-screen"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": -0.25,
+    "Nav1.5 electrophysiology": -0.49,
+    "Cav1.2 electrophysiology": 0.01,
+    "5-HT2A binding": 0.45,
+    "5-HT2B counter-screen": 1.38,
+    "5-HT3 binding": -0.34,
+    "D2 binding": -0.13,
+    "M2 muscarinic binding": -0.48,
+    "alpha1A binding": 2.29,
+    "H1 binding": -0.31,
+    "mu-opioid binding": -0.91,
+    "SERT uptake": -0.17,
+    "NET uptake": -0.28,
+    "DAT uptake": -0.45,
+    "CB1 counter-screen": -0.91,
+    "AChE inhibition": 1.95,
+    "MAO-A inhibition": 0.21,
+    "COX-1 inhibition": -0.6
+   }
+  },
+  "CHEMBL360328": {
+   "name": "LORCASERIN",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "5HT2B_CHEMBL1833"
+   ],
+   "primary_culprit": "5HT2B_CHEMBL1833",
+   "warning_classes": [
+    "carcinogenicity"
+   ],
+   "rank_ours": 3,
+   "rank_B": 11,
+   "rank_ours_primary": 3,
+   "rank_B_primary": 11,
+   "killer_z": 2.446631002485784,
+   "ours_top3": [
+    "5-HT2A binding",
+    "5-HT3 binding",
+    "5-HT2B counter-screen"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.21,
+    "Nav1.5 electrophysiology": -1.06,
+    "Cav1.2 electrophysiology": -0.68,
+    "5-HT2A binding": 2.85,
+    "5-HT2B counter-screen": 2.45,
+    "5-HT3 binding": 2.47,
+    "D2 binding": 1.51,
+    "M2 muscarinic binding": 0.81,
+    "alpha1A binding": 0.62,
+    "H1 binding": 0.76,
+    "mu-opioid binding": 0.25,
+    "SERT uptake": 0.61,
+    "NET uptake": 0.51,
+    "DAT uptake": 0.06,
+    "CB1 counter-screen": -0.41,
+    "AChE inhibition": 0.24,
+    "MAO-A inhibition": -0.01,
+    "COX-1 inhibition": -0.6
+   }
+  },
+  "CHEMBL395110": {
+   "name": "MEPAZINE",
+   "category": "buried",
+   "culprit_type": "organ",
+   "culprit_set": [
+    "5HT2A_CHEMBL224",
+    "H1_CHEMBL231",
+    "M2_CHEMBL211"
+   ],
+   "primary_culprit": "H1_CHEMBL231",
+   "warning_classes": [
+    "gastrointestinal toxicity",
+    "hepatotoxicity",
+    "immune system toxicity",
+    "nephrotoxicity",
+    "neurotoxicity",
+    "vascular toxicity"
+   ],
+   "rank_ours": 1,
+   "rank_B": 4,
+   "rank_ours_primary": 7,
+   "rank_B_primary": 8,
+   "killer_z": 3.7471486917902364,
+   "ours_top3": [
+    "M2 muscarinic binding",
+    "D2 binding",
+    "5-HT2B counter-screen"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 2.16,
+    "Nav1.5 electrophysiology": 0.2,
+    "Cav1.2 electrophysiology": -0.0,
+    "5-HT2A binding": 2.06,
+    "5-HT2B counter-screen": 2.89,
+    "5-HT3 binding": 1.26,
+    "D2 binding": 3.07,
+    "M2 muscarinic binding": 3.75,
+    "alpha1A binding": 1.73,
+    "H1 binding": 1.4,
+    "mu-opioid binding": 0.88,
+    "SERT uptake": 0.35,
+    "NET uptake": 0.09,
+    "DAT uptake": 0.1,
+    "CB1 counter-screen": -0.22,
+    "AChE inhibition": 1.08,
+    "MAO-A inhibition": -0.23,
+    "COX-1 inhibition": 0.61
+   }
+  },
+  "CHEMBL404108": {
+   "name": "LUMIRACOXIB",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "COX1_CHEMBL221"
+   ],
+   "primary_culprit": "COX1_CHEMBL221",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 1,
+   "rank_B": 18,
+   "rank_ours_primary": 1,
+   "rank_B_primary": 18,
+   "killer_z": 1.7476038045263844,
+   "ours_top3": [
+    "COX-1 inhibition",
+    "Nav1.5 electrophysiology",
+    "M2 muscarinic binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.1,
+    "Nav1.5 electrophysiology": 1.4,
+    "Cav1.2 electrophysiology": 0.16,
+    "5-HT2A binding": 0.45,
+    "5-HT2B counter-screen": -0.27,
+    "5-HT3 binding": 0.27,
+    "D2 binding": 0.33,
+    "M2 muscarinic binding": 0.5,
+    "alpha1A binding": 0.38,
+    "H1 binding": -0.14,
+    "mu-opioid binding": -0.13,
+    "SERT uptake": 0.17,
+    "NET uptake": -0.14,
+    "DAT uptake": -0.17,
+    "CB1 counter-screen": 0.18,
+    "AChE inhibition": 0.13,
+    "MAO-A inhibition": 0.14,
+    "COX-1 inhibition": 1.75
+   }
+  },
+  "CHEMBL404849": {
+   "name": "SULOCTIDIL",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "5HT2B_CHEMBL1833"
+   ],
+   "primary_culprit": "5HT2B_CHEMBL1833",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 15,
+   "rank_B": 11,
+   "rank_ours_primary": 15,
+   "rank_B_primary": 11,
+   "killer_z": -0.5817141811810775,
+   "ours_top3": [
+    "hERG patch-clamp",
+    "CB1 counter-screen",
+    "M2 muscarinic binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.23,
+    "Nav1.5 electrophysiology": -0.44,
+    "Cav1.2 electrophysiology": -0.59,
+    "5-HT2A binding": 0.03,
+    "5-HT2B counter-screen": -0.58,
+    "5-HT3 binding": -1.26,
+    "D2 binding": -0.92,
+    "M2 muscarinic binding": 0.03,
+    "alpha1A binding": -0.57,
+    "H1 binding": -0.36,
+    "mu-opioid binding": -0.31,
+    "SERT uptake": -0.32,
+    "NET uptake": -0.16,
+    "DAT uptake": -0.06,
+    "CB1 counter-screen": 0.05,
+    "AChE inhibition": -0.25,
+    "MAO-A inhibition": -0.17,
+    "COX-1 inhibition": -0.57
+   }
+  },
+  "CHEMBL408": {
+   "name": "TROGLITAZONE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "5HT2B_CHEMBL1833"
+   ],
+   "primary_culprit": "5HT2B_CHEMBL1833",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 9,
+   "rank_B": 11,
+   "rank_ours_primary": 9,
+   "rank_B_primary": 11,
+   "killer_z": -0.3066576948634128,
+   "ours_top3": [
+    "hERG patch-clamp",
+    "COX-1 inhibition",
+    "Nav1.5 electrophysiology"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": -0.08,
+    "Nav1.5 electrophysiology": -0.18,
+    "Cav1.2 electrophysiology": -0.18,
+    "5-HT2A binding": -0.64,
+    "5-HT2B counter-screen": -0.31,
+    "5-HT3 binding": -0.19,
+    "D2 binding": -0.66,
+    "M2 muscarinic binding": -0.65,
+    "alpha1A binding": -0.62,
+    "H1 binding": -0.29,
+    "mu-opioid binding": -0.51,
+    "SERT uptake": -0.47,
+    "NET uptake": -0.73,
+    "DAT uptake": -0.72,
+    "CB1 counter-screen": -0.51,
+    "AChE inhibition": -0.19,
+    "MAO-A inhibition": -0.23,
+    "COX-1 inhibition": -0.18
+   }
+  },
+  "CHEMBL442": {
+   "name": "ERGOTAMINE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "D2_CHEMBL217"
+   ],
+   "primary_culprit": "D2_CHEMBL217",
+   "warning_classes": [
+    "cardiotoxicity",
+    "vascular toxicity"
+   ],
+   "rank_ours": 2,
+   "rank_B": 5,
+   "rank_ours_primary": 2,
+   "rank_B_primary": 5,
+   "killer_z": 5.892310073948595,
+   "ours_top3": [
+    "5-HT2B counter-screen",
+    "D2 binding",
+    "5-HT2A binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": -0.35,
+    "Nav1.5 electrophysiology": 0.33,
+    "Cav1.2 electrophysiology": -0.07,
+    "5-HT2A binding": 4.53,
+    "5-HT2B counter-screen": 7.16,
+    "5-HT3 binding": 0.83,
+    "D2 binding": 5.89,
+    "M2 muscarinic binding": -0.27,
+    "alpha1A binding": -0.14,
+    "H1 binding": 0.54,
+    "mu-opioid binding": 0.06,
+    "SERT uptake": -0.53,
+    "NET uptake": -0.37,
+    "DAT uptake": -0.48,
+    "CB1 counter-screen": -0.67,
+    "AChE inhibition": -0.1,
+    "MAO-A inhibition": -0.8,
+    "COX-1 inhibition": -0.86
+   }
+  },
+  "CHEMBL469": {
+   "name": "KETOROLAC",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "COX1_CHEMBL221"
+   ],
+   "primary_culprit": "COX1_CHEMBL221",
+   "warning_classes": [
+    "nephrotoxicity"
+   ],
+   "rank_ours": 11,
+   "rank_B": 18,
+   "rank_ours_primary": 11,
+   "rank_B_primary": 18,
+   "killer_z": 0.34846112024109144,
+   "ours_top3": [
+    "M2 muscarinic binding",
+    "5-HT2A binding",
+    "AChE inhibition"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 0.64,
+    "Nav1.5 electrophysiology": 0.77,
+    "Cav1.2 electrophysiology": -0.18,
+    "5-HT2A binding": 1.06,
+    "5-HT2B counter-screen": 0.38,
+    "5-HT3 binding": 0.44,
+    "D2 binding": 0.75,
+    "M2 muscarinic binding": 1.38,
+    "alpha1A binding": 0.61,
+    "H1 binding": 0.25,
+    "mu-opioid binding": 0.42,
+    "SERT uptake": -0.01,
+    "NET uptake": -0.05,
+    "DAT uptake": 0.03,
+    "CB1 counter-screen": 0.1,
+    "AChE inhibition": 0.8,
+    "MAO-A inhibition": 0.1,
+    "COX-1 inhibition": 0.35
+   }
+  },
+  "CHEMBL623": {
+   "name": "NEFAZODONE",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "5HT2A_CHEMBL224"
+   ],
+   "primary_culprit": "5HT2A_CHEMBL224",
+   "warning_classes": [
+    "hepatotoxicity"
+   ],
+   "rank_ours": 3,
+   "rank_B": 4,
+   "rank_ours_primary": 3,
+   "rank_B_primary": 4,
+   "killer_z": 3.3947891579538307,
+   "ours_top3": [
+    "alpha1A binding",
+    "D2 binding",
+    "5-HT2A binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": 2.93,
+    "Nav1.5 electrophysiology": 0.9,
+    "Cav1.2 electrophysiology": -0.21,
+    "5-HT2A binding": 3.39,
+    "5-HT2B counter-screen": 2.93,
+    "5-HT3 binding": 2.86,
+    "D2 binding": 3.5,
+    "M2 muscarinic binding": 0.84,
+    "alpha1A binding": 3.67,
+    "H1 binding": 2.88,
+    "mu-opioid binding": 0.24,
+    "SERT uptake": 0.88,
+    "NET uptake": 0.02,
+    "DAT uptake": 0.05,
+    "CB1 counter-screen": 0.14,
+    "AChE inhibition": 0.6,
+    "MAO-A inhibition": 1.61,
+    "COX-1 inhibition": -0.09
+   }
+  },
+  "CHEMBL956": {
+   "name": "SUPROFEN",
+   "category": "buried",
+   "culprit_type": "max_pchembl",
+   "culprit_set": [
+    "COX1_CHEMBL221"
+   ],
+   "primary_culprit": "COX1_CHEMBL221",
+   "warning_classes": [
+    "musculoskeletal toxicity",
+    "nephrotoxicity"
+   ],
+   "rank_ours": 1,
+   "rank_B": 18,
+   "rank_ours_primary": 1,
+   "rank_B_primary": 18,
+   "killer_z": 3.321720319048842,
+   "ours_top3": [
+    "COX-1 inhibition",
+    "D2 binding",
+    "M2 muscarinic binding"
+   ],
+   "z_vector": {
+    "hERG patch-clamp": -0.47,
+    "Nav1.5 electrophysiology": -0.3,
+    "Cav1.2 electrophysiology": -0.25,
+    "5-HT2A binding": -0.21,
+    "5-HT2B counter-screen": -0.22,
+    "5-HT3 binding": -0.38,
+    "D2 binding": 0.72,
+    "M2 muscarinic binding": 0.71,
+    "alpha1A binding": -0.33,
+    "H1 binding": -0.12,
+    "mu-opioid binding": 0.21,
+    "SERT uptake": -0.05,
+    "NET uptake": -0.08,
+    "DAT uptake": -0.18,
+    "CB1 counter-screen": -0.04,
+    "AChE inhibition": -0.11,
+    "MAO-A inhibition": 0.26,
+    "COX-1 inhibition": 3.32
+   }
+  }
+ },
+ "recovery_by_category": {
+  "buried": {
+   "ours": {
+    "top1": 6,
+    "top3": 12,
+    "n": 19
+   },
+   "B": {
+    "top1": 0,
+    "top3": 0,
+    "n": 19
+   }
+  },
+  "cardiac": {
+   "ours": {
+    "top1": 0,
+    "top3": 1,
+    "n": 1
+   },
+   "B": {
+    "top1": 1,
+    "top3": 1,
+    "n": 1
+   }
+  }
+ },
+ "mean_assays_to_culprit": {
+  "buried": {
+   "ours": 4.684210526315789,
+   "B": 11.368421052631579
+  },
+  "cardiac": {
+   "ours": 2.0,
+   "B": 1.0
+  }
+ },
+ "money_number": {
+  "buried": 12,
+  "cardiac": 0
+ },
+ "money_drugs": {
+  "buried": [
+   "BROMFENAC",
+   "PEMOLINE",
+   "METHAPYRILENE",
+   "REMOXIPRIDE",
+   "INDALPINE",
+   "BERBERINE",
+   "LORCASERIN",
+   "MEPAZINE",
+   "LUMIRACOXIB",
+   "ERGOTAMINE",
+   "NEFAZODONE",
+   "SUPROFEN"
+  ],
+  "cardiac": []
+ }
+}
