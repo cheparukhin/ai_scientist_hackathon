@@ -82,6 +82,26 @@ def test_no_pharm_probability_in_plan():
         assert 0 <= row["priority"] <= 100
 
 
+# ---------------- N2: leave-one-out demo mode ----------------
+
+def test_rimonabant_loo_recovers_cb1_as_novel():
+    r = score_candidate(EXAMPLES["rimonabant"], loo=True)
+    assert r["status"] == "ok"
+    assert r["best_target"] == "CB1_CHEMBL218", r["best_target"]
+    assert r["targets"]["CB1_CHEMBL218"]["z"] >= 6.0, r["targets"]["CB1_CHEMBL218"]["z"]
+    # scoring the known drug "as if novel": its own + partner refs removed -> not a known analog
+    assert r["flags"]["known_analog"] is False
+    assert r["nearest_analog"]["name"] != "rimonabant", r["nearest_analog"]
+
+
+def test_rimonabant_loo_off_is_known_analog():
+    # regression: default path removes nothing -> rimonabant IS a known analog of itself
+    r = score_candidate(EXAMPLES["rimonabant"], loo=False)
+    assert r["flags"]["known_analog"] is True
+    assert r["loo"] is False
+    assert r["loo_exclude_iks"] == []
+
+
 # ---------------- M3 ----------------
 
 def test_narrative_rimonabant_grounded():

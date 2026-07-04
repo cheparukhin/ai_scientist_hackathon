@@ -70,10 +70,30 @@ metabolite = st.text_input(
     "Known active metabolite SMILES (optional)", value="",
     help="If given, parent AND metabolite are scored and aggregated by MAX per target.")
 
+loo = st.checkbox(
+    "Demo mode — leave-one-out (score this known drug as if novel: remove it and its "
+    "mechanistic partners from the DB)",
+    value=False,
+    help="DEMO ONLY. When ON and the input is a known reference-failure drug, the engine "
+         "excludes that drug and every reference sharing its culprit target from every "
+         "per-target score and from the known-analog check — showing it would still recover "
+         "the buried liability on a truly novel chemotype. The live/novel path never removes "
+         "anything (default OFF).")
+
 run = st.button("Score candidate", type="primary")
 
 if run or smiles:
-    result = score_candidate(smiles, metabolite_smiles=metabolite or None)
+    result = score_candidate(smiles, metabolite_smiles=metabolite or None, loo=loo)
+
+    if loo and result.get("loo_matched_ref"):
+        st.info(
+            f"🧪 **Demo mode active** — scoring **{result['loo_matched_ref']}** as if novel: "
+            f"removed it and {len(result['loo_exclude_iks']) - 1} mechanistic partner(s) from "
+            f"the reference DB. The recovered liability below comes only from *other* ligands, "
+            f"never the drug itself.")
+    elif loo:
+        st.caption("Demo mode ON, but this input is not a known reference-failure drug — "
+                   "leave-one-out only excludes the candidate's own structure.")
 
     # ---- candidate structure depiction (N1) ----
     cand_png = mol_png(smiles)

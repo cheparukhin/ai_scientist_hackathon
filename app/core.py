@@ -106,14 +106,16 @@ class _Engine:
         self.panel = panel
         self.targets = list(panel.keys())
 
-        # per-target active fingerprints
+        # per-target active fingerprints as [(inchikey, fp), ...] (N2: InChIKey lets
+        # leave-one-out demo mode exclude the query + its mechanistic partners)
         self.target_fps = {}
         for t in self.targets:
             fps = []
             for _mid, smi in actives.get(t, {}).items():
                 m = Chem.MolFromSmiles(smi)
                 if m is not None:
-                    fps.append(AllChem.GetMorganFingerprintAsBitVect(m, 2, nBits=NBITS))
+                    ik = Chem.MolToInchiKey(m)
+                    fps.append((ik, AllChem.GetMorganFingerprintAsBitVect(m, 2, nBits=NBITS)))
             self.target_fps[t] = fps
 
         # background stats per target (each bg drug's mean-top5 class score)
@@ -131,18 +133,42 @@ class _Engine:
 
         # reference-failure fingerprints (for known-analog flag + evidence)
         self.ref = []
+        self.ref_ik = {}                 # name -> InChIKey
+        self._ik_to_culprit = {}         # InChIKey -> culprit_target_key
+        self._culprit_to_iks = {}        # culprit_target_key -> {InChIKeys}
         for name, r in refs.items():
             m = Chem.MolFromSmiles(r["smiles"])
             if m is None:
                 continue
+            ik = Chem.MolToInchiKey(m)
             f = AllChem.GetMorganFingerprintAsBitVect(m, 2, nBits=NBITS)
-            self.ref.append((name, f, r))
+            self.ref.append((name, f, r, ik))
+            self.ref_ik[name] = ik
+            ck = r.get("culprit_target_key")
+            self._ik_to_culprit[ik] = ck
+            self._culprit_to_iks.setdefault(ck, set()).add(ik)
 
-    def _class_score(self, qfp, target):
+    def loo_exclude(self, cand_ik):
+        """LOO exclusion set for a candidate InChIKey (mirrors exp_score.loo_exclude):
+        the candidate itself PLUS every reference-failure drug sharing its matched
+        culprit target. If the candidate is not a known reference drug, just itself."""
+        ex = {cand_ik}
+        culprit = self._ik_to_culprit.get(cand_ik)
+        if culprit is not None:
+            ex |= self._culprit_to_iks.get(culprit, set())
+        return frozenset(ex)
+
+    def _class_score(self, qfp, target, exclude_iks=frozenset()):
         fps = self.target_fps[target]
         if not fps:
             return 0.0
-        sims = DataStructs.BulkTanimotoSimilarity(qfp, fps)
+        if exclude_iks:
+            usable = [f for ik, f in fps if ik not in exclude_iks]
+        else:
+            usable = [f for _ik, f in fps]
+        if not usable:
+            return 0.0
+        sims = DataStructs.BulkTanimotoSimilarity(qfp, usable)
         sims.sort(reverse=True)
         top5 = sims[:5]
         return statistics.mean(top5) if top5 else 0.0
@@ -151,31 +177,36 @@ class _Engine:
         m, sd = self.bg_stats[target]
         return (raw - m) / sd if sd > 0 else 0.0
 
-    def score_fp(self, fp):
-        """Per-target raw mean-top5 and z for one fingerprint."""
+    def score_fp(self, fp, exclude_iks=frozenset()):
+        """Per-target raw mean-top5 and z for one fingerprint (skip excluded InChIKeys)."""
         out = {}
         for t in self.targets:
-            raw = self._class_score(fp, t)
+            raw = self._class_score(fp, t, exclude_iks)
             out[t] = {"raw": raw, "z": self._z(raw, t)}
         return out
 
-    def nearest_ref(self, fp):
-        """(name, sim, meta) of the most similar reference-failure drug."""
+    def nearest_ref(self, fp, exclude_iks=frozenset()):
+        """(name, sim, meta) of the most similar reference-failure drug (skip excluded IKs)."""
         best = (None, 0.0, None)
-        for name, rfp, meta in self.ref:
+        for name, rfp, meta, ik in self.ref:
+            if ik in exclude_iks:
+                continue
             s = DataStructs.TanimotoSimilarity(fp, rfp)
             if s > best[1]:
                 best = (name, s, meta)
         return best
 
-    def refs_for_target(self, target_key):
+    def refs_for_target(self, target_key, exclude_iks=frozenset()):
         """All reference-failure drugs whose culprit target is this panel target."""
-        return [meta for _n, _f, meta in self.ref if meta.get("culprit_target_key") == target_key]
+        return [meta for _n, _f, meta, ik in self.ref
+                if meta.get("culprit_target_key") == target_key and ik not in exclude_iks]
 
-    def max_ref_sim_at_target(self, fp, target_key):
+    def max_ref_sim_at_target(self, fp, target_key, exclude_iks=frozenset()):
         """Max single Tanimoto from fp to any reference failure whose culprit is target_key."""
         best = 0.0
-        for _n, rfp, meta in self.ref:
+        for _n, rfp, meta, ik in self.ref:
+            if ik in exclude_iks:
+                continue
             if meta.get("culprit_target_key") == target_key:
                 best = max(best, DataStructs.TanimotoSimilarity(fp, rfp))
         return best
@@ -212,6 +243,10 @@ def build_plan(result, fp=None):
     if fp is None:
         _m, fp, _d = _fp_and_desc(result["canonical_smiles"])
 
+    # LOO demo mode: exclude the query + mechanistic partners from grounding/evidence too,
+    # so a self-match can't set the grounded flag or appear as its own evidence.
+    exclude_iks = frozenset(result.get("loo_exclude_iks", ()))
+
     scored = result["targets"]
 
     # effective (severity-weighted) priority per target -> our ranking
@@ -229,10 +264,10 @@ def build_plan(result, fp=None):
         _e, prio = _priority(z, sev)
         flagged = z >= FLAG_Z
         # grounded = candidate structurally resembles a KNOWN failed drug at THIS target
-        grounded = (fp is not None) and (eng.max_ref_sim_at_target(fp, t) >= KNOWN_ANALOG_T)
+        grounded = (fp is not None) and (eng.max_ref_sim_at_target(fp, t, exclude_iks) >= KNOWN_ANALOG_T)
         evidence = [
             {"name": m["name"], "organ": m["organ"], "tier": m["tier"], "citation": m["citation"]}
-            for m in eng.refs_for_target(t)
+            for m in eng.refs_for_target(t, exclude_iks)
         ]
 
         # action tag from severity + flagging + known-failure grounding
@@ -296,14 +331,21 @@ def get_engine():
     return _ENGINE
 
 
-def score_candidate(smiles, metabolite_smiles=None):
+def score_candidate(smiles, metabolite_smiles=None, loo=False):
     """Score a candidate SMILES against the 18-target safety panel.
+
+    loo=False (default, the live/novel path) removes nothing - identical to production.
+    loo=True is the DEMO-ONLY leave-one-out path: if the candidate matches a known
+    reference-failure drug (by InChIKey), exclude it AND every reference drug sharing its
+    culprit target from every per-target score and from the nearest-analog computation -
+    scoring a known drug 'as if novel'. This must never be enabled on the live path.
 
     Returns a dict:
       abstain:  {status:"abstain", reason, gate, descriptors}
       ok:       {status:"ok", canonical_smiles, descriptors, targets:{key:{raw,z}},
                  best_target, best_z, flags:{weak_coverage, known_analog},
-                 nearest_analog:{name,sim,...}, metabolite:{...}|None}
+                 nearest_analog:{name,sim,...}, metabolite:{...}|None,
+                 loo, loo_exclude_iks}
     """
     m, fp, desc = _fp_and_desc(smiles)
     if m is None:
@@ -316,7 +358,20 @@ def score_candidate(smiles, metabolite_smiles=None):
                 "input": smiles}
 
     eng = get_engine()
-    parent = eng.score_fp(fp)
+
+    # LOO exclusion set (demo mode only). Empty when loo=False -> unchanged behaviour.
+    exclude_iks = frozenset()
+    loo_matched_ref = None
+    if loo:
+        cand_ik = Chem.MolToInchiKey(m)
+        exclude_iks = eng.loo_exclude(cand_ik)
+        # is the candidate itself a known reference drug? (for the UI badge)
+        for name, _f, _meta, ik in eng.ref:
+            if ik == cand_ik:
+                loo_matched_ref = name
+                break
+
+    parent = eng.score_fp(fp, exclude_iks)
 
     # metabolite MAX-aggregation (rule from experiments/derisk/metabolite/)
     metabolite_info = None
@@ -324,7 +379,7 @@ def score_candidate(smiles, metabolite_smiles=None):
     if metabolite_smiles:
         mm, mfp, mdesc = _fp_and_desc(metabolite_smiles)
         if mm is not None:
-            met = eng.score_fp(mfp)
+            met = eng.score_fp(mfp, exclude_iks)
             merged = {}
             for t in eng.targets:
                 if met[t]["z"] > parent[t]["z"]:
@@ -338,11 +393,11 @@ def score_candidate(smiles, metabolite_smiles=None):
 
     # known-analog flag: max single Tanimoto to any reference failure (parent, and
     # metabolite if provided) >= threshold
-    na_name, na_sim, na_meta = eng.nearest_ref(fp)
+    na_name, na_sim, na_meta = eng.nearest_ref(fp, exclude_iks)
     if metabolite_smiles:
         mm, mfp, _ = _fp_and_desc(metabolite_smiles)
         if mm is not None:
-            n2, s2, m2 = eng.nearest_ref(mfp)
+            n2, s2, m2 = eng.nearest_ref(mfp, exclude_iks)
             if s2 > na_sim:
                 na_name, na_sim, na_meta = n2, s2, m2
     known_analog = na_sim >= KNOWN_ANALOG_T
@@ -369,4 +424,7 @@ def score_candidate(smiles, metabolite_smiles=None):
             "citation": na_meta.get("citation") if na_meta else None,
         },
         "metabolite": metabolite_info,
+        "loo": loo,
+        "loo_exclude_iks": sorted(exclude_iks),
+        "loo_matched_ref": loo_matched_ref,
     }

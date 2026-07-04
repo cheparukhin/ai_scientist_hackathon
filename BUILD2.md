@@ -115,7 +115,7 @@ app/
   (candidate structure); `mol_png(EXAMPLES["rimonabant"])` returns non-empty bytes;
   `mol_png("not_a_smiles")` returns `None`.
 
-### [ ] N2 — Leave-one-out "demo mode" (`core.py`)
+### [x] N2 — Leave-one-out "demo mode" (`core.py`)
 - Extend `_Engine`: store `target_fps[t]` as `[(inchikey, fp), ...]` (compute InChIKey via
   `Chem.MolToInchiKey`). Keep a fast path when no exclusion set is given (unchanged behaviour).
 - `_class_score(qfp, target, exclude_iks=frozenset())` and `score_fp(fp, exclude_iks=...)` skip
