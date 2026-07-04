@@ -110,7 +110,7 @@ We assembled 7 pairs of drugs that were **both withdrawn/failed for the same org
 
 Feature/pharmacophore 2D fingerprints (FCFP, Gobbi) gave only **1.3–1.5× lift** (absolute sim still ~0.15–0.25); sanity checks passed (true analogs stayed high: pergolide↔cabergoline 0.41). **Conclusion:** the signal linking these is **shared binding target**, which needs a 3D and/or off-target layer — *not* 2D structure. This is the single most important design fact.
 
-*(Open: a 3D shape/pharmacophore test (USRCAT) on the hERG pair is not yet run — it will tell us if rung 3 helps before committing to rung 4.)*
+**3D shape test (USRCAT) — done, mixed result.** 30 conformers/molecule (ETKDGv3 + MMFF), each pair's true partner ranked against the 16-compound library. USRCAT improved partner rank in **4/7** pairs and lifted top-3 hits only 3/7 → 4/7. One clean rescue: **fialuridine–perhexiline** (mito) — ECFP4 buried it at rank 11 (Tanimoto 0.05) → USRCAT **rank 1**. But it *worsened* 3 pairs (astemizole–thioridazine 2→9, troglitazone–nefazodone 2→9) because **global molecular shape/size dominates the descriptor, not the target-relevant toxicophore**; absolute sibling scores (0.12–0.23) stay non-discriminative. **Takeaway: 3D shape is a weak *supplement* (helps shape-driven cases), not a dependable rescue → R4 (off-target/mechanism) remains the engine.** A stricter 3D test — O3A/ROCS alignment or explicit pharmacophore-fitting, which target the 3-point toxicophore geometry USRCAT ignores — is the remaining untested 3D option.
 
 ### Pipeline
 ```
@@ -164,7 +164,7 @@ Each rung is interpretable and maps to a known driver; the **mechanism rung (R4)
 |---|---|---|---|
 | **R1 2D fingerprint** (ECFP4 Tanimoto) | shared 2D substructure | RDKit + **FPSim2** | fast floor; catches *obvious* analogs only |
 | **R2 feature/pharmacophore fp** (FCFP, ErG/Gobbi) | pharmacophoric features (topological) | RDKit | marginal lift; cheap |
-| **R3 3D shape + pharmacophore** (USRCAT; O3A/Shape-it, Align-it) | conformer shape + 3D feature layout | RDKit USRCAT (+ Shape-it/Align-it) | **test-gated** — may catch hERG-type 3D pharmacophores 2D misses |
+| **R3 3D shape** (USRCAT; O3A/ROCS = stricter, untested) | conformer shape (global, not toxicophore geometry) | RDKit USRCAT | **tested → weak supplement**: rescued a shape-driven mito pair (rank 11→1) but hurt others; not dependable |
 | **R4 off-target / mechanism** | shared (predicted) protein liabilities: hERG, 5-HT2B, BSEP, mito… | target-prediction (SEA, ChEMBL target-prediction, PIDGIN) or a small **docking panel**; matched to reference drugs' ChEMBL off-targets | **the differentiator** — this is what links the verified pairs |
 
 **On learned embeddings:** off-the-shelf encoders (MolFormer/ChemBERTa/Uni-Mol) embed *general chemistry, not toxicity*; unproven lift, unexplainable. Include only if they beat R1–R4 on a scaffold-split holdout. Until then, cut them.
@@ -220,7 +220,7 @@ Report as **"4.1× liver-liability enrichment"** or a **0–100 priority score**
 - [ ] organ/mechanism → assay mapping → ranked panel + evidence trail.
 
 **Phase 2 — Mechanism layer + rigor (the differentiator; do before any "wow")**
-- [ ] **R3 3D test (USRCAT)** on the verified pairs — keep only if it beats 2D.
+- [x] **R3 3D test (USRCAT): done — mixed** (4/7 improved, 3/7 worse; not a rescue). Keep as optional supplement. Remaining 3D option: O3A/ROCS alignment or pharmacophore-fit (untested).
 - [ ] **R4 off-target/mechanism linkage** — predict candidate off-target profile; match to reference off-targets; this is what should recover the verified pairs.
 - [ ] Validation: scaffold-split CV, per-organ enrichment/precision@k, calibration, baselines (ECFP, ProTox/ADMET-AI), ablation.
 - [ ] Attribution (shared mechanism + motif/pose) + LLM report + mechanism-edge network.
