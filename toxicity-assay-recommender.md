@@ -11,8 +11,8 @@
 - **Event:** a bio × AI hackathon. Deliverable is an **MVP + investor/judge-facing demo** (see §6), not a validated product.
 - **How we got here:** chosen over an alternative — a *cross-specificity / immunogenicity risk tool for biologics* (antibody candidates, e.g. cetuximab/α-gal) — because the small-molecule tox tool is **more tractable**: core datasets are downloadable, and the MVP is retrieval + light reasoning. The biologics idea is a fallback.
 - **Key pivot (from our own feasibility test — see §4):** we tested whether cheap **2D structural similarity** actually connects mechanistically-related tox failures. **It does not** (7 verified withdrawn-drug pairs, ECFP4 Tanimoto 0.05–0.19). The shared liability is an off-target *binding* phenomenon 2D structure can't see. So the retrieval engine is **mechanism / off-target similarity**, with 2D fingerprints demoted to a fast "obvious-analog" pre-filter.
-- **Repo state:** **greenfield.** `/Users/cheparukhin/hackathon/` contains this doc; a Python venv with RDKit exists in scratch for verification. No product code yet.
-- **Guiding principle:** ship a working floor first (2D fingerprint retrieval + class-conditional scoring), but the **differentiator is the mechanism/off-target layer** validated against real clinical failures — *not* a black-box structural model.
+- **Repo state:** the repo contains this doc + an **[`experiments/`](experiments/)** folder with reproducible feasibility scripts (2D / 3D / R4) + results (RDKit 2026.03.3, seeds, SMILES). No product code yet — the pipeline (§4) is greenfield.
+- **Guiding principle:** ship a working floor first (2D fingerprint retrieval + class-conditional scoring), but the **demo headline is the mechanism/off-target layer (R4)** — now **validated** on real clinical failures (§4). The 2D floor is the baseline/safety-net, *not* the pitch.
 - **Parameters still TBD:** timeframe/deadline; team size & strengths; explicit judging criteria; target LLM + infra.
 - **Data caveat:** dataset sizes are **last-published figures** and several conflict across mirrors (e.g. ClinTox is cited as **1,484** on TDC and **1,491** in the MoleculeNet paper). **Re-confirm every count and DOI against the primary source before quoting in a pitch.**
 
@@ -37,13 +37,15 @@ The two halves each exist separately; the **combination is unoccupied**:
 
 - **Endpoint predictors** — ProTox 3.0, admetSAR 3.0 / ADMETlab 3.0, ADMET-AI, DeepTox, DEREK. Predict *tox probabilities / structural alerts*, **not "which assay to run,"** and are **not grounded in clinical-trial failures**.
 - **Read-across engines** — EPA **GenRA**, OECD QSAR Toolbox, AMBIT. Analog-based tox inference (closest cousin), but reference sets are **environmental chemicals**, and output isn't a prioritized clinical assay panel.
-- **Closest paper** — *"Comprehensive Analysis of Clinically Discontinued Compounds Using an In Vitro Secondary Pharmacology Panel"* (PMC12441832, 2024): **52 small molecules discontinued Phase 1–3 for safety** run through a **47-target / 78-assay** panel. It screens **everything** and argues the primary target doesn't predict off-target risk — it does **not** use similarity to *prioritize a subset* of assays. **That is our niche.**
+- **Closest paper** — Albert, Skinner et al., *"Comprehensive Analysis of Clinically Discontinued Compounds Using an In Vitro Secondary Pharmacology Panel…"* (**ACS Pharmacol Transl Sci 2025, DOI 10.1021/acsptsci.5c00452**): **52 compounds discontinued 2001–2021 for safety** run through the **SAFETYscan47** (47-target) panel. It screens **everything** and argues the primary target doesn't predict off-target risk — it does **not** use similarity to *prioritize a subset* of assays. **That is our niche.**
 
 > **Novelty claim — needs a documented search log, don't overstate.** A *preliminary* search found no public tool/paper combining (clinical-failure grounding) × (similarity/mechanism retrieval) × (specific assay recommendation). Before the pitch, record the exact **databases, dates, query strings, and inclusion criteria** so "we found nothing equivalent" is reproducible rather than an assertion.
 
 **Our two defensible novelty claims:**
 1. **Reference set grounded in *toxicity-causal* clinical failures** (not assay-positives, not mere market withdrawals).
 2. **Output = a specific, ranked assay panel**, made credible by organ+mechanism-resolved labels and a validation protocol.
+
+> **Be precise about T1 vs T2 in the pitch:** the *clinical-failure grounding* (T1) is what's novel, but the *scoring backbone* is largely **T2 organ-liability labels** (DILIrank/DICTrank — marketed drugs). Don't imply the whole score comes from toxicity-causal clinical failures — T1 is the grounding badge, T2 does the statistical lifting.
 
 Genuine white space = the **linkage layer**: candidate → the mechanism/off-target it shares with clinically-failed drugs → the assay that would have caught them.
 
@@ -98,19 +100,21 @@ The class-conditional score needs a denominator. **"Approved" ≠ "safe"** — a
 ### Empirical reality check (we ran this — it drove the design)
 We assembled 7 pairs of drugs that were **both withdrawn/failed for the same organ toxicity via the same documented mechanism**, then computed similarity. **2D fingerprints miss all of them:**
 
-| Pair | Shared mechanism → organ | ECFP4 | FCFP4 | Both withdrawn |
+| Pair | Shared mechanism → organ | ECFP4 | FCFP4 | Clinical status (precise — verify per row) |
 |---|---|---|---|---|
-| **Terfenadine × Cisapride** | hERG block (Tyr652/Phe656) → QT/TdP | 0.19 | 0.15 | ✅ 1998 / 2000 |
-| Astemizole × Thioridazine | hERG → QT/TdP | 0.17 | 0.25 | ✅ 1999 / 2005 |
-| **Pergolide × Fenfluramine** | 5-HT2B agonism → valve fibrosis | 0.11 | 0.14 | ✅ 2007 / 1997 |
-| Cabergoline × Benfluorex | 5-HT2B (norfenfluramine) → valvulopathy | 0.11 | 0.15 | ✅ (Mediator scandal) |
-| **Troglitazone × Nefazodone** | BSEP + mitochondrial → DILI | 0.13 | — | ✅ both DILIrank-Most |
-| Troglitazone × Sitaxentan | BSEP inhibition → cholestatic DILI | 0.11 | — | ✅ 2000 / 2010 |
-| Fialuridine × Perhexiline | mitochondrial → hepatotox | 0.05 | — | ✅ (FIAU: 5 trial deaths) |
+| **Terfenadine × Cisapride** | hERG block (Tyr652/Phe656) → QT/TdP | 0.19 | 0.15 | both withdrawn (US 1998 / 2000) |
+| Astemizole × Thioridazine | hERG → QT/TdP | 0.17 | 0.25 | astemizole withdrawn 1999; thioridazine brand withdrawn 2005 (QT boxed 2000) |
+| **Pergolide × Fenfluramine** | 5-HT2B agonism → valve fibrosis | 0.11 | 0.14 | both withdrawn (US 2007 / 1997) |
+| Cabergoline × Benfluorex | 5-HT2B (norfenfluramine) → valvulopathy | 0.11 | 0.15 | cabergoline **restricted/boxed, not withdrawn** (still marketed low-dose); benfluorex withdrawn EU 2009 (Mediator) |
+| **Troglitazone × Nefazodone** | BSEP + mitochondrial → DILI | 0.13 | — | troglitazone withdrawn 2000; nefazodone brand discontinued ~2004 (hepatotox boxed) — both DILIrank-Most |
+| Troglitazone × Sitaxentan | BSEP inhibition → cholestatic DILI | 0.11 | — | both withdrawn (2000 / 2010) |
+| Fialuridine × Perhexiline | mitochondrial → hepatotox | 0.05 | — | FIAU **never approved** (Phase 2 halted 1993, 5 deaths); perhexiline withdrawn most markets, TDM-only AU/NZ |
 
 Feature/pharmacophore 2D fingerprints (FCFP, Gobbi) gave only **1.3–1.5× lift** (absolute sim still ~0.15–0.25); sanity checks passed (true analogs stayed high: pergolide↔cabergoline 0.41). **Conclusion:** the signal linking these is **shared binding target**, which needs a 3D and/or off-target layer — *not* 2D structure. This is the single most important design fact.
 
 **3D shape test (USRCAT) — done, mixed result.** 30 conformers/molecule (ETKDGv3 + MMFF), each pair's true partner ranked against the 16-compound library. USRCAT improved partner rank in **4/7** pairs and lifted top-3 hits only 3/7 → 4/7. One clean rescue: **fialuridine–perhexiline** (mito) — ECFP4 buried it at rank 11 (Tanimoto 0.05) → USRCAT **rank 1**. But it *worsened* 3 pairs (astemizole–thioridazine 2→9, troglitazone–nefazodone 2→9) because **global molecular shape/size dominates the descriptor, not the target-relevant toxicophore**; absolute sibling scores (0.12–0.23) stay non-discriminative. **Takeaway: 3D shape is a weak *supplement* (helps shape-driven cases), not a dependable rescue → R4 (off-target/mechanism) remains the engine.** A stricter 3D test — O3A/ROCS alignment or explicit pharmacophore-fitting, which target the 3-point toxicophore geometry USRCAT ignores — is the remaining untested 3D option.
+
+**R4 mechanism-linkage test (the fix) — done, decisive.** We prototyped the off-target layer as a lightweight proxy: for each safety target, fetch its known actives from ChEMBL (hERG 1,483; 5-HT2B 1,214; Nav1.5 258 — **BSEP yielded only 5, so it fell back**), and score a query by mean top-5 Tanimoto to that *class* (leave-one-out: query + named partners removed first). Result: **terfenadine → hERG = 0.57 (z = +6.4 vs background)** vs pairwise terfenadine–cisapride = 0.19 — and cisapride wasn't even in the fetched hERG set, so the recovery is driven entirely by *other* hERG ligands. Across 6 query drugs the true mechanism was **top-ranked 4/6, above background 6/6**. Honest misses: fenfluramine (its active is the metabolite norfenfluramine), thioridazine (genuinely hERG *and* serotonergic). **Conclusion: class-aggregation recovers the mechanism pairwise buries — R4 is validated and cheap.** Full scripts + data in [`experiments/`](experiments/).
 
 ### Pipeline
 ```
@@ -167,6 +171,15 @@ Each rung is interpretable and maps to a known driver; the **mechanism rung (R4)
 | **R3 3D shape** (USRCAT; O3A/ROCS = stricter, untested) | conformer shape (global, not toxicophore geometry) | RDKit USRCAT | **tested → weak supplement**: rescued a shape-driven mito pair (rank 11→1) but hurt others; not dependable |
 | **R4 off-target / mechanism** | shared (predicted) protein liabilities: hERG, 5-HT2B, BSEP, mito… | target-prediction (SEA, ChEMBL target-prediction, PIDGIN) or a small **docking panel**; matched to reference drugs' ChEMBL off-targets | **the differentiator** — this is what links the verified pairs |
 
+**Layer 1 — R4 detail (the safety-panel pipeline).** The mechanism vocabulary is a **defined secondary-pharmacology safety panel**, not an open-ended target list: the **Bowes et al. ~44-target minimal panel** (*Nat Rev Drug Discov* 2012;11:909), aligned to the **SAFETYscan47** panel in the discontinued-compounds paper (*ACS Pharmacol Transl Sci* 2025, DOI 10.1021/acsptsci.5c00452). Each off-target (hERG, 5-HT2B, BSEP, Nav1.5, mitochondrial complexes, …) maps to an **organ** and a **named assay** (see Layer 4). Pipeline:
+- **(a) Reference side** — annotate each clinically-failed drug with its **measured** panel activity from ChEMBL (hERG/5-HT2B/BSEP IC50 etc.) + organ/mechanism/provenance. These are facts, not predictions.
+- **(b) Candidate side** — score the candidate against the **same panel** via off-target/target-prediction (SEA, ChEMBL target-prediction, PIDGIN) and/or per-target QSAR (hERG has excellent public models — see §3b).
+- **(c) Link** — candidate's predicted panel-hits → failed drugs sharing them → organ → assay.
+
+**Concrete MVP path (validated — commit to this one).** For each safety-panel target, fetch known actives from **ChEMBL** (pChEMBL ≥ 6; IC50/Ki/Kd); score the candidate by **mean top-5 Tanimoto to the class**, reported as a **z-score vs. a background set of non-binder drugs** (prototype: terfenadine→hERG z = +6.4). **Fallbacks:** if a target has too few actives (BSEP returned only 5 → unusable), fall back to that mechanism's direct reference-drug annotations or the 2D floor, and flag low target-coverage. **Production upgrade:** swap raw class-Tanimoto for a trained target-prediction model (SEA / per-target QSAR) and handle metabolite-active drugs explicitly (the fenfluramine miss). Start the panel with **hERG and 5-HT2B / aminergic GPCRs** — best-covered, and the verified-pair mechanisms.
+
+**Why R4 works where pairwise similarity failed.** Terfenadine and cisapride aren't similar to *each other* (ECFP4 0.19) — but each is similar to *some* member of the large, structurally diverse set of known hERG ligands. Predicting "binds hERG" by comparing to the **whole target class** is far more sensitive than comparing to one sibling. R4 wins by **aggregating over the target's entire diverse ligand set** — exactly the signal a single pairwise comparison throws away. *The off-target predictors are the means, not the product:* the novelty is the clinical-failure grounding + linkage + assay recommendation, not the predictors themselves.
+
 **On learned embeddings:** off-the-shelf encoders (MolFormer/ChemBERTa/Uni-Mol) embed *general chemistry, not toxicity*; unproven lift, unexplainable. Include only if they beat R1–R4 on a scaffold-split holdout. Until then, cut them.
 
 ### Layer 3 — Per-modality scoring (class-conditional; enrichment, not a probability)
@@ -198,6 +211,7 @@ Report as **"4.1× liver-liability enrichment"** or a **0–100 priority score**
 ### Rigor: validation, calibration & applicability domain
 - **Scaffold-split CV (never random)** — random splits leak analogs and inflate everything; Bemis–Murcko split tests generalization to novel chemotypes.
 - **Per-organ discrimination:** ROC-AUC and **enrichment factor / precision@k** (triage-relevant).
+- **Assay-recovery (tests the actual product promise):** for held-out failures with a known mechanism, does the **correct assay appear in the top-1 / top-3** of the recommended panel? This validates the *"which assay first"* claim directly — organ discrimination alone doesn't.
 - **Calibration:** does 4× enrichment map to a real elevated failure rate? Report a calibration curve; ranked-but-uncalibrated is fine for *prioritization* if not sold as P(harm).
 - **Baselines to beat:** plain ECFP (does R3/R4 add signal?) and ≥1 published predictor (ProTox / ADMET-AI) on the same holdout — demonstrate **lift**.
 - **Applicability domain (OECD):** flag and **abstain** outside the reference set's chemical/target space.
@@ -215,13 +229,16 @@ Report as **"4.1× liver-liability enrichment"** or a **0–100 priority score**
 - [ ] Build the **matched No-concern comparator** (DILIrank/DICTrank No-concern, matched by scaffold/property/route).
 - [ ] Load our **7 verified demo pairs** (§4) as fixtures + a documented **novelty search log** (§2).
 
-**Phase 1 — Floor (must ship)**
+**Phase 1 — Baseline / obvious-analog floor (must ship — but this alone is NOT the demo)**
 - [ ] FPSim2 2D retrieval + **class-conditional enrichment** score (vs matched comparator) with applicability-domain flag.
 - [ ] organ/mechanism → assay mapping → ranked panel + evidence trail.
+- ⚠️ 2D catches only *obvious* analogs (our test: it misses every verified mechanistic pair). The floor guarantees "always have something running"; **the demo headline requires R4 (Phase 2) — already validated by the prototype, so treat R4 as must-ship for the demo, not a stretch.**
 
 **Phase 2 — Mechanism layer + rigor (the differentiator; do before any "wow")**
 - [x] **R3 3D test (USRCAT): done — mixed** (4/7 improved, 3/7 worse; not a rescue). Keep as optional supplement. Remaining 3D option: O3A/ROCS alignment or pharmacophore-fit (untested).
-- [ ] **R4 off-target/mechanism linkage** — predict candidate off-target profile; match to reference off-targets; this is what should recover the verified pairs.
+- [x] **R4 prototype (class-membership scoring vs ChEMBL actives): done — go/no-go PASSED.** True mechanism top-ranked 4/6, above background 6/6; terfenadine→hERG z = +6.4, leave-one-out (§4, [`experiments/`](experiments/)). The differentiator landed.
+- [ ] **Harden R4:** swap raw class-Tanimoto → trained target-prediction (SEA / per-target QSAR); expand the panel beyond hERG/5-HT2B; handle metabolite-active drugs (fenfluramine); add per-target coverage + applicability-domain flags.
+- [ ] **Assay-recovery validation** (top-1/top-3, §4 Rigor) — the "which assay first" promise, not just organ discrimination.
 - [ ] Validation: scaffold-split CV, per-organ enrichment/precision@k, calibration, baselines (ECFP, ProTox/ADMET-AI), ablation.
 - [ ] Attribution (shared mechanism + motif/pose) + LLM report + mechanism-edge network.
 
@@ -233,12 +250,12 @@ Report as **"4.1× liver-liability enrichment"** or a **0–100 priority score**
 
 ## 6. Demo / pitch (investor-facing)
 
-Claim: **"our AI reasons like an experienced med chemist — links a candidate to clinical failures by *shared mechanism* (not just lookalikes), shows why, recommends the next experiment, and we can show it generalizes."** Flow, built on a **verified** pair (Terfenadine × Cisapride):
+Claim: **"our AI reasons like an experienced med chemist — links a candidate to clinical failures by *shared mechanism* (not just lookalikes), shows why, recommends the next experiment, and we can show it generalizes."** Framed honestly as a **retrospective leave-one-out demo** — hide a known failure's label, query it, show the system recovers the liability. Built on a **verified** pair (Terfenadine × Cisapride):
 
-1. Paste a candidate.
+1. Paste **terfenadine** as the "candidate," its own tox label hidden (leave-one-out).
 2. *Screening against N toxicity-causal clinical failures vs. matched No-concern drugs…*
-3. **The honest hook:** *"A 2D-similarity tool scores this against cisapride at 0.19 — it would miss it. But both block hERG."* → shows the 2D limitation up front, then the mechanism link.
-4. **Class-conditional result:** *"cardiac-liability enrichment 4.1× vs matched comparator; driven by shared predicted hERG block with terfenadine & cisapride — both withdrawn for QT/TdP."*
+3. **The honest hook:** *"A 2D-similarity tool scores terfenadine against cisapride at 0.19 — it would miss the link. But both block hERG."*
+4. **Mechanism result (real, from our prototype):** *"terfenadine flags the hERG class at **z = +6.4** above background — even with terfenadine and cisapride removed from the reference set. Shared predicted hERG liability with drugs withdrawn for QT/TdP."* (An organ-level `N×` enrichment can be shown too — but only once computed against the matched comparator; don't display a placeholder.)
 5. **Ranked assay panel** — hERG patch-clamp → iPSC-cardiomyocyte, each tagged with the driving failed drug + tier + citation.
 6. **Trust signal:** paste an out-of-domain molecule → the tool **abstains** ("outside applicability domain").
 7. Mechanism-edge network; click a node to inspect a failed drug.
@@ -254,8 +271,8 @@ Claim: **"our AI reasons like an experienced med chemist — links a candidate t
 3. **"Safe" comparator is a misnomer.** → matched **No-concern** class, not "any approved" (§3e).
 4. **Score semantics.** Present enrichment (`N×`) or 0–100 priority, **not** probability-looking decimals unless calibrated.
 5. **2D structure is insufficient** (our own test). → mechanism/off-target layer is the engine; state it as a designed choice, not a gap.
-6. **Off-target prediction is itself a model** with error. → report confidence; use measured ChEMBL off-targets for reference drugs, predicted for the candidate; validate on the verified pairs.
-7. **Structure/mechanism proxies miss metabolism / reactive metabolites / dose.** → prioritization, never a safety verdict.
+6. **Off-target prediction is itself a model** with error — **worst for novel scaffolds** far from any known ligand set (R4's sensitivity comes from the target's known ligands; a truly novel chemotype has few). → report confidence and an applicability-domain flag; use **measured** ChEMBL off-targets for reference drugs, **predicted** only for the candidate; validate on the verified pairs.
+7. **Some clinical killers are NOT off-target binding** — reactive/CYP-generated metabolites, idiosyncratic mitochondrial tox, dose/exposure — so **the panel physically cannot predict them**. The **reference set still flags** such drugs (they're in the failure DB with their organ/mechanism), but **R4 can't link a candidate to them** by shared panel activity. Honest scope limit: R4 covers off-target-mediated liabilities only → prioritization, never a safety verdict.
 8. **Generalization.** Never quote a random-split number; report scaffold-split CV + AD abstention.
 9. **Proprietary gap.** Cleanest discontinued-for-safety data (Pharmaprojects/Citeline, Pharmapendium) is paywalled — note as gold standard if licensed.
 10. **Licenses:** DrugBank / SIDER / OFFSIDES non-commercial — flag for any commercialization.
@@ -265,7 +282,7 @@ Claim: **"our AI reasons like an experienced med chemist — links a candidate t
 ## 8. Tools
 **Core:** RDKit (ECFP/FCFP, Gobbi pharmacophore, **USRCAT 3D**, conformers via ETKDGv3, descriptors, substructure), **FPSim2** (2D retrieval engine), scikit-learn (scaffold-split CV, calibration, stacking), an LLM for the agent report.
 **3D similarity:** RDKit USRCAT / O3A; **Shape-it / Align-it** (open-source ROCS-like); ROCS/Phase (commercial, gold standard).
-**Off-target / mechanism (R4):** SEA, ChEMBL target-prediction models, PIDGIN; optional docking (hERG/5-HT2B/BSEP panel); reference off-targets from ChEMBL bioactivity.
+**Off-target / mechanism (R4):** **Bowes et al. 2012 ~44-target safety panel** (aligned to SAFETYscan47) as the **target vocabulary**; SEA (Similarity Ensemble Approach), ChEMBL target-prediction models, PIDGIN; **per-target QSAR (hERG has strong public models)**; optional docking (hERG/5-HT2B/BSEP panel); reference off-targets = measured ChEMBL bioactivity.
 **Baselines / cross-checks:** plain ECFP, ProTox 3.0, ADMET-AI, admetSAR/ADMETlab 3.0, EPA GenRA.
 **Only-if-lift-shown:** MolFormer/ChemBERTa/Uni-Mol as an added rung, gated by the scaffold-split holdout.
 
@@ -280,7 +297,8 @@ Claim: **"our AI reasons like an experienced med chemist — links a candidate t
 - DICTrank — FDA (2023); Drug Discov Today DOI 10.1016/j.drudis.2023.103770
 - Tox21 / ToxCast — tox21.gov; EPA figshare invitrodb
 - SIDER / OFFSIDES / TWOSIDES — nsides.io; Tatonetti Lab
-- Closest prior art — secondary pharmacology of discontinued compounds, PMC12441832 (2024)
+- Closest prior art — Albert, Skinner et al., *"Comprehensive Analysis of Clinically Discontinued Compounds Using an In Vitro Secondary Pharmacology Panel…"*, *ACS Pharmacol Transl Sci* 2025 — **DOI 10.1021/acsptsci.5c00452** (SAFETYscan47; 52 safety-discontinued compounds 2001–2021)
+- Secondary-pharmacology safety panel (R4 target vocabulary) — Bowes et al., *Nat Rev Drug Discov* 2012;11:909
 - Read-across — EPA GenRA · Predictors — ADMET-AI; ProTox 3.0 (NAR 2024 W513); ADMETlab 3.0 (NAR 2024 W422)
 
 **Verified demo pairs — citations:**
