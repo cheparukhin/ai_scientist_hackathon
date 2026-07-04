@@ -11,7 +11,7 @@ Backing evidence for the design claims in `../toxicity-assay-recommender.md` §4
 | `run_all.py` | **E1 — 2D similarity** of the 7 verified withdrawn-drug pairs + sanity pairs | Mechanistic pairs ECFP4 **0.05–0.19**; true analogs stay high (pergolide↔cabergoline 0.41, fenfluramine↔norfenfluramine 0.64) → 2D **misses** the mechanistic links |
 | `run_pharm.py` | **E2 — feature/pharmacophore 2D** (FCFP4, Gobbi) vs ECFP4 | FCFP lift only **1.3–1.5×**, absolute sim still ~0.15–0.25; Gobbi worse → 2D pharmacophore does **not** rescue |
 | `usrcat_experiment.py` | **E3 — 3D shape** (USRCAT, 30 confs ETKDGv3+MMFF), retrieval-rank vs 2D | Partner rank improved **4/7**, worsened **3/7**; one clean rescue (fialuridine–perhexiline 11→1). 3D = weak supplement, **not** a dependable rescue |
-| `fetch_actives.py` + `score.py` | **E4 — R4 mechanism linkage** (class-membership scoring vs ChEMBL actives, leave-one-out) | **terfenadine→hERG = 0.57, z = +6.4** vs pairwise 0.19; true mechanism top-ranked **4/6**, above background **6/6** → **R4 validated** |
+| `fetch_actives.py` + `score.py` | **E4 — R4 mechanism linkage** (class-membership scoring vs ChEMBL actives, leave-one-out) | **terfenadine→hERG = 0.57, z = +6.4** vs pairwise 0.19; correct mechanism was the highest-scoring of the 3 tested targets for **4 of 6** drugs, and above the non-binder background for **all 6** → **R4 validated** |
 
 `results.json` = E4 output (per-drug class scores, background stats, actives counts: hERG 1,483 / 5-HT2B 1,214 / Nav1.5 258; BSEP only 5 → unusable, fell back).
 
