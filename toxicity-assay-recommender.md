@@ -104,22 +104,23 @@ Layered so there is always a working floor even if the higher layers slip.
 
 ```
              ┌─────────────────────────────────────────────┐
-  SMILES  →  │ 1. Representation                            │
-             │   • ECFP4 (Morgan r=2) fingerprint  [floor]  │
-             │   • pretrained embedding (MolFormer/ChemBERTa)│
-             │   • Uni-Mol 3D embedding            [stretch] │
+  SMILES  →  │ 1. Similarity channels (interpretable)       │
+             │   • ECFP4 Tanimoto (FPSim2)          [floor] │
+             │   • pharmacophore fp + physchem distance     │
+             │   • 3D shape (USRCAT)             [optional] │
+             │   • learned embedding — only if lift proven  │
              └───────────────────┬─────────────────────────┘
                                  ▼
              ┌─────────────────────────────────────────────┐
              │ 2. Retrieval over reference DB               │
-             │   • Tanimoto / cosine kNN                    │
-             │   • returns neighbors + organ labels + source│
+             │   • multi-channel k-NN (FPSim2)              │
+             │   • neighbors + organ labels + tier + source │
              └───────────────────┬─────────────────────────┘
                                  ▼
              ┌─────────────────────────────────────────────┐
-             │ 3. Per-modality risk scoring                 │
-             │   • similarity-weighted kNN vote per organ   │
-             │   • calibrated vs. safe background set       │
+             │ 3. Per-modality scoring (class-conditional)  │
+             │   • likelihood ratio: sim(toxic)/sim(safe)   │
+             │   • matched background + applicability domain │
              │   → {liver:0.71, cardio:0.20, hERG:0.10,...} │
              └───────────────────┬─────────────────────────┘
                                  ▼
@@ -138,21 +139,40 @@ Layered so there is always a working floor even if the higher layers slip.
 
 ### Reference DB schema (organ/mechanism-resolved, multi-modal)
 ```
-compound_id | canonical_SMILES | source(s) | fail_stage | clinical_failure_flag |
+compound_id | canonical_SMILES | source(s) | provenance/evidence_link | label_tier |
+fail_stage | clinical_failure_flag |
 liver_risk | cardio_risk | hERG | kidney | neuro | hematologic | ... |
-mechanism (optional) | representative_evidence_link
+mechanism (optional)
 ```
 - Store labels as a **vector across modalities**, not a single "reason" string — a molecule can carry several liabilities.
-- `clinical_failure_flag` (from ClinTox/WITHDRAWN) is a separate boost/badge so we keep the clinical-failure story *and* the score stays credible on the cleaner FDA organ ranks.
+- **`label_tier` is non-negotiable for rigor — never silently blend label qualities:**
+  - **T1** — withdrawn / discontinued *for toxicity* (WITHDRAWN, ClinTox positives): strongest, but small.
+  - **T2** — organ-severity-ranked *marketed* drugs (DILIrank-Most, DICTrank-Most): cleaner labels, but survivorship-biased.
+  - **T3** — noisier flags (broad ClinTox-failed, SIDER-derived): supporting evidence only.
+- `clinical_failure_flag` (from ClinTox/WITHDRAWN) is a separate badge so we keep the clinical-failure story *and* the score stays credible on the cleaner T2 organ ranks.
 
-### Layer 1 — Representation (the "non-obvious similarity" differentiator, honestly scoped)
-- **Floor:** ECFP4 + Tanimoto. Guaranteed to run; explainable; ships.
-- **Differentiator:** add **one** pretrained encoder — **MolFormer or ChemBERTa** (SMILES, via HuggingFace, no conformers = easiest). Show a case where the learned embedding and fingerprints **disagree** → the "finds what chemists miss" moment.
-- **Honesty caveat:** an off-the-shelf pretrained embedding is a *general-chemistry* space, **not a "toxicity space."** True toxicity clustering requires supervised/contrastive fine-tuning on the labels (>1-weekend, gated by ~1–3k labeled cpds). Do **not** over-claim "learned toxicity space" for the MVP.
-- **Stretch:** Uni-Mol 3D — only if someone owns conformer generation (3D similarity is conformer-dependent and a time sink).
+### Layer 1 — Similarity channels (interpretable by construction)
+Retrieve neighbors with **several complementary, human-inspectable similarity metrics — not one black-box embedding.** Each channel maps to a known toxicity driver, so every retrieval can be explained. Engine: **FPSim2** (fast Tanimoto k-NN over RDKit fingerprints); the reference set is only a few thousand compounds, so all channels run in-memory in real time.
 
-### Layer 3 — Scoring
-Per modality *m*: `score_m = Σ_i sim(candidate, neighbor_i) · label_{i,m}` over top-k neighbors, normalized against the safe-background neighbor distribution (enrichment, not raw similarity).
+| Channel | Captures | Toxicity rationale | Tool |
+|---|---|---|---|
+| **ECFP4 / Morgan Tanimoto** *[floor]* | 2D substructure / scaffold | close analogs of known failures | RDKit + FPSim2 |
+| **Pharmacophore fingerprint** (ErG / Gobbi 2D-pharmacophore) | feature arrangement (basic amine ↔ aromatic, etc.) | catches **scaffold hops** sharing a pharmacophore (hERG, phospholipidosis) | RDKit |
+| **Physicochemical distance** (logP, pKa/charge, PSA, MW) | cationic-amphiphilic / lipophilic character | direct driver of phospholipidosis, hERG, promiscuity | RDKit descriptors |
+| **3D shape** (USRCAT) *[optional]* | conformer shape | shape-driven off-target liability | RDKit |
+
+**Why not learned embeddings (the rigorous reason):** an off-the-shelf pretrained encoder (MolFormer/ChemBERTa/Uni-Mol) embeds *general chemistry*, **not toxicity** — there's no guarantee it ranks two hERG blockers closer than fingerprints do, it's unexplainable, and its lift over fingerprints for *this* task is unproven. A true "toxicity space" needs supervised/contrastive fine-tuning on the labels (out of hackathon scope, gated by ~1–3k labeled cpds). **Include a neural channel only if you can demonstrate measurable lift over the interpretable channels on a scaffold-split holdout** (see Rigor). Until that lift is shown, it is unfalsifiable weight — cut it.
+
+### Layer 3 — Per-modality scoring (class-conditional, *not* raw similarity)
+**The core rigor point:** similarity to a toxic drug means nothing unless the candidate is *more* similar to toxic drugs than to safe ones — toxic and safe drugs share scaffolds (kinase inhibitors, etc.), so a raw nearest-neighbor score is confounded. Score each organ modality as a **relative enrichment / likelihood ratio** against the *matched* safe background (§3e):
+
+```
+LR_m  =  weighted_sim(candidate, toxic-in-m neighbors)
+         ─────────────────────────────────────────────
+         weighted_sim(candidate, safe-background neighbors)
+```
+
+Equivalently: a class-conditional k-NN posterior `P(tox_m | structure)`, or an **enrichment factor** (how enriched the top-k neighbors are for organ-*m* failures vs. the base rate). Combine channels by rank-aggregation or a simple logistic stack — **not** a hidden weighting. Report per organ: the score, the driving neighbors (with provenance + label tier), and an **applicability-domain flag** (§ Rigor). This kills the "everything looks toxic because everything resembles *some* drug" confound.
 
 ### Layer 4 — Modality → assay mapping (hand-authored; the payoff)
 | Modality flagged | Recommended assays (priority order) |
@@ -169,6 +189,19 @@ Per modality *m*: `score_m = Σ_i sim(candidate, neighbor_i) · label_{i,m}` ove
 - **LLM agent** interprets retrieved evidence into a report (retrieval + reasoning; **no model training needed for v1**). Optional multi-role framing for the pitch: Retriever → Evidence → Hypothesis → Experiment-planner.
 - **Visualization** — candidate at center, historical neighbors around it, organ-colored (🔴liver 🔵kidney 🟢heart); click a node → why it failed, shared motif, literature, suggested assay.
 
+### Rigor: validation protocol, calibration & applicability domain
+This is what separates the tool from a nice-looking demo. Minimum defensible evaluation, all under **retrospective holdout**:
+
+1. **Scaffold-split cross-validation (never random split).** Random splits leak close analogs between train/test and inflate performance — the tool would look great and generalize to nothing. **Bemis–Murcko scaffold splits** test the honest question: does it flag risk in *novel chemotypes*? Report all metrics under scaffold split.
+2. **Per-organ discrimination:** ROC-AUC, and — more relevant for a triage tool — **enrichment factor / precision@k** (of the top-k retrieved neighbors, what fraction truly failed in that organ vs. base rate).
+3. **Calibration:** does a 0.7 liver score correspond to a genuinely elevated liver-failure rate? Report a calibration curve. A well-*ranked* but miscalibrated score is acceptable for *prioritization* — as long as you never present it as a probability of harm.
+4. **Baselines to beat:** (a) plain ECFP/Tanimoto — does multi-channel actually add signal? and (b) ≥1 published predictor (**ProTox 3.0** / **ADMET-AI**) on the same holdout. A value claim requires demonstrated **lift** over these, not standalone numbers.
+5. **Applicability domain (OECD QSAR principle):** flag and **abstain** when a query lies outside the reference set's chemical space (e.g. max Tanimoto to any reference < threshold, or descriptors outside the training range). Rigor = knowing when *not* to answer.
+6. **Ablation:** report each similarity channel's individual contribution, so "the pharmacophore channel is what caught this" is measured, not asserted.
+7. **Explainability grounded in prior art:** where the shared motif matches a documented **structural alert / toxicophore**, cite it — anchoring the "why" in established SAR rather than model opinion.
+
+**Honest bounds (state these up front):** structure-only → misses metabolism, reactive metabolites, off-target, and dose/exposure-driven toxicity; it is *prioritization*, not a safety verdict; the T1 positive class is small, so lean on T2 for scoring and use T1 as the clinical-grounding badge.
+
 ---
 
 ## 5. Roadmap (hackathon-scoped, layered by risk)
@@ -176,23 +209,26 @@ Per modality *m*: `score_m = Σ_i sim(candidate, neighbor_i) · label_{i,m}` ove
 **Phase 0 — Data assembly (do first; this is the real work)**
 - [ ] Ingest ClinTox, WITHDRAWN 2.0, Probes&Drugs withdrawn, DILIrank 2.0, DICTrank, a hERG set.
 - [ ] Resolve names → canonical SMILES via PubChem/ChEMBL; de-dupe.
-- [ ] Build the modality-labeled reference table + the safe background set (ClinTox approved).
-- [ ] **Curate ≥1 verifiable "non-obvious analog → real clinical tox failure" pair** for the demo (see Risks — this is the single most important demo asset; a wrong neighbor when a judge clicks kills the pitch).
+- [ ] Build the modality-labeled reference table with **`label_tier` (T1/T2/T3)** and per-compound provenance.
+- [ ] Build a **matched safe background set** — approved, chronically-used drugs, ideally scaffold/property-matched to the toxic set (not just "any approved") so the likelihood ratio isn't confounded by drug-likeness alone.
+- [ ] **Curate ≥1 verifiable "non-obvious analog → real clinical tox failure" pair** for the demo (the single most important demo asset; a wrong neighbor when a judge clicks kills the pitch).
 
 **Phase 1 — Floor (must ship)**
-- [ ] ECFP4 + Tanimoto kNN retrieval.
-- [ ] Per-modality risk vector, background-calibrated.
-- [ ] Modality→assay mapping → ranked assay panel + evidence trail.
+- [ ] FPSim2 ECFP4 Tanimoto k-NN retrieval.
+- [ ] **Class-conditional per-modality score** (likelihood ratio vs. matched background), with an applicability-domain flag.
+- [ ] Modality→assay mapping → ranked assay panel + evidence trail (with neighbor provenance + label tier).
 
-**Phase 2 — Differentiator**
-- [ ] Add MolFormer/ChemBERTa embedding + retrieval; surface a fingerprint-vs-learned disagreement.
-- [ ] Toxicophore / shared-motif highlighting.
+**Phase 2 — Rigor & interpretable channels (this is the defensibility, do before any "wow")**
+- [ ] Add pharmacophore + physicochemical similarity channels; rank-aggregate.
+- [ ] **Validation:** scaffold-split CV, per-organ ROC-AUC + enrichment/precision@k, calibration curve, applicability domain.
+- [ ] **Baselines:** beat plain ECFP and ≥1 published predictor (ProTox / ADMET-AI) on the same holdout; channel ablation.
+- [ ] Toxicophore / shared-motif highlighting, cross-referenced to structural alerts.
 - [ ] LLM agent report + clickable neighbor network.
 
-**Phase 3 — Stretch (only if time)**
+**Phase 3 — Stretch (only with demonstrated lift or spare time)**
+- [ ] Learned embedding channel — **only if** it beats the interpretable channels on the scaffold-split holdout.
+- [ ] USRCAT 3D-shape channel.
 - [ ] AACT `why_stopped` tox-termination mining on a slice ("how the reference set scales").
-- [ ] Uni-Mol 3D embedding.
-- [ ] Cross-check overlay vs. ProTox / ADMET-AI as an independent second opinion.
 
 ---
 
@@ -219,11 +255,13 @@ Don't claim "our AI predicts toxicity better than pharma" (needs years of valida
 5. **The demo needs a *real* non-obvious analog.** Fabricated clusters collapse under a click-through. Curating a true one is Phase-0 work.
 6. **Proprietary gap.** The cleanest "discontinued-for-safety" attrition data (Pharmaprojects/Citeline, Pharmapendium) is paywalled — the 52-compound paper used it. Note as "gold standard if licensed," out of hackathon scope.
 7. **DrugBank / SIDER / OFFSIDES licenses are non-commercial** — flag if the output could be commercialized.
+8. **Similarity ≠ causation (the confound most tools ignore).** Toxic and safe drugs share scaffolds; a raw nearest-neighbor score is confounded. → addressed by **class-conditional / likelihood-ratio scoring** (§4 Layer 3) against a *matched* safe background.
+9. **Generalization to novel scaffolds.** Random-split metrics overstate performance via analog leakage. → **scaffold-split CV + applicability-domain abstention** (§4 Rigor). Never quote a random-split number.
 
 ---
 
 ## 8. Tools
-RDKit (fingerprints + Tanimoto + substructure), HuggingFace (MolFormer/ChemBERTa), Uni-Mol (3D, stretch), a vector store (FAISS or in-memory for ~5k cpds), an LLM for the agent report. Cross-check baselines: ADMET-AI, ProTox 3.0, admetSAR/ADMETlab 3.0, EPA GenRA.
+**Core:** RDKit (Morgan/ECFP + pharmacophore fingerprints + USRCAT shape + physchem descriptors + substructure matching), **FPSim2** (fast Tanimoto k-NN retrieval engine), scikit-learn (scaffold-split CV, calibration, logistic stacking), an LLM for the agent report. **Baselines / cross-checks:** plain ECFP, ProTox 3.0, ADMET-AI, admetSAR/ADMETlab 3.0, EPA GenRA. **Only-if-lift-shown:** HuggingFace MolFormer/ChemBERTa or Uni-Mol as an *additional* channel, gated by the scaffold-split holdout.
 
 ---
 
