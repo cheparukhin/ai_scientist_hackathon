@@ -206,7 +206,7 @@ app/
   M1-derived (unchanged by M2). Narrative for troglitazone (fallback path, no API key) contains
   "model-predicted" and does not claim a probability. Existing render tests stay green.
 
-### [ ] N7 — Mechanism-edge network viz (STRETCH — only if N1–N6 done + time)
+### [x] N7 — Mechanism-edge network viz (STRETCH — only if N1–N6 done + time)
 - `render.py`: `mechanism_graph_dot(result, plan) -> str` — a Graphviz DOT string with the
   candidate at center and each flagged target's linked failed drugs as nodes, edges labelled by
   target/mechanism, node color by organ system (cardiac/CNS/GI/autonomic). Render with

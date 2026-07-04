@@ -132,3 +132,21 @@ def test_troglitazone_narrative_fallback_mentions_m2_no_probability(monkeypatch)
     txt = narrative_report(r, plan, m2)
     assert "model-predicted" in txt.lower(), txt
     assert "probability" not in txt.lower(), txt
+
+
+# ---------------- N7 (stretch) ----------------
+
+def test_mechanism_graph_dot_contents():
+    from render import mechanism_graph_dot
+    from core import score_candidate, build_plan
+    r = score_candidate(EXAMPLES["rimonabant"])
+    dot = mechanism_graph_dot(r, build_plan(r))
+    assert "digraph" in dot
+    assert "CB1" in dot, dot
+    assert ("rimonabant" in dot or "taranabant" in dot), dot
+
+
+def test_app_renders_graphviz_chart():
+    at = _run(EXAMPLES["rimonabant"])
+    assert not at.exception
+    assert len(at.get("graphviz_chart")) >= 1

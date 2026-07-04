@@ -19,7 +19,7 @@ import json
 
 from core import EXAMPLES, build_plan, score_candidate  # noqa: E402
 from agent import narrative_report  # noqa: E402
-from render import mol_png  # noqa: E402
+from render import mol_png, mechanism_graph_dot  # noqa: E402
 from outcome_modules import outcome_panel  # noqa: E402
 import validation as V  # noqa: E402
 
@@ -239,6 +239,14 @@ if run or smiles:
             "Tier": e["tier"], "Provenance / citation": e["citation"],
         } for e in r["evidence"]])
         st.dataframe(ev_df, hide_index=True, width="stretch")
+
+    # ---- mechanism-edge network (N7) ----
+    if any(r["flagged"] and r["evidence"] for r in rows):
+        st.markdown("### Mechanism network — candidate → flagged off-target → linked failed drugs")
+        try:
+            st.graphviz_chart(mechanism_graph_dot(result, plan), use_container_width=True)
+        except Exception as e:
+            st.caption(f"(network view unavailable: {type(e).__name__})")
 
     # ---- M2: metabolism / organ-tox, model-predicted (LOWER tier than M1) (N6) ----
     st.divider()
