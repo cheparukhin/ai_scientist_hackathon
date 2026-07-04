@@ -97,7 +97,7 @@ Add `app/data/panel_actives.json` to `.gitignore` (regenerable cache).
 - Tag each recommended assay `no-go / counter-screen / monitor` (from severity + known-failure grounding).
 - **Acceptance:** `score_candidate("rimonabant SMILES")` returns CB1 counter-screen at rank 1 with default-rank ~15 and an evidence list; output tags present; no P(harm) decimals anywhere.
 
-### [ ] M3 — LLM med-chemist narrative (`agent.py`)
+### [x] M3 — LLM med-chemist narrative (`agent.py`)
 - `narrative_report(result)` → grounded paragraph: names the shared mechanism, the linked failed drugs, and the recommended first assay + why (severity + "resembles drugs withdrawn for X"). Pass ONLY the structured result; instruct no fabrication. Graceful templated fallback if no API key.
 - **Acceptance:** for rimonabant, the narrative names CB1 / psychiatric liability, ≥1 real linked failed drug, and recommends the CB1 counter-screen first — with zero invented facts.
 

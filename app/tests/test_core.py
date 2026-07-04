@@ -80,3 +80,23 @@ def test_no_pharm_probability_in_plan():
         # priority is a 0-100 integer, never a 0-1 probability
         assert isinstance(row["priority"], int)
         assert 0 <= row["priority"] <= 100
+
+
+# ---------------- M3 ----------------
+
+def test_narrative_rimonabant_grounded():
+    from agent import narrative_report
+    r = score_candidate(EXAMPLES["rimonabant"])
+    txt = narrative_report(r).lower()
+    assert "cb1" in txt
+    assert "psychiatr" in txt or "suicid" in txt          # CB1 organ/liability
+    assert ("rimonabant" in txt or "taranabant" in txt)   # >=1 real linked failed drug
+    assert "cb1 counter-screen" in txt                    # recommends the CB1 counter-screen
+    assert "probability" not in txt                       # no P(harm) framing
+
+
+def test_narrative_abstain_message():
+    from agent import narrative_report
+    r = score_candidate(EXAMPLES["cyclosporine"])
+    txt = narrative_report(r).lower()
+    assert "abstain" in txt
