@@ -159,7 +159,7 @@ app/
   data has 10 rows. A test asserts the hard-coded rank pairs match the FINDINGS.md table
   (parse the table, compare).
 
-### [ ] N5 — M2 outcome modules (`outcome_modules.py` + curated data)
+### [x] N5 — M2 outcome modules (`outcome_modules.py` + curated data)
 - **`data/reactive_alerts.json`** (committed): curated bioactivation SMARTS with citations
   (Kalgutkar 2005; Stepan 2011; Claydon/Park DILI alerts). Cover at least: aromatic nitro,
   aromatic amine/anilide, thiophene, furan, hydrazine/hydrazide, thiourea, epoxide,

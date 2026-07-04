@@ -6,6 +6,8 @@ __pycache__/
 actives.json
 *_actives.json
 raw_*.json
+# ...but the curated M2 read-across set is AUTHORED data, not a fetched cache - commit it.
+!app/data/outcome_actives.json
 
 # uv virtual environment
 .venv/

@@ -1,0 +1,230 @@
+{
+ "hepatotox": [
+  {
+   "name": "troglitazone",
+   "smiles": "Cc1c(C)c2c(c(C)c1O)CCC(C)(COc1ccc(CC3SC(=O)NC3=O)cc1)O2",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-DILI-concern (Chen et al., Drug Discov Today 2016, PMID 26903151); FDA-LTKB. Withdrawn 2000 - fatal hepatotoxicity."
+  },
+  {
+   "name": "nefazodone",
+   "smiles": "CCc1nn(CCCN2CCN(c3cccc(Cl)c3)CC2)c(=O)n1CCOc1ccccc1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern; FDA-LTKB. Black-box then withdrawn - hepatic failure."
+  },
+  {
+   "name": "trovafloxacin",
+   "smiles": "N[C@@H]1[C@H]2C[C@H]2CN1c1nc2c(cc1F)c(=O)c(C(=O)O)cn2-c1ccc(F)cc1F",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern (Chen 2016, PMID 26903151). Restricted 1999 - hepatotoxicity."
+  },
+  {
+   "name": "tolcapone",
+   "smiles": "Cc1ccc(C(=O)c2cc(O)c(O)c([N+](=O)[O-])c2)cc1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA-LTKB most-concern. Black-box - fulminant hepatic failure."
+  },
+  {
+   "name": "ketoconazole",
+   "smiles": "CC(=O)N1CCN(c2ccc(OC[C@H]3CO[C@@](Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern; FDA-LTKB. Oral use restricted 2013 - hepatotoxicity."
+  },
+  {
+   "name": "diclofenac",
+   "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern (Chen 2016, PMID 26903151). Idiosyncratic hepatotoxicity."
+  },
+  {
+   "name": "bromfenac",
+   "smiles": "Nc1c(CC(=O)O)cccc1C(=O)c1ccc(Br)cc1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA-LTKB most-concern. Withdrawn 1998 - hepatic failure."
+  },
+  {
+   "name": "isoniazid",
+   "smiles": "NNC(=O)c1ccncc1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern; FDA-LTKB. Classic idiosyncratic hepatotoxicity."
+  },
+  {
+   "name": "valproic acid",
+   "smiles": "CCCC(CCC)C(=O)O",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern. Black-box - hepatotoxicity + microvesicular steatosis."
+  },
+  {
+   "name": "amiodarone",
+   "smiles": "CCCCc1oc2ccccc2c1C(=O)c1cc(I)c(OCCN(CC)CC)c(I)c1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern; FDA-LTKB. Phospholipidosis / steatohepatitis."
+  },
+  {
+   "name": "felbamate",
+   "smiles": "NC(=O)OCC(COC(N)=O)c1ccccc1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA-LTKB most-concern. Black-box - hepatic failure (+ aplastic anaemia)."
+  },
+  {
+   "name": "ticlopidine",
+   "smiles": "Clc1ccccc1CN1CCc2ccsc2C1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank concern; FDA-LTKB. Cholestatic hepatotoxicity."
+  },
+  {
+   "name": "pemoline",
+   "smiles": "CC1OC(c2ccccc2)=NC1=O",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA-LTKB most-concern. Withdrawn - hepatic failure."
+  },
+  {
+   "name": "nimesulide",
+   "smiles": "CS(=O)(=O)Nc1ccc([N+](=O)[O-])cc1Oc1ccccc1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern. Restricted/withdrawn (several countries) - hepatotoxicity."
+  },
+  {
+   "name": "flutamide",
+   "smiles": "CC(C)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern; FDA-LTKB. Black-box - hepatic failure."
+  },
+  {
+   "name": "benoxaprofen",
+   "smiles": "CC(C(=O)O)c1ccc2oc(-c3ccc(Cl)cc3)nc2c1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA-LTKB. Withdrawn 1982 - cholestatic hepatotoxicity."
+  },
+  {
+   "name": "methotrexate",
+   "smiles": "CN(Cc1cnc2nc(N)nc(N)c2n1)c1ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "DILIrank most-concern. Chronic dosing - fibrosis / cirrhosis."
+  },
+  {
+   "name": "dantrolene",
+   "smiles": "O=C1CN(/N=C/c2ccc(-c3ccc([N+](=O)[O-])o3)o2)C(=O)N1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA-LTKB most-concern. Hepatotoxicity (dose/duration related)."
+  },
+  {
+   "name": "labetalol",
+   "smiles": "CC(CCc1ccccc1)NCC(O)c1ccc(O)c(C(N)=O)c1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA-LTKB. Idiosyncratic hepatocellular injury."
+  },
+  {
+   "name": "ebrotidine",
+   "smiles": "NC(N)=Nc1nc(CSCCNC(N)=NS(=O)(=O)Cc2ccc(/N=C/Br)cc2)cs1",
+   "endpoint": "hepatotox",
+   "tier": "T2",
+   "citation": "FDA/EMA. Withdrawn 1998 - acute hepatotoxicity."
+  }
+ ],
+ "mito": [
+  {
+   "name": "troglitazone",
+   "smiles": "Cc1c(C)c2c(c(C)c1O)CCC(C)(COc1ccc(CC3SC(=O)NC3=O)cc1)O2",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will, Curr Drug Targets 2007; Aleo et al., Hepatology 2014 (PMID 24677191). Mitochondrial respiration inhibitor."
+  },
+  {
+   "name": "nefazodone",
+   "smiles": "CCc1nn(CCCN2CCN(c3cccc(Cl)c3)CC2)c(=O)n1CCOc1ccccc1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Aleo et al., Hepatology 2014 (PMID 24677191). Complex I inhibition + BSEP inhibition."
+  },
+  {
+   "name": "tolcapone",
+   "smiles": "Cc1ccc(C(=O)c2cc(O)c(O)c([N+](=O)[O-])c2)cc1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will 2007. Uncoupler of oxidative phosphorylation."
+  },
+  {
+   "name": "perhexiline",
+   "smiles": "C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will 2007. CPT-1 / mitochondrial fatty-acid oxidation inhibitor."
+  },
+  {
+   "name": "flutamide",
+   "smiles": "CC(C)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Aleo et al., Hepatology 2014 (PMID 24677191). Respiratory-chain inhibition."
+  },
+  {
+   "name": "amiodarone",
+   "smiles": "CCCCc1oc2ccccc2c1C(=O)c1cc(I)c(OCCN(CC)CC)c(I)c1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will 2007. Beta-oxidation + electron-transport inhibitor."
+  },
+  {
+   "name": "tamoxifen",
+   "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will 2007. MPT / beta-oxidation inhibition (steatosis)."
+  },
+  {
+   "name": "benzbromarone",
+   "smiles": "CCc1oc2ccccc2c1C(=O)c1cc(Br)c(O)c(Br)c1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Aleo et al., Hepatology 2014 (PMID 24677191). Mitochondrial uncoupler / respiration inhibitor."
+  },
+  {
+   "name": "cerivastatin",
+   "smiles": "COCc1c(C(C)C)nc(C(C)C)c(/C=C/[C@@H](O)C[C@@H](O)CC(=O)O)c1-c1ccc(F)cc1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will 2007. Mitochondrial dysfunction (myotoxic). Withdrawn 2001."
+  },
+  {
+   "name": "valproic acid",
+   "smiles": "CCCC(CCC)C(=O)O",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will 2007. beta-oxidation inhibition -> microvesicular steatosis."
+  },
+  {
+   "name": "chlorpromazine",
+   "smiles": "CN(C)CCCN1c2ccccc2Sc2ccc(Cl)cc21",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Nadanaciva & Will 2007. Electron-transport-chain inhibition."
+  },
+  {
+   "name": "felbamate",
+   "smiles": "NC(=O)OCC(COC(N)=O)c1ccccc1",
+   "endpoint": "mito",
+   "tier": "T2",
+   "citation": "Aleo et al., Hepatology 2014 (PMID 24677191). Mitochondrial liability (reactive atropaldehyde)."
+  }
+ ]
+}
