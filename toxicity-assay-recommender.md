@@ -216,7 +216,15 @@ enrichment_m  =  linkage(candidate, T1/T2 failures in organ m)
 
 Report as **"4.1× liver-liability enrichment"** or a **0–100 priority score** — never `0.71`-style decimals that read as probability of harm, unless calibrated. Combine rungs by transparent rank-aggregation/logistic stack (not hidden weights). Attach: driving links (drug, organ, mechanism, tier, provenance) + **applicability-domain flag**.
 
-### Layer 4 — organ/mechanism → assay mapping (derived, hand-authored)
+### Layer 3b — Severity / actionability weighting (likelihood ≠ consequence)
+The enrichment score measures *how likely* the candidate hits a target — **not how much that hit matters.** A target-liability signal is not automatically a program-killer: some hits mean *early no-go*, some *run a counter-screen*, some *just watch the exposure margin*. The ranking must weight **consequence**, not just target-similarity. Three inputs:
+- **Per-target severity tier** (hand-authored, Bowes-2012-derived; a ~40-row table like the assay map): e.g. **hERG / 5-HT2B = high** (QT-TdP, valvulopathy — potential no-go); **H1 = low** (sedation — monitor); many enzyme hits = counter-screen.
+- **Clinical-failure grounding *is* a severity signal.** Because the reference set is drugs that *actually failed* via that mechanism, resembling a **T1 clinical failure** at a target ("this hit killed real programs at clinical exposure") outranks resembling a benign ligand of the same target. T1 does double duty — grounding **and** actionability.
+- **Exposure margin** — the pharmacology that actually decides if a hit matters (off-target potency vs efficacious exposure). For a *novel* candidate absolute exposure is unknown → express predicted off-target potency + flag *"margin needs exposure context,"* and ground it via the reference failures' known margins where available.
+
+Ranking ≈ (hit confidence, Layer 3) × (target severity) × (T1 clinical-failure grounding) × (margin, if known). Tag every recommendation with an **actionability label — no-go / counter-screen / monitor** — carried into Layer 4.
+
+### Layer 4 — organ/mechanism → assay mapping (derived, hand-authored; carries the Layer-3b actionability tag)
 | Mechanism / organ | Recommended assays (priority order) |
 |---|---|
 | hERG block / cardiac (DICTrank) | hERG patch-clamp → iPSC-cardiomyocyte → Nav1.5/Cav1.2 |
@@ -259,6 +267,7 @@ The de-risking (Phase 0) is **done** and reshaped the plan: build a **tiered por
 - [ ] Reference set: SMILES + ChEMBL off-targets + DILIrank/DICTrank organ join — start with the auto-derivable off-target/cardiac-CNS slice (7/20 clean per Phase-0); load the **7 verified pairs** as fixtures + a documented **novelty search log** (§2).
 - [ ] R4 module across the rich panel (hERG, 5-HT2B + aminergic GPCRs, transporters, enzymes): class-membership scoring (pChEMBL≥6, top-5 Tanimoto, z vs background), leave-one-out.
 - [ ] **Evidence-tier + coverage flags as first-class output:** *mechanism-linked / weak-coverage / **abstain***.
+- [ ] **Severity/actionability table** (§4 Layer 3b): per-target *no-go / counter-screen / monitor* + the T1-failure severity signal — so ranking reflects *consequence*, not just hit-likelihood.
 - [ ] organ/mechanism → assay mapping → ranked panel + evidence trail; **retrospective leave-one-out demo** (§6).
 
 **Phase 2 — M2: breadth for the metabolism/phenotypic gap**
