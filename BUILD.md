@@ -74,7 +74,7 @@ Add `app/data/panel_actives.json` to `.gitignore` (regenerable cache).
 
 ## 5. MILESTONES (work in order; each is independently demoable)
 
-### [ ] M0 — Data + environment
+### [x] M0 — Data + environment
 - `uv pip install --python .venv streamlit anthropic pytest`.
 - Author `app/data/panel.json` (18 targets) and `baseline_order.json` from §4's Layer-3b severity table + Layer-4 assay map + the Baseline-B order in `experiments/derisk/expanded/FINDINGS.md`. Panel keys/CHEMBL IDs are listed in exp_fetch.py.
 - `build_reference.py` → `reference_failures.json` from `experiments/derisk/drugs.json` + citations in §9.

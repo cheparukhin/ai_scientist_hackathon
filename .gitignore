@@ -9,3 +9,6 @@ raw_*.json
 
 # uv virtual environment
 .venv/
+
+# App regenerable ChEMBL cache
+app/data/panel_actives.json

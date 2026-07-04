@@ -1,0 +1,23 @@
+{
+ "description": "Baseline B - the fixed, candidate-INDEPENDENT 'standard practice' default panel order. Cardiac ion channels (hERG, Nav1.5, Cav1.2) front-loaded as real panels do; buried off-targets (5-HT2B, 5-HT3, CB1, MAO-A, AChE) sit low. This is the honest default we reorder against. Source: experiments/derisk/expanded/exp_score.py (BASELINE_B_ORDER) + FINDINGS.md.",
+ "order": [
+  "hERG_CHEMBL240",
+  "Nav15_CHEMBL1980",
+  "Cav12_CHEMBL1940",
+  "5HT2A_CHEMBL224",
+  "D2_CHEMBL217",
+  "M2_CHEMBL211",
+  "alpha1A_CHEMBL229",
+  "H1_CHEMBL231",
+  "muOpioid_CHEMBL233",
+  "SERT_CHEMBL228",
+  "5HT2B_CHEMBL1833",
+  "5HT3_CHEMBL1899",
+  "NET_CHEMBL222",
+  "DAT_CHEMBL238",
+  "CB1_CHEMBL218",
+  "AChE_CHEMBL220",
+  "MAOA_CHEMBL1951",
+  "COX1_CHEMBL221"
+ ]
+}

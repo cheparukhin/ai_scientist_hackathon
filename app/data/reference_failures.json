@@ -1,0 +1,222 @@
+{
+ "pergolide": {
+  "name": "pergolide",
+  "smiles": "CCCN1C[C@H](CSC)C[C@@H]2c3cccc4[nH]cc(c34)C[C@H]21",
+  "culprit_target": "5-HT2B",
+  "culprit_target_key": "5HT2B_CHEMBL1833",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvular fibrosis",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Zanettini et al., NEJM 2007 (PMID 17202454); Setola et al., Mol Pharmacol 2003 (PMID 12761331). Withdrawn (US 2007) - valvular heart disease."
+ },
+ "cabergoline": {
+  "name": "cabergoline",
+  "smiles": "C=CCN1C[C@H](C(=O)N(CCCN(C)C)C(=O)NCC)C[C@@H]2c3cccc4[nH]cc(c34)C[C@H]21",
+  "culprit_target": "5-HT2B",
+  "culprit_target_key": "5HT2B_CHEMBL1833",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvular fibrosis",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Zanettini et al., NEJM 2007 (PMID 17202454). Dose-restricted - cardiac valvulopathy."
+ },
+ "fenfluramine": {
+  "name": "fenfluramine",
+  "smiles": "CCNC(C)Cc1cccc(C(F)(F)F)c1",
+  "culprit_target": "5-HT2B",
+  "culprit_target_key": "5HT2B_CHEMBL1833",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvulopathy (metabolite-active)",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Connolly et al., NEJM 1997 (PMID 9271479). Withdrawn 1997 - valvulopathy (metabolite-active)."
+ },
+ "dexfenfluramine": {
+  "name": "dexfenfluramine",
+  "smiles": "CCN[C@@H](C)Cc1cccc(C(F)(F)F)c1",
+  "culprit_target": "5-HT2B",
+  "culprit_target_key": "5HT2B_CHEMBL1833",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvulopathy (metabolite-active)",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Connolly et al., NEJM 1997 (PMID 9271479). Withdrawn 1997 - valvulopathy (metabolite-active)."
+ },
+ "methysergide": {
+  "name": "methysergide",
+  "smiles": "CC[C@@H](CO)NC(=O)[C@@H]1C=C2c3cccc4c3c(cn4C)C[C@H]2N(C)C1",
+  "culprit_target": "5-HT2B",
+  "culprit_target_key": "5HT2B_CHEMBL1833",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "retroperitoneal/valve fibrosis",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Setola et al., Mol Pharmacol 2003 (PMID 12761331). Retroperitoneal/valve fibrosis."
+ },
+ "rimonabant": {
+  "name": "rimonabant",
+  "smiles": "Cc1c(C(=O)NN2CCCCC2)nn(-c2ccc(Cl)cc2Cl)c1-c1ccc(Cl)cc1",
+  "culprit_target": "CB1",
+  "culprit_target_key": "CB1_CHEMBL218",
+  "culprit_chembl_id": "CHEMBL218",
+  "organ": "psychiatric / suicidality",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Christensen et al., Lancet 2007 (PMID 18029027). Withdrawn (EU 2008) - psychiatric / suicidality."
+ },
+ "taranabant": {
+  "name": "taranabant",
+  "smiles": "C[C@H](NC(=O)C(C)(C)Oc1ccc(C(F)(F)F)cn1)[C@@H](Cc1ccc(Cl)cc1)c1cccc(C#N)c1",
+  "culprit_target": "CB1",
+  "culprit_target_key": "CB1_CHEMBL218",
+  "culprit_chembl_id": "CHEMBL218",
+  "organ": "psychiatric",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Aronne et al., 2010. Development discontinued - psychiatric adverse events (CB1)."
+ },
+ "alosetron": {
+  "name": "alosetron",
+  "smiles": "Cc1[nH]cnc1CN1CCc2c(c3ccccc3n2C)C1=O",
+  "culprit_target": "5-HT3",
+  "culprit_target_key": "5HT3_CHEMBL1899",
+  "culprit_chembl_id": "CHEMBL1899",
+  "organ": "ischemic colitis",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "FDA 2000 withdrawal / restriction - ischemic colitis (5-HT3)."
+ },
+ "sibutramine": {
+  "name": "sibutramine",
+  "smiles": "CC(C)CC(N(C)C)C1(c2ccc(Cl)cc2)CCC1",
+  "culprit_target": "NET",
+  "culprit_target_key": "NET_CHEMBL222",
+  "culprit_chembl_id": "CHEMBL222",
+  "organ": "cardiovascular (BP/HR)",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "SCOUT trial; FDA & EMA 2010 withdrawal - cardiovascular events (NET)."
+ },
+ "mibefradil": {
+  "name": "mibefradil",
+  "smiles": "COCC(=O)O[C@]1(CCN(C)CCCc2nc3ccccc3[nH]2)CCc2cc(F)ccc2[C@@H]1C(C)C",
+  "culprit_target": "Cav1.2",
+  "culprit_target_key": "Cav12_CHEMBL1940",
+  "culprit_chembl_id": "CHEMBL1940",
+  "organ": "cardiac (T-type Ca) + DDI",
+  "category": "buried",
+  "tier": "T1",
+  "citation": "Withdrawn 1998 - fatal CYP3A4 drug-drug interactions + cardiac (Cav1.2 / T-type)."
+ },
+ "terfenadine": {
+  "name": "terfenadine",
+  "smiles": "CC(C)(C)c1ccc(C(O)CCCN2CCC(C(O)(c3ccccc3)c3ccccc3)CC2)cc1",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Saxena et al., PMC2845965. Withdrawn 1997 - QT / torsades (hERG)."
+ },
+ "cisapride": {
+  "name": "cisapride",
+  "smiles": "COc1cc(N)c(Cl)cc1C(=O)N[C@@H]1CCN(CCCOc2ccc(F)cc2)C[C@@H]1OC",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Saxena et al., PMC2845965. Withdrawn 2000 - QT / torsades (hERG)."
+ },
+ "astemizole": {
+  "name": "astemizole",
+  "smiles": "COc1ccc(CCN2CCC(Nc3nc4ccccc4n3Cc3ccc(F)cc3)CC2)cc1",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Withdrawn 1999 - QT / torsades (hERG)."
+ },
+ "grepafloxacin": {
+  "name": "grepafloxacin",
+  "smiles": "Cc1c(F)c(N2CCNC(C)C2)cc2c1c(=O)c(C(=O)O)cn2C1CC1",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Withdrawn 1999 - QT / torsades (hERG)."
+ },
+ "sertindole": {
+  "name": "sertindole",
+  "smiles": "O=C1NCCN1CCN1CCC(c2cn(-c3ccc(F)cc3)c3ccc(Cl)cc23)CC1",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Suspended 1998 (EU) - QT / arrhythmia (hERG)."
+ },
+ "thioridazine": {
+  "name": "thioridazine",
+  "smiles": "CSc1ccc2c(c1)N(CCC1CCCCN1C)c1ccccc1S2",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Restricted / withdrawn - QT prolongation (hERG)."
+ },
+ "terodiline": {
+  "name": "terodiline",
+  "smiles": "CC(CC(c1ccccc1)c1ccccc1)NC(C)(C)C",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Withdrawn 1991 - QT / torsades (hERG)."
+ },
+ "droperidol": {
+  "name": "droperidol",
+  "smiles": "O=C(CCCN1CC=C(n2c(=O)[nH]c3ccccc32)CC1)c1ccc(F)cc1",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "FDA black-box 2001 - QT prolongation (hERG)."
+ },
+ "sparfloxacin": {
+  "name": "sparfloxacin",
+  "smiles": "C[C@@H]1CN(c2c(F)c(N)c3c(=O)c(C(=O)O)cn(C4CC4)c3c2F)C[C@H](C)N1",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Withdrawn - QT prolongation + phototoxicity (hERG)."
+ },
+ "mesoridazine": {
+  "name": "mesoridazine",
+  "smiles": "CN1CCCCC1CCN1c2ccccc2Sc2ccc(S(C)=O)cc21",
+  "culprit_target": "hERG",
+  "culprit_target_key": "hERG_CHEMBL240",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg",
+  "tier": "T1",
+  "citation": "Withdrawn 2004 - QT prolongation (hERG)."
+ }
+}
