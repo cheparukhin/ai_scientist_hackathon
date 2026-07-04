@@ -82,7 +82,7 @@ Add `app/data/panel_actives.json` to `.gitignore` (regenerable cache).
 - `fetch_panel.py` → `panel_actives.json` (18 targets, ~600–1000 actives each).
 - **Acceptance:** all `app/data/*.json` load; `panel_actives.json` has 18 keys each with >50 SMILES.
 
-### [ ] M1 — Core scoring engine (`core.py`)
+### [x] M1 — Core scoring engine (`core.py`)
 - `score_candidate(smiles, metabolite_smiles=None)`:
   1. Parse+canonicalize; run the **abstain gate** (reuse calibrate_ad.py rule) → return `{status:"abstain", reason}` if triggered.
   2. Per panel target: mean-top5 ECFP4 Tanimoto to `panel_actives`, z vs `background`. **No LOO.** If metabolite given, MAX-aggregate.
