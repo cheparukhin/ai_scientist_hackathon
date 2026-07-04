@@ -1,6 +1,6 @@
 # Toxicity Risk → Assay Recommender
 
-**A retrieval tool that scores a small-molecule candidate's toxicity risk by linking it to drugs that failed in the clinic (or were withdrawn) for toxicity, and recommends which in-vitro assays to run first.**
+**A tool that re-orders a small-molecule candidate's in-vitro safety-assay plan — putting the assay most likely to catch a real liability first — by linking the molecule to drugs that failed in the clinic for toxicity via shared off-target mechanism. A tiered portfolio: a validated off-target engine (broad) + wrapped outcome-models for the metabolism-driven gap, every recommendation tagged by evidence strength.**
 
 > Positioning in one line: *"We connect your candidate to clinically-failed drugs it shares a toxicity **mechanism** with — including ones no 2D-structure search would find — and rank which in-vitro assays would catch the implicated liability first. It prioritizes experiments; it does not declare a molecule safe."*
 
@@ -11,7 +11,7 @@
 - **Event:** a bio × AI hackathon. Deliverable is an **MVP + investor/judge-facing demo** (see §6), not a validated product.
 - **How we got here:** chosen over an alternative — a *cross-specificity / immunogenicity risk tool for biologics* (antibody candidates, e.g. cetuximab/α-gal) — because the small-molecule tox tool is **more tractable**: core datasets are downloadable, and the MVP is retrieval + light reasoning. The biologics idea is a fallback.
 - **Key pivot (from our own feasibility test — see §4):** we tested whether cheap **2D structural similarity** actually connects mechanistically-related tox failures. **It does not** (7 verified withdrawn-drug pairs, ECFP4 Tanimoto 0.05–0.19). The shared liability is an off-target *binding* phenomenon 2D structure can't see. So the retrieval engine is **mechanism / off-target similarity**, with 2D fingerprints demoted to a fast "obvious-analog" pre-filter.
-- **Repo state:** the repo contains this doc + an **[`experiments/`](experiments/)** folder with reproducible feasibility scripts (2D / 3D / R4) + results (RDKit 2026.03.3, seeds, SMILES). No product code yet — the pipeline (§4) is greenfield.
+- **Repo state:** the repo contains this doc, a short **[`SUMMARY.md`](SUMMARY.md)**, and an **[`experiments/`](experiments/)** folder with reproducible feasibility scripts (2D / 3D / R4 linkage / specificity / cross-target / coverage / curation) + results (RDKit 2026.03.3, seeds, SMILES). No product code yet — the pipeline (§4) is greenfield.
 - **Guiding principle:** a **portfolio, tiered by confidence** (§4). The validated off-target engine (M1/R4) is the demo headline and covers *broad* off-target liabilities (cardiac/CNS/GI/endocrine/immune — 37/39 panel targets); wrapped outcome-models (M2) cover the liver/mito gap; every recommendation is tagged **mechanism-linked / model-predicted / abstain**. The 2D floor is a safety-net, not the pitch.
 - **Parameters still TBD:** timeframe/deadline; team size & strengths; explicit judging criteria; target LLM + infra.
 - **Data caveat:** dataset sizes are **last-published figures** and several conflict across mirrors (e.g. ClinTox is cited as **1,484** on TDC and **1,491** in the MoleculeNet paper). **Re-confirm every count and DOI against the primary source before quoting in a pitch.**
@@ -23,11 +23,11 @@
 - **Input:** a small-molecule candidate (SMILES; optionally a 3D conformer).
 - **Reference database:** drugs annotated with **why they failed** — prioritizing those that **failed clinical trials or were withdrawn specifically for a toxicity**, each tagged with the **organ, phenotype, and mechanism** and a provenance link.
 - **Output:**
-  1. A **per-modality risk profile** expressed as **enrichment vs. a matched lower-liability comparator** — e.g. *"liver-liability enrichment 4.1× (95% CI …); cardiac 1.2×"* — or a **0–100 priority score**, **not** a probability of harm (see §4 Layer 3).
-  2. A **ranked in-vitro assay panel** — e.g. *"prioritize hERG + iPSC-cardiomyocyte (candidate shares predicted hERG liability with terfenadine/cisapride, both withdrawn for QT); then hepatocyte spheroid."*
-  3. An **evidence trail** — the linked failed drugs, the organ/mechanism they failed by, whether the link is structural or mechanistic, and provenance.
+  1. **The headline — a re-ordered in-vitro assay plan:** the assay most likely to catch a real liability moved to the front, each tagged with an **actionability label** (*no-go / counter-screen / monitor*, §4 Layer 3b) and an **evidence tier** (*mechanism-linked / model-predicted / abstain*). E.g. *"hERG patch-clamp + iPSC-cardiomyocyte first (no-go: resembles drugs withdrawn for QT); then hepatocyte spheroid."*
+  2. A **per-modality risk profile** (supporting) — enrichment vs. a matched lower-liability comparator, or a 0–100 priority score; **not** a probability of harm (§4 Layer 3).
+  3. An **evidence trail** — the linked failed drugs, the organ/mechanism, evidence tier, and provenance.
 
-It is a **decision-support / experiment-prioritization** tool, not a binary safety classifier — more honest (structure/mechanism proxies miss metabolism, dose, exposure) and easier to validate and adopt.
+Under the hood it's a **tiered portfolio** (§4): a validated off-target-mechanism engine (M1, broad) + wrapped outcome-models (M2) for the metabolism-driven liver/mito gap. It is **decision-support / experiment-prioritization**, not a binary safety classifier — more honest (proxies miss metabolism, dose, exposure) and easier to validate and adopt.
 
 ---
 
@@ -173,6 +173,7 @@ The novelty is the **fusion + clinical-failure grounding + assay triage + honest
              │ 5. Explainability + Agent + Visualization    │
              └─────────────────────────────────────────────┘
 ```
+*(This is the **M1** core pipeline. **Layer 3b** severity/actionability re-weights step 3→4; **M2** outcome-models fuse in at step 4 for the liver/mito domains — see the portfolio table above.)*
 
 ### Reference DB schema (split labels — avoid circular recommendations)
 Keep organ, phenotype, mechanism, and assay as **separate fields** so the recommended assay is *derived*, not baked into, the label:
@@ -219,7 +220,7 @@ Report as **"4.1× liver-liability enrichment"** or a **0–100 priority score**
 
 ### Layer 3b — Severity / actionability weighting (likelihood ≠ consequence)
 The enrichment score measures *how likely* the candidate hits a target — **not how much that hit matters.** A target-liability signal is not automatically a program-killer: some hits mean *early no-go*, some *run a counter-screen*, some *just watch the exposure margin*. The ranking must weight **consequence**, not just target-similarity. Three inputs:
-- **Per-target severity tier** (hand-authored, Bowes-2012-derived; a ~40-row table like the assay map): e.g. **hERG / 5-HT2B = high** (QT-TdP, valvulopathy — potential no-go); **H1 = low** (sedation — monitor); many enzyme hits = counter-screen.
+- **Per-target severity tier** (hand-authored, Bowes-2012-derived — see the starter table below): e.g. **hERG / 5-HT2B = high** (QT-TdP, valvulopathy — potential no-go); **H1 = low** (sedation — monitor); many enzyme hits = counter-screen.
 - **Clinical-failure grounding *is* a severity signal.** Because the reference set is drugs that *actually failed* via that mechanism, resembling a **T1 clinical failure** at a target ("this hit killed real programs at clinical exposure") outranks resembling a benign ligand of the same target. T1 does double duty — grounding **and** actionability.
 - **Exposure margin** — the pharmacology that actually decides if a hit matters (off-target potency vs efficacious exposure). For a *novel* candidate absolute exposure is unknown → express predicted off-target potency + flag *"margin needs exposure context,"* and ground it via the reference failures' known margins where available.
 
@@ -280,6 +281,7 @@ The de-risking (Phase 0) is **done** and reshaped the plan: build a **tiered por
 - [x] 2D similarity fails on mechanistic pairs (ECFP4 0.05–0.19); 3D/USRCAT a weak supplement (helped 4/7, hurt 3/7).
 - [x] R4 off-target linkage recovers the mechanism (terfenadine→hERG z = +6.4; top target 4/6, above background 6/6).
 - [x] **Specificity AUC 0.894** (blockers vs non-blockers); scaffold-generalization 0.913 pooled, but 0.667 for truly novel isolated chemotypes.
+- [x] **Cross-target replication:** discrimination holds across classes (SERT 0.95, AChE 0.92, MAO-A 0.88); 5-HT2B negatives degenerate → external-decoy sanity.
 - [x] **Coverage 37/39 panel targets serviceable**; liver (BSEP/mito) is the gap.
 - [x] Phase-0 curation is a hybrid (cheap for off-target drugs; ~2 person-weeks for mechanism/reason/tier).
 - → **Verdict: viable, broad within off-target space, honest liver/mito gap → build as a tiered portfolio.**
@@ -330,7 +332,7 @@ Claim: **"our AI reasons like an experienced med chemist — links a candidate t
 3. **"Safe" comparator is a misnomer.** → matched **No-concern** class, not "any approved" (§3e).
 4. **Score semantics.** Present enrichment (`N×`) or 0–100 priority, **not** probability-looking decimals unless calibrated.
 5. **2D structure is insufficient** (our own test). → mechanism/off-target layer is the engine; state it as a designed choice, not a gap.
-6. **Off-target prediction is itself a model** with error — **worst for novel scaffolds** (R4's sensitivity comes from the target's known ligands; measured AUC 0.667 on a diverse isolated-chemotype holdout vs 0.913 pooled). Also: **only hERG has a measured discrimination AUC (0.894)** — the other 36 rich targets are expected-but-unvalidated (Phase 3). → report confidence + applicability-domain flag; measured off-targets for reference drugs, predicted only for the candidate.
+6. **Off-target prediction is itself a model** with error — **worst for novel scaffolds** (R4's sensitivity comes from the target's known ligands; measured AUC 0.667 on a diverse isolated-chemotype holdout vs 0.913 pooled). Discrimination is now **measured on 4 targets across 3 classes** (hERG 0.89, SERT 0.95, AChE 0.92, MAO-A 0.88), but the remaining ~33 rich targets are still unvalidated (Phase 3), and some agonist GPCRs (5-HT2B) lack clean ChEMBL negatives. → report confidence + applicability-domain flag; measured off-targets for reference drugs, predicted only for the candidate.
 7. **Some clinical killers are NOT off-target binding** — reactive/CYP metabolites, idiosyncratic mitochondrial tox, dose/exposure. R4 (M1) physically can't predict these → they are the **M2 outcome-model modules** (DILI QSAR, Tox21-mito, alerts), served at a **lower evidence tier (model-predicted, not mechanism-linked)** and clearly flagged as such. Liver/mito is a *designed module boundary*, not a hidden gap — but M2 is less validated than M1; don't oversell it.
 8. **Generalization.** Never quote a random-split number; report scaffold-split CV + AD abstention.
 9. **Proprietary gap.** Cleanest discontinued-for-safety data (Pharmaprojects/Citeline, Pharmapendium) is paywalled — note as gold standard if licensed.
