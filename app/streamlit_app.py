@@ -18,14 +18,16 @@ import streamlit as st
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from core import EXAMPLES, build_plan, score_candidate  # noqa: E402
+from core import EXAMPLES, build_plan, score_candidate, get_engine  # noqa: E402
 from agent import narrative_report  # noqa: E402
 from render import mol_png, mechanism_graph_dot  # noqa: E402
 from outcome_modules import outcome_panel  # noqa: E402
 import validation as V  # noqa: E402
 
-_REF_FAILURES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                             "data", "reference_failures.json")))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_REF_FAILURES = json.load(open(os.path.join(_HERE, "data", "reference_failures.json")))
+_N_BG = len([k for k in json.load(open(os.path.join(_HERE, "data", "background.json")))
+             if not k.startswith("_")])
 
 st.set_page_config(page_title="Safety-Test Prioritizer", page_icon="🧪", layout="wide")
 
@@ -56,18 +58,6 @@ ACTION_PLAIN = {
 }
 ENDPOINT_PLAIN = {"hepatotox": "Liver injury", "mito": "Mitochondrial"}
 
-
-def _resemblance(z, blank_if_low=False):
-    """Plain-English 'how much does this look like drugs that failed?' — hides the raw
-    z-score, which means nothing to a non-expert. Flag threshold is z ≥ 2."""
-    if z >= 6:
-        return "Strong"
-    if z >= 3:
-        return "Moderate"
-    if z >= 2:
-        return "Weak"
-    return "" if blank_if_low else "None"
-
 # ======================================================================================
 #  HEADER
 # ======================================================================================
@@ -79,8 +69,29 @@ st.markdown(
     "not whether a molecule is safe."
 )
 
-# collapsed trust/limits — visible but out of the way
-lc, rc = st.columns(2)
+# collapsed method / limits / track-record — visible but out of the way
+mc, lc, rc = st.columns(3)
+with mc:
+    with st.expander("Method — how the score is computed"):
+        st.markdown(
+            f"The candidate is scored against an **18-target secondary-pharmacology safety panel** "
+            f"(aligned to Bowes et al., *Nat Rev Drug Discov* 2012). For **each** target:\n\n"
+            f"1. **Fingerprint** the candidate — ECFP4 (Morgan radius 2, 2048-bit; RDKit).\n"
+            f"2. **Compare to that target's known actives** from **ChEMBL** (pChEMBL ≥ 6; "
+            f"IC50 / Ki / Kd) — e.g. 1,483 hERG binders, 1,266 CB1 binders.\n"
+            f"3. **Resemblance** = the **mean of the top-5 Tanimoto similarities** to those actives. "
+            f"Averaging the top-5 of the whole active *class* (not a single nearest neighbour) is "
+            f"what recovers a shared mechanism for a **novel** chemotype resembling no one drug.\n"
+            f"4. **Standardize** into the **z-score** shown everywhere: standard deviations above "
+            f"the mean resemblance of a fixed **{_N_BG}-drug background** of ordinary marketed drugs "
+            f"(metformin, aspirin, …). **z = (candidate − background mean) / background SD**; "
+            f"**z ≥ 2 flags** a target.\n\n"
+            f"Tests are ranked by **z weighted by a per-target severity tier**; the headline is the "
+            f"highest-severity target where the candidate resembles a drug that *actually failed in "
+            f"the clinic*. The **z-score is similarity-enrichment, not a probability of harm** — no "
+            f"dose, exposure, or metabolism is modelled. Every result includes the raw numbers "
+            f"(open *Show the calculation* under any result)."
+        )
 with lc:
     with st.expander("Limits — what this tool can't see"):
         st.markdown(
@@ -224,17 +235,44 @@ if run or smiles:
             )
 
         delta = head["default_rank"] - head["our_rank"]
-        head_z = head_row["z"] if head_row else 0.0
+        head_z = result["targets"][head["target_key"]]["z"]
         m1, m2c, m3 = st.columns(3)
         m1.metric("We'd run it", f"#{head['our_rank']}", help="Where our tool puts this test in the queue. #1 = run first.")
         m2c.metric("A standard panel runs it", f"#{head['default_rank']}", help="Where a default safety panel would run the same test.")
-        m3.metric("Looks like failed drugs?", _resemblance(head_z),
-                  help="How closely the candidate resembles drugs that failed at this target. "
-                       "Strong / Moderate / Weak — not a probability of harm.")
+        m3.metric("Resemblance (z-score)", f"{head_z:+.1f} σ",
+                  help="Std deviations above the background set's mean resemblance to this target's "
+                       "known binders. z ≥ 2 = flagged. Enrichment, not a probability of harm. "
+                       "See Method / Show the calculation.")
         if flagged_head and not is_herg and delta > 0:
             st.markdown(
                 f"➜ You reach the go/no-go decision **≈{delta} experiments sooner**.  "
                 f"Recommended call: **{ACTION_PLAIN.get(head['action'], head['action'])}**."
+            )
+
+        # transparent arithmetic for THIS candidate at the headline target
+        eng = get_engine()
+        tkey = head["target_key"]
+        tsym = tkey.split("_")[0]
+        raw = result["targets"][tkey]["raw"]
+        bg_mean, bg_sd = eng.bg_stats[tkey]
+        _excl = set(result.get("loo_exclude_iks") or [])
+        n_full = len(eng.target_fps[tkey])
+        n_act = sum(1 for ik, _f in eng.target_fps[tkey] if ik not in _excl)
+        removed_note = (f"  _(demo mode removed {n_full - n_act} of them — this drug and its "
+                        f"mechanistic cousins — before scoring)_" if n_act < n_full else "")
+        with st.expander("Show the calculation for this test"):
+            st.markdown(
+                f"Scoring the candidate at **{tsym}** ({head['assay_name']}):\n\n"
+                f"1. Candidate fingerprint: ECFP4 (Morgan r=2, 2048-bit).\n"
+                f"2. Mean of the **top-5 Tanimoto** similarities to the **{n_act:,} known {tsym} "
+                f"binders** used from ChEMBL (pChEMBL ≥ 6)  =  **{raw:.3f}**{removed_note}.\n"
+                f"3. Same measure across the **{_N_BG}-drug background**: mean **{bg_mean:.3f}**, "
+                f"SD **{bg_sd:.3f}**.\n"
+                f"4. **z = ({raw:.3f} − {bg_mean:.3f}) / {bg_sd:.3f} = {head_z:+.1f} σ**  "
+                f"→ {'**flagged** (≥ 2 σ)' if head_z >= 2 else 'not flagged (< 2 σ)'}.\n\n"
+                f"In words: the candidate is **{head_z:+.1f} standard deviations** more similar to "
+                f"known {tsym} binders than a typical marketed drug — this is *enrichment*, not a "
+                f"probability of toxicity."
             )
 
     # known-drug heads-up (only when we did NOT hide it) — teaches why demo mode exists
@@ -296,22 +334,25 @@ if run or smiles:
     # ---------------- FULL REORDERED PLAN ----------------
     st.markdown("### The full reordered test plan")
     st.caption("Every test in the panel, in the order we'd run them. **#1 = run first.** "
-               "The last column says how much this candidate looks like drugs that failed at that "
-               "target — blank means no meaningful resemblance.")
+               "*Resemblance (z-score)* = std deviations above the background set's mean similarity "
+               "to that target's known binders; **≥ 2 = flagged** (see Method). Not a probability.")
     rows = plan["rows"]
     df = pd.DataFrame([{
         "Run in this order": r["our_rank"],
         "Safety test": r["assay_name"],
         "What to do": ACTION_PLAIN.get(r["action"], r["action"]),
         "Organ / effect": r["organ"],
+        "Resemblance (z-score)": r["z"],
         "A standard panel runs it": r["default_rank"],
         "Spots moved up": r["delta"],
-        "Looks like failed drugs?": _resemblance(r["z"], blank_if_low=True),
     } for r in rows])
     st.dataframe(
         df, hide_index=True, width="stretch",
         column_config={
             "Run in this order": st.column_config.NumberColumn(help="#1 = run first."),
+            "Resemblance (z-score)": st.column_config.NumberColumn(
+                help="Mean top-5 Tanimoto to the target's ChEMBL actives, z-scored vs the "
+                     "background set. ≥ 2 = flagged. Enrichment, not a probability.", format="%.1f"),
             "A standard panel runs it": st.column_config.NumberColumn(
                 help="Where a default safety panel would run this test."),
             "Spots moved up": st.column_config.NumberColumn(
@@ -340,14 +381,18 @@ if run or smiles:
     lcol, rcol = st.columns(2)
 
     with lcol:
-        st.markdown("**Does it look like drugs toxic to these organs?**")
+        st.markdown("**Resemblance to drugs toxic to these organs**")
         ep_df = pd.DataFrame([{
             "Organ concern": ENDPOINT_PLAIN.get(ep, ep),
-            "Resemblance": ("⚠️ " if d["flagged"] else "") + (_resemblance(d["z"]) or "None"),
+            "Resemblance (z-score)": d["z"],
+            "Flagged (z ≥ 2)": "⚠️ yes" if d["flagged"] else "no",
             "Most similar known-toxic drug": f"{d['nearest']['name'].title()} "
-                                             f"({int(d['nearest']['sim'] * 100)}% similar)",
+                                             f"({int(d['nearest']['sim'] * 100)}% Tanimoto)",
         } for ep, d in m2["endpoints"].items()])
-        st.dataframe(ep_df, hide_index=True, width="stretch")
+        st.dataframe(ep_df, hide_index=True, width="stretch",
+                     column_config={"Resemblance (z-score)": st.column_config.NumberColumn(
+                         help="Same top-5 Tanimoto z-score as the main panel, here against curated "
+                              "DILIrank / mitochondrial-toxicant sets.", format="%.1f")})
 
     with rcol:
         st.markdown("**Reactive-metabolite alerts** — structural hunches to confirm in the lab")
