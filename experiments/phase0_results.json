@@ -1,0 +1,396 @@
+{
+  "terfenadine": {
+    "smiles": "CC(C)(C)C1=CC=C(C=C1)C(CCCN2CCC(CC2)C(C3=CC=CC=C3)(C4=CC=CC=C4)O)O",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL17157",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 41,
+      "Nav1.5 (SCN5A) cardiac": 18,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 4,
+      "COX-1 (PTGS1)": 4,
+      "COX-2 (PTGS2)": 3,
+      "D2 receptor (DRD2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 4,
+      "5-HT2A": 3,
+      "5-HT2B (HTR2B) valvulopathy": 6,
+      "SERT (SLC6A4)": 4,
+      "BSEP (ABCB11) liver": 2
+    },
+    "n_safety_targets": 13,
+    "err": null
+  },
+  "cisapride": {
+    "smiles": "COC1CN(CCC1NC(=O)C2=CC(=C(C=C2OC)N)Cl)CCCOC3=CC=C(C=C3)F",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL1729",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 67,
+      "D2 receptor (DRD2)": 4,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 2,
+      "COX-2 (PTGS2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 3,
+      "5-HT2A": 5,
+      "5-HT2B (HTR2B) valvulopathy": 6,
+      "SERT (SLC6A4)": 3
+    },
+    "n_safety_targets": 11,
+    "err": null
+  },
+  "astemizole": {
+    "smiles": "COC1=CC=C(C=C1)CCN2CCC(CC2)NC3=NC4=CC=CC=C4N3CC5=CC=C(C=C5)F",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL296419",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 38,
+      "Nav1.5 (SCN5A) cardiac": 10,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 4,
+      "COX-1 (PTGS1)": 4,
+      "COX-2 (PTGS2)": 3,
+      "D2 receptor (DRD2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 4,
+      "5-HT2A": 4,
+      "5-HT2B (HTR2B) valvulopathy": 6,
+      "SERT (SLC6A4)": 4,
+      "BSEP (ABCB11) liver": 3
+    },
+    "n_safety_targets": 13,
+    "err": null
+  },
+  "thioridazine": {
+    "smiles": "CN1CCCCC1CCN2C3=CC=CC=C3SC4=C2C=C(C=C4)SC",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL479",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 15,
+      "D2 receptor (DRD2)": 5,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 2,
+      "COX-2 (PTGS2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 3,
+      "5-HT2A": 6,
+      "5-HT2B (HTR2B) valvulopathy": 4,
+      "SERT (SLC6A4)": 3,
+      "BSEP (ABCB11) liver": 1
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "sertindole": {
+    "smiles": "C1CN(CCC1C2=CN(C3=C2C=C(C=C3)Cl)C4=CC=C(C=C4)F)CCN5CCNC5=O",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL12713",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 16,
+      "D2 receptor (DRD2)": 5,
+      "5-HT2A": 5,
+      "Nav1.5 (SCN5A) cardiac": 3,
+      "BSEP (ABCB11) liver": 1,
+      "NET (SLC6A2)": 1,
+      "SERT (SLC6A4)": 1,
+      "Adenosine A2A": 1,
+      "MAO-B": 1,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "COX-2 (PTGS2)": 1,
+      "Endothelin ET-B": 1
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "grepafloxacin": {
+    "smiles": "CC1CN(CCN1)C2=C(C(=C3C(=C2)N(C=C(C3=O)C(=O)O)C4CC4)C)F",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL583",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 13,
+      "5-HT2A": 2,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "SERT (SLC6A4)": 3,
+      "Adenosine A2A": 2,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 4,
+      "COX-2 (PTGS2)": 2,
+      "D2 receptor (DRD2)": 2,
+      "Endothelin ET-B": 2,
+      "MAO-B": 3,
+      "Nav1.5 (SCN5A) cardiac": 3
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "cerivastatin": {
+    "smiles": "CC(C)C1=C(C(=C(C(=N1)C(C)C)COC)C2=CC=C(C=C2)F)C=CC(CC(CC(=O)O)O)O",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL1477",
+    "safety_targets": {
+      "Adenosine A2A": 2,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 4,
+      "COX-2 (PTGS2)": 2,
+      "D2 receptor (DRD2)": 2,
+      "Endothelin ET-B": 2,
+      "MAO-B": 3,
+      "hERG (KCNH2) cardiac": 2,
+      "5-HT2A": 2,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "SERT (SLC6A4)": 3,
+      "Nav1.5 (SCN5A) cardiac": 1
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "pergolide": {
+    "smiles": "CCCN1CC(CC2C1CC3=CNC4=CC=CC2=C34)CSC",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL531",
+    "safety_targets": {
+      "D2 receptor (DRD2)": 13,
+      "hERG (KCNH2) cardiac": 4,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 2,
+      "COX-2 (PTGS2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 3,
+      "5-HT2A": 7,
+      "5-HT2B (HTR2B) valvulopathy": 5,
+      "SERT (SLC6A4)": 3,
+      "BSEP (ABCB11) liver": 1
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "fenfluramine": {
+    "smiles": "CCNC(C)CC1=CC(=CC=C1)C(F)(F)F",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL87493",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 1,
+      "D2 receptor (DRD2)": 1,
+      "NET (SLC6A2)": 1,
+      "SERT (SLC6A4)": 1,
+      "Adenosine A2A": 1,
+      "MAO-B": 1,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "COX-2 (PTGS2)": 1,
+      "5-HT2A": 2,
+      "Endothelin ET-B": 1
+    },
+    "n_safety_targets": 10,
+    "err": null
+  },
+  "benfluorex": {
+    "smiles": "CC(CC1=CC(=CC=C1)C(F)(F)F)NCCOC(=O)C2=CC=CC=C2",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL400599",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 1,
+      "D2 receptor (DRD2)": 1,
+      "NET (SLC6A2)": 1,
+      "SERT (SLC6A4)": 1,
+      "Adenosine A2A": 1,
+      "MAO-B": 1,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "COX-2 (PTGS2)": 1,
+      "Endothelin ET-B": 1,
+      "5-HT2A": 2
+    },
+    "n_safety_targets": 10,
+    "err": null
+  },
+  "troglitazone": {
+    "smiles": "CC1=C(C2=C(CCC(O2)(C)COC3=CC=C(C=C3)CC4C(=O)NC(=O)S4)C(=C1O)C)C",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL408",
+    "safety_targets": {
+      "MAO-A": 3,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 4,
+      "COX-1 (PTGS1)": 4,
+      "COX-2 (PTGS2)": 3,
+      "D2 receptor (DRD2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 5,
+      "hERG (KCNH2) cardiac": 3,
+      "5-HT2A": 4,
+      "5-HT2B (HTR2B) valvulopathy": 5,
+      "SERT (SLC6A4)": 4,
+      "BSEP (ABCB11) liver": 8
+    },
+    "n_safety_targets": 13,
+    "err": null
+  },
+  "nefazodone": {
+    "smiles": "CCC1=NN(C(=O)N1CCOC2=CC=CC=C2)CCCN3CCN(CC3)C4=CC(=CC=C4)Cl",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL623",
+    "safety_targets": {
+      "SERT (SLC6A4)": 3,
+      "NET (SLC6A2)": 2,
+      "5-HT2A": 4,
+      "Nav1.5 (SCN5A) cardiac": 3,
+      "BSEP (ABCB11) liver": 7,
+      "hERG (KCNH2) cardiac": 1,
+      "D2 receptor (DRD2)": 1,
+      "Adenosine A2A": 1,
+      "MAO-B": 1,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "COX-2 (PTGS2)": 1,
+      "Endothelin ET-B": 1
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "sitaxentan": {
+    "smiles": "CC1=CC2=C(C=C1CC(=O)C3=C(C=CS3)S(=O)(=O)NC4=C(C(=NO4)C)Cl)OCO2",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL282724",
+    "safety_targets": {
+      "Endothelin ET-B": 7,
+      "BSEP (ABCB11) liver": 2,
+      "NET (SLC6A2)": 1,
+      "SERT (SLC6A4)": 1,
+      "MAO-B": 1,
+      "5-HT2B (HTR2B) valvulopathy": 1,
+      "COX-1 (PTGS1)": 2
+    },
+    "n_safety_targets": 7,
+    "err": null
+  },
+  "fialuridine": {
+    "smiles": "C1=C(C(=O)NC(=O)N1C2C(C(C(O2)CO)O)F)I",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL271475",
+    "safety_targets": {
+      "BSEP (ABCB11) liver": 1
+    },
+    "n_safety_targets": 1,
+    "err": null
+  },
+  "perhexiline": {
+    "smiles": "C1CCC(CC1)C(CC2CCCCN2)C3CCCCC3",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL75880",
+    "safety_targets": {
+      "hERG (KCNH2) cardiac": 9,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 2,
+      "COX-2 (PTGS2)": 3,
+      "D2 receptor (DRD2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 3,
+      "5-HT2A": 3,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "SERT (SLC6A4)": 3,
+      "BSEP (ABCB11) liver": 2
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "rofecoxib": {
+    "smiles": "CS(=O)(=O)C1=CC=C(C=C1)C2=C(C(=O)OC2)C3=CC=CC=C3",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL122",
+    "safety_targets": {
+      "COX-2 (PTGS2)": 87,
+      "COX-1 (PTGS1)": 56,
+      "hERG (KCNH2) cardiac": 9,
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 4,
+      "D2 receptor (DRD2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 4,
+      "5-HT2A": 5,
+      "5-HT2B (HTR2B) valvulopathy": 6,
+      "SERT (SLC6A4)": 4,
+      "BSEP (ABCB11) liver": 3
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "ximelagatran": {
+    "smiles": "CCOC(=O)CNC(C1CCCCC1)C(=O)N2CCC2C(=O)NCC3=CC=C(C=C3)C(=NO)N",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL522038",
+    "safety_targets": {
+      "BSEP (ABCB11) liver": 1,
+      "NET (SLC6A2)": 1,
+      "SERT (SLC6A4)": 1,
+      "MAO-B": 1,
+      "5-HT2B (HTR2B) valvulopathy": 1,
+      "COX-1 (PTGS1)": 2
+    },
+    "n_safety_targets": 6,
+    "err": null
+  },
+  "tolcapone": {
+    "smiles": "CC1=CC=C(C=C1)C(=O)C2=CC(=C(C(=C2)O)O)[N+](=O)[O-]",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL1324",
+    "safety_targets": {
+      "BSEP (ABCB11) liver": 5,
+      "hERG (KCNH2) cardiac": 1,
+      "D2 receptor (DRD2)": 1,
+      "NET (SLC6A2)": 1,
+      "SERT (SLC6A4)": 1,
+      "Adenosine A2A": 1,
+      "MAO-B": 1,
+      "COX-2 (PTGS2)": 1,
+      "5-HT2A": 2,
+      "5-HT2B (HTR2B) valvulopathy": 2
+    },
+    "n_safety_targets": 10,
+    "err": null
+  },
+  "trovafloxacin": {
+    "smiles": "C1C2C(C2N)CN1C3=C(C=C4C(=O)C(=CN(C4=N3)C5=C(C=C(C=C5)F)F)C(=O)O)F",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL428",
+    "safety_targets": {
+      "Adenosine A2A": 3,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 2,
+      "COX-2 (PTGS2)": 3,
+      "D2 receptor (DRD2)": 3,
+      "Endothelin ET-B": 3,
+      "MAO-B": 3,
+      "hERG (KCNH2) cardiac": 3,
+      "5-HT2A": 4,
+      "5-HT2B (HTR2B) valvulopathy": 4,
+      "SERT (SLC6A4)": 3,
+      "BSEP (ABCB11) liver": 1
+    },
+    "n_safety_targets": 12,
+    "err": null
+  },
+  "bromfenac": {
+    "smiles": "C1=CC(=C(C(=C1)C(=O)C2=CC=C(C=C2)Br)N)CC(=O)O",
+    "smiles_ok": true,
+    "chembl_id": "CHEMBL1077",
+    "safety_targets": {
+      "Adenosine A2A": 2,
+      "NET (SLC6A2)": 3,
+      "COX-1 (PTGS1)": 4,
+      "COX-2 (PTGS2)": 2,
+      "D2 receptor (DRD2)": 2,
+      "Endothelin ET-B": 2,
+      "MAO-B": 3,
+      "hERG (KCNH2) cardiac": 3,
+      "5-HT2A": 2,
+      "5-HT2B (HTR2B) valvulopathy": 3,
+      "SERT (SLC6A4)": 3,
+      "BSEP (ABCB11) liver": 2
+    },
+    "n_safety_targets": 12,
+    "err": null
+  }
+}

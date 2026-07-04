@@ -12,7 +12,7 @@
 - **How we got here:** chosen over an alternative — a *cross-specificity / immunogenicity risk tool for biologics* (antibody candidates, e.g. cetuximab/α-gal) — because the small-molecule tox tool is **more tractable**: core datasets are downloadable, and the MVP is retrieval + light reasoning. The biologics idea is a fallback.
 - **Key pivot (from our own feasibility test — see §4):** we tested whether cheap **2D structural similarity** actually connects mechanistically-related tox failures. **It does not** (7 verified withdrawn-drug pairs, ECFP4 Tanimoto 0.05–0.19). The shared liability is an off-target *binding* phenomenon 2D structure can't see. So the retrieval engine is **mechanism / off-target similarity**, with 2D fingerprints demoted to a fast "obvious-analog" pre-filter.
 - **Repo state:** the repo contains this doc + an **[`experiments/`](experiments/)** folder with reproducible feasibility scripts (2D / 3D / R4) + results (RDKit 2026.03.3, seeds, SMILES). No product code yet — the pipeline (§4) is greenfield.
-- **Guiding principle:** ship a working floor first (2D fingerprint retrieval + class-conditional scoring), but the **demo headline is the mechanism/off-target layer (R4)** — now **validated** on real clinical failures (§4). The 2D floor is the baseline/safety-net, *not* the pitch.
+- **Guiding principle:** a **portfolio, tiered by confidence** (§4). The validated off-target engine (M1/R4) is the demo headline and covers *broad* off-target liabilities (cardiac/CNS/GI/endocrine/immune — 37/39 panel targets); wrapped outcome-models (M2) cover the liver/mito gap; every recommendation is tagged **mechanism-linked / model-predicted / abstain**. The 2D floor is a safety-net, not the pitch.
 - **Parameters still TBD:** timeframe/deadline; team size & strengths; explicit judging criteria; target LLM + infra.
 - **Data caveat:** dataset sizes are **last-published figures** and several conflict across mirrors (e.g. ClinTox is cited as **1,484** on TDC and **1,491** in the MoleculeNet paper). **Re-confirm every count and DOI against the primary source before quoting in a pitch.**
 
@@ -115,6 +115,29 @@ Feature/pharmacophore 2D fingerprints (FCFP, Gobbi) gave only **1.3–1.5× lift
 **3D shape test (USRCAT) — done, mixed result.** 30 conformers/molecule (ETKDGv3 + MMFF), each pair's true partner ranked against the 16-compound library. USRCAT improved partner rank in **4/7** pairs and lifted top-3 hits only 3/7 → 4/7. One clean rescue: **fialuridine–perhexiline** (mito) — ECFP4 buried it at rank 11 (Tanimoto 0.05) → USRCAT **rank 1**. But it *worsened* 3 pairs (astemizole–thioridazine 2→9, troglitazone–nefazodone 2→9) because **global molecular shape/size dominates the descriptor, not the target-relevant toxicophore**; absolute sibling scores (0.12–0.23) stay non-discriminative. **Takeaway: 3D shape is a weak *supplement* (helps shape-driven cases), not a dependable rescue → R4 (off-target/mechanism) remains the engine.** A stricter 3D test — O3A/ROCS alignment or explicit pharmacophore-fitting, which target the 3-point toxicophore geometry USRCAT ignores — is the remaining untested 3D option.
 
 **R4 mechanism-linkage test (the fix) — done, decisive.** We prototyped the off-target layer as a lightweight proxy: for each safety target, fetch its known actives from ChEMBL (hERG 1,483; 5-HT2B 1,214; Nav1.5 258 — **BSEP yielded only 5, so it fell back**), and score a query by mean top-5 Tanimoto to that *class* (leave-one-out: query + named partners removed first). Result: **terfenadine → hERG = 0.57 (z = +6.4 vs background)** vs pairwise terfenadine–cisapride = 0.19 — and cisapride wasn't even in the fetched hERG set, so the recovery is driven entirely by *other* hERG ligands. Across the 6 query drugs (each scored against hERG, 5-HT2B, Nav1.5): the correct mechanism was the **single highest-scoring target for 4 of 6**, and scored **above the non-binder background for all 6** — i.e. always detectable, and the outright top pick two-thirds of the time. The 2 non-top cases are honest and explained: fenfluramine (its active is the metabolite norfenfluramine, so the parent scores low) and thioridazine (genuinely both a hERG blocker *and* serotonergic, so it ties rather than errs). **Conclusion: class-aggregation recovers the mechanism pairwise buries — R4 is validated and cheap.** Full scripts + data in [`experiments/`](experiments/).
+
+### De-risking results — four cheap checks before building (all run; scripts in [`experiments/`](experiments/))
+Before committing to a build we stress-tested the load-bearing assumptions:
+
+| Check | Question | Result | Verdict |
+|---|---|---|---|
+| **Specificity** (hERG) | Does the score separate blockers from non-blockers, or flag everything? | **ROC-AUC 0.894** — blockers (median 0.66) vs. assay-confirmed non-blockers (0.28); 19/19 common drugs scored low | ✅ discriminates; no false-positive flood |
+| **Scaffold generalization** | Does it survive *novel* chemotypes (the real use case)? | Pooled leave-one-scaffold-out AUC **0.913**; a diverse single-ring holdout collapses to **0.667** | ⚠️ real, but degrades for truly novel, isolated chemotypes |
+| **Panel coverage** | How much of the safety panel can R4 serve? | **37/39 targets serviceable (34 rich)** — all aminergic GPCRs, transporters, enzymes, nuclear receptors. Gap: **BSEP 5 actives; mitochondrial = no single target** | ✅ broad off-target reach; ❌ liver is a data desert |
+| **Phase-0 curation** | Cheap merge or manual sink? | SMILES 20/20 auto; correct mechanism auto-derivable **7/20** (all the off-target cases); `failure_reason`/`tier` ~0% structured | ⚠️ hybrid: cheap for off-target drugs, ~2 person-weeks curation for the rest |
+
+**What this means for scope.** R4's off-target engine is **broad, not narrow** — 37/39 secondary-pharmacology targets spanning cardiac, CNS, GI, endocrine, and immune liabilities, and it genuinely discriminates (AUC 0.89 on hERG, the one target measured end-to-end). The honest boundary is **off-target-mediated (R4's domain) vs. metabolism/phenotypic**: liver DILI (BSEP/mito) and reactive-metabolite/idiosyncratic tox are *not* off-target-binding events, so no similarity method reaches them — they need outcome-trained models (the portfolio below). *Caveat:* coverage ≠ measured accuracy — only hERG has a validated AUC; per-target discrimination across the other 36 rich targets is expected (aminergic GPCRs are QSAR-tractable) but unmeasured.
+
+### The tool is a *portfolio*, not one engine
+Breadth comes from the right method per domain, fused into one prioritized assay panel, each item tagged with an **evidence tier**:
+
+| Module | Domains | Method | Evidence tier (shown in UI) |
+|---|---|---|---|
+| **M1 — off-target linkage (R4, the validated core)** | cardiac, CNS, GI, endocrine, immune (37 targets) | similarity to known actives → linked clinical failures | **mechanism-linked** (strongest) |
+| **M2 — outcome models** | liver DILI, mitochondrial, reactive-metabolite | QSAR on DILIrank, Tox21-mito model, structural alerts; wrap ADMET-AI / ProTox | **model-predicted / alert-based** |
+| **Fusion** | all | rank + tag every recommendation by evidence tier & confidence; **abstain** outside domain | — |
+
+The novelty is the **fusion + clinical-failure grounding + assay triage + honest evidence-tiering**, not any single predictor. Coverage flags are first-class output: *covered mechanism / weak coverage / abstain*.
 
 ### Pipeline
 ```
@@ -220,31 +243,36 @@ Report as **"4.1× liver-liability enrichment"** or a **0–100 priority score**
 
 ---
 
-## 5. Roadmap (hackathon-scoped, layered by risk)
+## 5. Roadmap (revised after de-risking)
 
-**Phase 0 — Curate toxicity-*causal* failures (the real work; not just a merge)**
-- [ ] Ingest ClinTox, WITHDRAWN 2.0, Probes&Drugs, DILIrank 2.0, DICTrank, a hERG set; resolve names → canonical SMILES (PubChem/ChEMBL); de-dupe.
-- [ ] **Curate `failure_reason` + `safety_related` + `organ_system` + `mechanism` + provenance** for each; assign `label_tier`. Filter WITHDRAWN's non-safety reasons out of T1.
-- [ ] Pull reference drugs' **known off-targets** from ChEMBL (hERG/5-HT2B/BSEP IC50 etc.) for the mechanism layer.
-- [ ] Build the **matched No-concern comparator** (DILIrank/DICTrank No-concern, matched by scaffold/property/route).
-- [ ] Load our **7 verified demo pairs** (§4) as fixtures + a documented **novelty search log** (§2).
+The de-risking (Phase 0) is **done** and reshaped the plan: build a **tiered portfolio** — ship the validated off-target core (M1) first, add the metabolism/phenotypic modules (M2) for breadth, then harden.
 
-**Phase 1 — Baseline / obvious-analog floor (must ship — but this alone is NOT the demo)**
-- [ ] FPSim2 2D retrieval + **class-conditional enrichment** score (vs matched comparator) with applicability-domain flag.
-- [ ] organ/mechanism → assay mapping → ranked panel + evidence trail.
-- ⚠️ 2D catches only *obvious* analogs (our test: it misses every verified mechanistic pair). The floor guarantees "always have something running"; **the demo headline requires R4 (Phase 2) — already validated by the prototype, so treat R4 as must-ship for the demo, not a stretch.**
+**Phase 0 — De-risking (DONE ✅ — see §4 + [`experiments/`](experiments/))**
+- [x] 2D similarity fails on mechanistic pairs (ECFP4 0.05–0.19); 3D/USRCAT a weak supplement (helped 4/7, hurt 3/7).
+- [x] R4 off-target linkage recovers the mechanism (terfenadine→hERG z = +6.4; top target 4/6, above background 6/6).
+- [x] **Specificity AUC 0.894** (blockers vs non-blockers); scaffold-generalization 0.913 pooled, but 0.667 for truly novel isolated chemotypes.
+- [x] **Coverage 37/39 panel targets serviceable**; liver (BSEP/mito) is the gap.
+- [x] Phase-0 curation is a hybrid (cheap for off-target drugs; ~2 person-weeks for mechanism/reason/tier).
+- → **Verdict: viable, broad within off-target space, honest liver/mito gap → build as a tiered portfolio.**
 
-**Phase 2 — Mechanism layer + rigor (the differentiator; do before any "wow")**
-- [x] **R3 3D test (USRCAT): done — mixed** (4/7 improved, 3/7 worse; not a rescue). Keep as optional supplement. Remaining 3D option: O3A/ROCS alignment or pharmacophore-fit (untested).
-- [x] **R4 prototype (class-membership scoring vs ChEMBL actives): done — go/no-go PASSED.** The correct mechanism was the highest-scoring target for 4 of 6 drugs and detectable above background for all 6; terfenadine→hERG z = +6.4, leave-one-out (§4, [`experiments/`](experiments/)). The differentiator landed.
-- [ ] **Harden R4:** swap raw class-Tanimoto → trained target-prediction (SEA / per-target QSAR); expand the panel beyond hERG/5-HT2B; handle metabolite-active drugs (fenfluramine); add per-target coverage + applicability-domain flags.
-- [ ] **Assay-recovery validation** (top-1/top-3, §4 Rigor) — the "which assay first" promise, not just organ discrimination.
-- [ ] Validation: scaffold-split CV, per-organ enrichment/precision@k, calibration, baselines (ECFP, ProTox/ADMET-AI), ablation.
-- [ ] Attribution (shared mechanism + motif/pose) + LLM report + mechanism-edge network.
+**Phase 1 — M1: the validated off-target core (must ship — this is the demo)**
+- [ ] Reference set: SMILES + ChEMBL off-targets + DILIrank/DICTrank organ join — start with the auto-derivable off-target/cardiac-CNS slice (7/20 clean per Phase-0); load the **7 verified pairs** as fixtures + a documented **novelty search log** (§2).
+- [ ] R4 module across the rich panel (hERG, 5-HT2B + aminergic GPCRs, transporters, enzymes): class-membership scoring (pChEMBL≥6, top-5 Tanimoto, z vs background), leave-one-out.
+- [ ] **Evidence-tier + coverage flags as first-class output:** *mechanism-linked / weak-coverage / **abstain***.
+- [ ] organ/mechanism → assay mapping → ranked panel + evidence trail; **retrospective leave-one-out demo** (§6).
 
-**Phase 3 — Stretch**
-- [ ] Learned embedding rung — only with demonstrated lift.
-- [ ] Docking panel for off-targets; AACT `why_stopped` mining on a slice.
+**Phase 2 — M2: breadth for the metabolism/phenotypic gap**
+- [ ] Wrap outcome-models for what R4 can't reach: **DILI QSAR** (DILIrank), **mitochondrial** (Tox21 mito-membrane-potential model), **reactive-metabolite structural alerts**; optionally fold in **ADMET-AI / ProTox** endpoints.
+- [ ] **Fuse M1 + M2** into one cross-domain assay panel, each item tagged by evidence tier + confidence.
+- [ ] Present liver/mito explicitly as *model-predicted* (not mechanism-linked) — honest tiering, not overclaim.
+
+**Phase 3 — Rigor & hardening (post-MVP)**
+- [ ] Measure **per-target AUC beyond hERG** (validate the breadth claim); swap class-Tanimoto → trained target-prediction (SEA / per-target QSAR); metabolite-active handling (fenfluramine).
+- [ ] Scaffold-split CV, calibration, **assay-recovery top-1/top-3**, baselines (ECFP, ProTox/ADMET-AI), ablation.
+- [ ] Scale curation to ~200 drugs (~2 person-weeks); build the matched No-concern comparator.
+
+**Phase 4 — Stretch**
+- [ ] Learned-embedding rung (only with demonstrated lift); off-target docking panel; AACT `why_stopped` mining; 3D O3A/ROCS test.
 
 ---
 
@@ -271,8 +299,8 @@ Claim: **"our AI reasons like an experienced med chemist — links a candidate t
 3. **"Safe" comparator is a misnomer.** → matched **No-concern** class, not "any approved" (§3e).
 4. **Score semantics.** Present enrichment (`N×`) or 0–100 priority, **not** probability-looking decimals unless calibrated.
 5. **2D structure is insufficient** (our own test). → mechanism/off-target layer is the engine; state it as a designed choice, not a gap.
-6. **Off-target prediction is itself a model** with error — **worst for novel scaffolds** far from any known ligand set (R4's sensitivity comes from the target's known ligands; a truly novel chemotype has few). → report confidence and an applicability-domain flag; use **measured** ChEMBL off-targets for reference drugs, **predicted** only for the candidate; validate on the verified pairs.
-7. **Some clinical killers are NOT off-target binding** — reactive/CYP-generated metabolites, idiosyncratic mitochondrial tox, dose/exposure — so **the panel physically cannot predict them**. The **reference set still flags** such drugs (they're in the failure DB with their organ/mechanism), but **R4 can't link a candidate to them** by shared panel activity. Honest scope limit: R4 covers off-target-mediated liabilities only → prioritization, never a safety verdict.
+6. **Off-target prediction is itself a model** with error — **worst for novel scaffolds** (R4's sensitivity comes from the target's known ligands; measured AUC 0.667 on a diverse isolated-chemotype holdout vs 0.913 pooled). Also: **only hERG has a measured discrimination AUC (0.894)** — the other 36 rich targets are expected-but-unvalidated (Phase 3). → report confidence + applicability-domain flag; measured off-targets for reference drugs, predicted only for the candidate.
+7. **Some clinical killers are NOT off-target binding** — reactive/CYP metabolites, idiosyncratic mitochondrial tox, dose/exposure. R4 (M1) physically can't predict these → they are the **M2 outcome-model modules** (DILI QSAR, Tox21-mito, alerts), served at a **lower evidence tier (model-predicted, not mechanism-linked)** and clearly flagged as such. Liver/mito is a *designed module boundary*, not a hidden gap — but M2 is less validated than M1; don't oversell it.
 8. **Generalization.** Never quote a random-split number; report scaffold-split CV + AD abstention.
 9. **Proprietary gap.** Cleanest discontinued-for-safety data (Pharmaprojects/Citeline, Pharmapendium) is paywalled — note as gold standard if licensed.
 10. **Licenses:** DrugBank / SIDER / OFFSIDES non-commercial — flag for any commercialization.

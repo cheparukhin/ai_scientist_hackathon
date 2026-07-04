@@ -1,0 +1,76 @@
+{
+ "nonblocker_full_ref_q25_med_q75": [
+  0.24446574393942816,
+  0.2836438923395445,
+  0.38330256501884774
+ ],
+ "clusters": [
+  {
+   "scaffold_smiles": "c1ccc(-n2cc(Cn3ccnc3)nn2)cc1",
+   "cluster_size": 64,
+   "inset_score_median": 0.7660417842330183,
+   "holdout_score_q25_med_q75": [
+    0.530245960456377,
+    0.5549750931430051,
+    0.578414988806328
+   ],
+   "holdout_auc_vs_nonblockers": 0.9319158075601375,
+   "median_drop_inset_to_holdout": 0.2110666910900132,
+   "frac_holdout_above_nonblocker_median": 1.0
+  },
+  {
+   "scaffold_smiles": "O=C1COc2ccc(CNC34CCC(CCc5ccnc6cccnc56)(CC3)OC4)nc2N1",
+   "cluster_size": 57,
+   "inset_score_median": 0.7968135973615426,
+   "holdout_score_q25_med_q75": [
+    0.5363294717941252,
+    0.6057320304406726,
+    0.6701963568661791
+   ],
+   "holdout_auc_vs_nonblockers": 0.9532163742690059,
+   "median_drop_inset_to_holdout": 0.19108156692086997,
+   "frac_holdout_above_nonblocker_median": 1.0
+  },
+  {
+   "scaffold_smiles": "c1ccc(-c2cnn(Cc3cc[nH]n3)c2)cc1",
+   "cluster_size": 26,
+   "inset_score_median": 0.6930640171641524,
+   "holdout_score_q25_med_q75": [
+    0.4868394346951974,
+    0.566060583671042,
+    0.6226268757448004
+   ],
+   "holdout_auc_vs_nonblockers": 0.920257291391312,
+   "median_drop_inset_to_holdout": 0.1270034334931105,
+   "frac_holdout_above_nonblocker_median": 1.0
+  },
+  {
+   "scaffold_smiles": "c1cc([C@H]2NCCc3c2ccc2[nH]ncc32)ncc1NC1CNC1",
+   "cluster_size": 22,
+   "inset_score_median": 0.8073319874012719,
+   "holdout_score_q25_med_q75": [
+    0.674433775235862,
+    0.731564043848871,
+    0.7640435114589385
+   ],
+   "holdout_auc_vs_nonblockers": 0.9825054670415495,
+   "median_drop_inset_to_holdout": 0.07576794355240091,
+   "frac_holdout_above_nonblocker_median": 1.0
+  },
+  {
+   "scaffold_smiles": "c1ccccc1",
+   "cluster_size": 21,
+   "inset_score_median": 0.5957536224410871,
+   "holdout_score_q25_med_q75": [
+    0.30920891130727196,
+    0.35877397112691234,
+    0.37593760711455
+   ],
+   "holdout_auc_vs_nonblockers": 0.6670484917907599,
+   "median_drop_inset_to_holdout": 0.23697965131417476,
+   "frac_holdout_above_nonblocker_median": 0.9047619047619048
+  }
+ ],
+ "pooled_holdout_auc_vs_full_nonblockers": 0.9127449207210466,
+ "pooled_holdout_median": 0.566060583671042
+}

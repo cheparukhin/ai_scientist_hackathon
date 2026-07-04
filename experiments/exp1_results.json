@@ -1,0 +1,42 @@
+{
+ "counts": {
+  "blockers_valid": 2494,
+  "nonblockers_valid": 873
+ },
+ "auc": 0.8938336314141339,
+ "blocker_score_q25_med_q75": [
+  0.4906257634107441,
+  0.664309971057709,
+  0.7564555341276691
+ ],
+ "nonblocker_score_q25_med_q75": [
+  0.24446574393942816,
+  0.2836438923395445,
+  0.38330256501884774
+ ],
+ "blocker_mean": 0.6183272387705284,
+ "nonblocker_mean": 0.3292407076437751,
+ "external_drug_scores": {
+  "metformin": 0.113,
+  "aspirin": 0.257,
+  "acetaminophen": 0.259,
+  "amoxicillin": 0.202,
+  "omeprazole": 0.246,
+  "ibuprofen": 0.245,
+  "caffeine": 0.178,
+  "lisinopril": 0.292,
+  "metronidazole": 0.237,
+  "ranitidine": 0.175,
+  "naproxen": 0.274,
+  "gabapentin": 0.15,
+  "hydrochlorothiazide": 0.172,
+  "furosemide": 0.256,
+  "ciprofloxacin": 0.243,
+  "levothyroxine": 0.187,
+  "prednisone": 0.192,
+  "warfarin": 0.255,
+  "ascorbic_acid": 0.153
+ },
+ "blocker_median": 0.664309971057709,
+ "external_below_blocker_median": "19/19"
+}

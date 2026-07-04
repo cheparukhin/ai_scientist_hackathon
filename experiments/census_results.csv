@@ -1,0 +1,40 @@
+target,chembl_id,pref_name,n_actives_pchembl6,class,organ_tox_relevance
+hERG/KCNH2,CHEMBL240,Voltage-gated inwardly rectifying potassium channel KCNH2,2494,RICH,"Cardiac: QT prolongation, torsades"
+Nav1.5/SCN5A,CHEMBL1980,Sodium channel protein type 5 subunit alpha,258,USABLE,"Cardiac: conduction, arrhythmia"
+Cav1.2/CACNA1C,CHEMBL1940,Voltage-dependent L-type calcium channel subunit alpha-1C,70,USABLE,"Cardiac: contractility, BP"
+KCNQ1,CHEMBL1866,Potassium voltage-gated channel subfamily KQT member 1,0,THIN,Cardiac: QT / LQT1
+5-HT1A,CHEMBL214,5-hydroxytryptamine receptor 1A,4736,RICH,"CNS: mood, anxiety"
+5-HT1B,CHEMBL1898,5-hydroxytryptamine receptor 1B,950,RICH,CNS/vascular
+5-HT2A,CHEMBL224,5-hydroxytryptamine receptor 2A,4858,RICH,"CNS: hallucination, antipsychotic"
+5-HT2B,CHEMBL1833,5-hydroxytryptamine receptor 2B,1461,RICH,"Cardiac: valvulopathy, fibrosis"
+5-HT3,CHEMBL1899,5-hydroxytryptamine receptor 3A,740,RICH,"GI: nausea, motility"
+D1,CHEMBL2056,D(1A) dopamine receptor,1004,RICH,"CNS: motor, reward"
+D2,CHEMBL217,D(2) dopamine receptor,7175,RICH,"CNS: EPS, prolactin"
+alpha1A adrenergic,CHEMBL229,Alpha-1A adrenergic receptor,1531,RICH,"Cardiovascular: BP, orthostasis"
+alpha2A adrenergic,CHEMBL1867,Alpha-2A adrenergic receptor,731,RICH,"CV/CNS: BP, sedation"
+beta1 adrenergic,CHEMBL213,Beta-1 adrenergic receptor,510,RICH,"Cardiac: HR, contractility"
+beta2 adrenergic,CHEMBL210,Beta-2 adrenergic receptor,822,RICH,Respiratory/CV
+M1 muscarinic,CHEMBL216,Muscarinic acetylcholine receptor M1,1422,RICH,CNS/autonomic
+M2 muscarinic,CHEMBL211,Muscarinic acetylcholine receptor M2,1572,RICH,Cardiac: HR
+M3 muscarinic,CHEMBL245,Muscarinic acetylcholine receptor M3,2125,RICH,"Smooth muscle, secretion"
+H1 histamine,CHEMBL231,Histamine H1 receptor,1285,RICH,CNS: sedation
+H2 histamine,CHEMBL1941,Histamine H2 receptor,202,USABLE,GI: acid secretion
+mu opioid,CHEMBL233,Mu-type opioid receptor,5179,RICH,"CNS: analgesia, resp depression"
+kappa opioid,CHEMBL237,Kappa-type opioid receptor,4414,RICH,CNS: dysphoria
+delta opioid,CHEMBL236,Delta-type opioid receptor,3355,RICH,"CNS: analgesia, seizure"
+CB1 cannabinoid,CHEMBL218,Cannabinoid receptor 1,3363,RICH,CNS: psychiatric
+CB2 cannabinoid,CHEMBL253,Cannabinoid receptor 2,3766,RICH,Immune
+A2A adenosine,CHEMBL251,Adenosine receptor A2a,5278,RICH,CV/CNS
+SERT/SLC6A4,CHEMBL228,Sodium-dependent serotonin transporter,4392,RICH,CNS: serotonin syndrome
+NET/SLC6A2,CHEMBL222,Sodium-dependent noradrenaline transporter,2818,RICH,CV/CNS: BP
+DAT/SLC6A3,CHEMBL238,Sodium-dependent dopamine transporter,2350,RICH,CNS: abuse liability
+BSEP/ABCB11,CHEMBL6020,Bile salt export pump,5,THIN,Liver: cholestatic DILI
+COX1/PTGS1,CHEMBL221,Prostaglandin G/H synthase 1,393,RICH,"GI: bleeding, ulcer"
+COX2/PTGS2,CHEMBL230,Prostaglandin G/H synthase 2,2542,RICH,CV/renal
+AChE,CHEMBL220,Acetylcholinesterase,3137,RICH,Autonomic/CNS: cholinergic crisis
+MAO-A,CHEMBL1951,Amine oxidase [flavin-containing] A,831,RICH,CNS/CV: hypertensive crisis
+PDE3A,CHEMBL241,"cGMP-inhibited 3',5'-cyclic phosphodiesterase 3A",472,RICH,"Cardiac: inotropy, mortality"
+PDE4D,CHEMBL288,"3',5'-cyclic-AMP phosphodiesterase 4D",919,RICH,CNS/GI: emesis
+Lck,CHEMBL258,Tyrosine-protein kinase Lck,1678,RICH,Immune: immunosuppression
+GR/NR3C1,CHEMBL2034,Glucocorticoid receptor,2601,RICH,Endocrine/metabolic
+androgen receptor,CHEMBL1871,Androgen receptor,2084,RICH,Endocrine/reproductive

@@ -1,0 +1,1303 @@
+{
+  "terfenadine": {
+    "chembl": "CHEMBL17157",
+    "targets": {
+      "hERG": {
+        "pchembl": 8.05,
+        "type": "IC50",
+        "n": 41
+      },
+      "Nav1.5": {
+        "pchembl": 5.96,
+        "type": "IC50",
+        "n": 18
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": 5.72,
+        "type": "Ki",
+        "n": 4
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "D2": {
+        "pchembl": 5.69,
+        "type": "Ki",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "5-HT2A": {
+        "pchembl": 7.14,
+        "type": "Ki",
+        "n": 3
+      },
+      "5-HT2B": {
+        "pchembl": 7.52,
+        "type": "Ki",
+        "n": 6
+      },
+      "SERT": {
+        "pchembl": 5.08,
+        "type": "AC50",
+        "n": 4
+      },
+      "BSEP": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      }
+    },
+    "n_any_record": 13,
+    "n_quantified": 7,
+    "n_potent_1uM": 3,
+    "potent_list": [
+      "5-HT2A",
+      "5-HT2B",
+      "hERG"
+    ]
+  },
+  "cisapride": {
+    "chembl": "CHEMBL1729",
+    "targets": {
+      "hERG": {
+        "pchembl": 8.19,
+        "type": "IC50",
+        "n": 67
+      },
+      "D2": {
+        "pchembl": 6.8,
+        "type": "Ki",
+        "n": 4
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "5-HT2A": {
+        "pchembl": 8.96,
+        "type": "Ki",
+        "n": 5
+      },
+      "5-HT2B": {
+        "pchembl": 7.4,
+        "type": "Ki",
+        "n": 6
+      },
+      "SERT": {
+        "pchembl": 6.69,
+        "type": "Ki",
+        "n": 3
+      }
+    },
+    "n_any_record": 11,
+    "n_quantified": 5,
+    "n_potent_1uM": 5,
+    "potent_list": [
+      "5-HT2A",
+      "5-HT2B",
+      "D2",
+      "SERT",
+      "hERG"
+    ]
+  },
+  "astemizole": {
+    "chembl": "CHEMBL296419",
+    "targets": {
+      "hERG": {
+        "pchembl": 9.05,
+        "type": "IC50",
+        "n": 38
+      },
+      "Nav1.5": {
+        "pchembl": 6.52,
+        "type": "IC50",
+        "n": 10
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": 5.87,
+        "type": "Ki",
+        "n": 4
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "D2": {
+        "pchembl": 5.82,
+        "type": "Ki",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "5-HT2A": {
+        "pchembl": 8.25,
+        "type": "Ki",
+        "n": 4
+      },
+      "5-HT2B": {
+        "pchembl": 8.13,
+        "type": "Ki",
+        "n": 6
+      },
+      "SERT": {
+        "pchembl": 6.16,
+        "type": "Ki",
+        "n": 4
+      },
+      "BSEP": {
+        "pchembl": 4.96,
+        "type": "AC50",
+        "n": 3
+      }
+    },
+    "n_any_record": 13,
+    "n_quantified": 8,
+    "n_potent_1uM": 5,
+    "potent_list": [
+      "5-HT2A",
+      "5-HT2B",
+      "Nav1.5",
+      "SERT",
+      "hERG"
+    ]
+  },
+  "thioridazine": {
+    "chembl": "CHEMBL479",
+    "targets": {
+      "hERG": {
+        "pchembl": 7.48,
+        "type": "IC50",
+        "n": 15
+      },
+      "D2": {
+        "pchembl": 8.1,
+        "type": "Ki",
+        "n": 5
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": 5.81,
+        "type": "IC50",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": 5.27,
+        "type": "AC50",
+        "n": 3
+      },
+      "5-HT2A": {
+        "pchembl": 8.9,
+        "type": "Ki",
+        "n": 6
+      },
+      "5-HT2B": {
+        "pchembl": 7.09,
+        "type": "Ki",
+        "n": 4
+      },
+      "SERT": {
+        "pchembl": 6.4,
+        "type": "Ki",
+        "n": 3
+      },
+      "BSEP": {
+        "pchembl": 4.61,
+        "type": "IC50",
+        "n": 1
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 8,
+    "n_potent_1uM": 5,
+    "potent_list": [
+      "5-HT2A",
+      "5-HT2B",
+      "D2",
+      "SERT",
+      "hERG"
+    ]
+  },
+  "sertindole": {
+    "chembl": "CHEMBL12713",
+    "targets": {
+      "hERG": {
+        "pchembl": 8.57,
+        "type": "IC50",
+        "n": 16
+      },
+      "D2": {
+        "pchembl": 9.42,
+        "type": "Ki",
+        "n": 5
+      },
+      "5-HT2A": {
+        "pchembl": 9.22,
+        "type": "Ki",
+        "n": 5
+      },
+      "Nav1.5": {
+        "pchembl": 5.19,
+        "type": "IC50",
+        "n": 3
+      },
+      "BSEP": {
+        "pchembl": 4.08,
+        "type": "IC50",
+        "n": 1
+      },
+      "NET": {
+        "pchembl": 5.57,
+        "type": "AC50",
+        "n": 1
+      },
+      "SERT": {
+        "pchembl": 5.47,
+        "type": "AC50",
+        "n": 1
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "MAO-B": {
+        "pchembl": 4.66,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2B": {
+        "pchembl": 7.92,
+        "type": "AC50",
+        "n": 3
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 9,
+    "n_potent_1uM": 4,
+    "potent_list": [
+      "5-HT2A",
+      "5-HT2B",
+      "D2",
+      "hERG"
+    ]
+  },
+  "grepafloxacin": {
+    "chembl": "CHEMBL583",
+    "targets": {
+      "hERG": {
+        "pchembl": 4.3,
+        "type": "IC50",
+        "n": 13
+      },
+      "5-HT2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "Nav1.5": {
+        "pchembl": null,
+        "type": "Activity",
+        "n": 3
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 1,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "cerivastatin": {
+    "chembl": "CHEMBL1477",
+    "targets": {
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "hERG": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "5-HT2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "Nav1.5": {
+        "pchembl": null,
+        "type": "Activity",
+        "n": 1
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 0,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "pergolide": {
+    "chembl": "CHEMBL531",
+    "targets": {
+      "D2": {
+        "pchembl": 9.45,
+        "type": "EC50",
+        "n": 13
+      },
+      "hERG": {
+        "pchembl": 6.92,
+        "type": "IC50",
+        "n": 4
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "5-HT2A": {
+        "pchembl": 8.41,
+        "type": "Ki",
+        "n": 7
+      },
+      "5-HT2B": {
+        "pchembl": 8.08,
+        "type": "AC50",
+        "n": 5
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "BSEP": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 4,
+    "n_potent_1uM": 4,
+    "potent_list": [
+      "5-HT2A",
+      "5-HT2B",
+      "D2",
+      "hERG"
+    ]
+  },
+  "fenfluramine": {
+    "chembl": "CHEMBL87493",
+    "targets": {
+      "hERG": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "SERT": {
+        "pchembl": 4.96,
+        "type": "AC50",
+        "n": 1
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2B": {
+        "pchembl": 5.36,
+        "type": "AC50",
+        "n": 3
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2A": {
+        "pchembl": 5.29,
+        "type": "AC50",
+        "n": 2
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      }
+    },
+    "n_any_record": 10,
+    "n_quantified": 3,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "benfluorex": {
+    "chembl": "CHEMBL400599",
+    "targets": {
+      "hERG": {
+        "pchembl": 5.25,
+        "type": "AC50",
+        "n": 1
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "NET": {
+        "pchembl": 4.64,
+        "type": "AC50",
+        "n": 1
+      },
+      "SERT": {
+        "pchembl": 4.8,
+        "type": "AC50",
+        "n": 1
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2B": {
+        "pchembl": 6.3,
+        "type": "AC50",
+        "n": 3
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2A": {
+        "pchembl": 5.16,
+        "type": "AC50",
+        "n": 2
+      }
+    },
+    "n_any_record": 10,
+    "n_quantified": 5,
+    "n_potent_1uM": 1,
+    "potent_list": [
+      "5-HT2B"
+    ]
+  },
+  "troglitazone": {
+    "chembl": "CHEMBL408",
+    "targets": {
+      "MAO-A": {
+        "pchembl": 5.68,
+        "type": "IC50",
+        "n": 3
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": 5.39,
+        "type": "AC50",
+        "n": 4
+      },
+      "COX-1": {
+        "pchembl": 5.23,
+        "type": "AC50",
+        "n": 4
+      },
+      "COX-2": {
+        "pchembl": 5.52,
+        "type": "AC50",
+        "n": 3
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": 4.98,
+        "type": "Ki",
+        "n": 5
+      },
+      "hERG": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "5-HT2A": {
+        "pchembl": 5.55,
+        "type": "AC50",
+        "n": 4
+      },
+      "5-HT2B": {
+        "pchembl": 6.08,
+        "type": "Ki",
+        "n": 5
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "BSEP": {
+        "pchembl": 5.57,
+        "type": "IC50",
+        "n": 8
+      }
+    },
+    "n_any_record": 13,
+    "n_quantified": 8,
+    "n_potent_1uM": 1,
+    "potent_list": [
+      "5-HT2B"
+    ]
+  },
+  "nefazodone": {
+    "chembl": "CHEMBL623",
+    "targets": {
+      "SERT": {
+        "pchembl": 6.7,
+        "type": "Kd",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": 6.44,
+        "type": "Kd",
+        "n": 2
+      },
+      "5-HT2A": {
+        "pchembl": 8.24,
+        "type": "Ki",
+        "n": 4
+      },
+      "Nav1.5": {
+        "pchembl": 5.33,
+        "type": "IC50",
+        "n": 3
+      },
+      "BSEP": {
+        "pchembl": 5.38,
+        "type": "IC50",
+        "n": 7
+      },
+      "hERG": {
+        "pchembl": 6.05,
+        "type": "AC50",
+        "n": 1
+      },
+      "D2": {
+        "pchembl": 6.57,
+        "type": "AC50",
+        "n": 1
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2B": {
+        "pchembl": 7.08,
+        "type": "AC50",
+        "n": 3
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 8,
+    "n_potent_1uM": 6,
+    "potent_list": [
+      "5-HT2A",
+      "5-HT2B",
+      "D2",
+      "NET",
+      "SERT",
+      "hERG"
+    ]
+  },
+  "sitaxentan": {
+    "chembl": "CHEMBL282724",
+    "targets": {
+      "ET-B": {
+        "pchembl": 9.37,
+        "type": "Ki",
+        "n": 7
+      },
+      "BSEP": {
+        "pchembl": 5.01,
+        "type": "AC50",
+        "n": 2
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 2
+      }
+    },
+    "n_any_record": 7,
+    "n_quantified": 2,
+    "n_potent_1uM": 1,
+    "potent_list": [
+      "ET-B"
+    ]
+  },
+  "fialuridine": {
+    "chembl": "CHEMBL271475",
+    "targets": {
+      "BSEP": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 1
+      }
+    },
+    "n_any_record": 1,
+    "n_quantified": 0,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "perhexiline": {
+    "chembl": "CHEMBL75880",
+    "targets": {
+      "hERG": {
+        "pchembl": 5.46,
+        "type": "AC50",
+        "n": 9
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": 5.49,
+        "type": "Ki",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "5-HT2A": {
+        "pchembl": 4.76,
+        "type": "AC50",
+        "n": 3
+      },
+      "5-HT2B": {
+        "pchembl": 4.92,
+        "type": "AC50",
+        "n": 3
+      },
+      "SERT": {
+        "pchembl": 4.8,
+        "type": "AC50",
+        "n": 3
+      },
+      "BSEP": {
+        "pchembl": 4.84,
+        "type": "IC50",
+        "n": 2
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 6,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "rofecoxib": {
+    "chembl": "CHEMBL122",
+    "targets": {
+      "COX-2": {
+        "pchembl": 9.0,
+        "type": "IC50",
+        "n": 87
+      },
+      "COX-1": {
+        "pchembl": 6.3,
+        "type": "AC50",
+        "n": 56
+      },
+      "hERG": {
+        "pchembl": null,
+        "type": "Inhibition",
+        "n": 9
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "5-HT2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 5
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 6
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "BSEP": {
+        "pchembl": 4.02,
+        "type": "IC50",
+        "n": 3
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 3,
+    "n_potent_1uM": 2,
+    "potent_list": [
+      "COX-1",
+      "COX-2"
+    ]
+  },
+  "ximelagatran": {
+    "chembl": "CHEMBL522038",
+    "targets": {
+      "BSEP": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 2
+      }
+    },
+    "n_any_record": 6,
+    "n_quantified": 0,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "tolcapone": {
+    "chembl": "CHEMBL1324",
+    "targets": {
+      "BSEP": {
+        "pchembl": 4.52,
+        "type": "AC50",
+        "n": 5
+      },
+      "hERG": {
+        "pchembl": 5.71,
+        "type": "AC50",
+        "n": 1
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "NET": {
+        "pchembl": 4.89,
+        "type": "AC50",
+        "n": 1
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "A2A": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      },
+      "COX-2": {
+        "pchembl": 5.55,
+        "type": "AC50",
+        "n": 1
+      },
+      "5-HT2A": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 2
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 2
+      }
+    },
+    "n_any_record": 10,
+    "n_quantified": 4,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "trovafloxacin": {
+    "chembl": "CHEMBL428",
+    "targets": {
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "COX-2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "hERG": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "5-HT2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 4
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "BSEP": {
+        "pchembl": null,
+        "type": "AC50",
+        "n": 1
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 0,
+    "n_potent_1uM": 0,
+    "potent_list": []
+  },
+  "bromfenac": {
+    "chembl": "CHEMBL1077",
+    "targets": {
+      "A2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "NET": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "COX-1": {
+        "pchembl": 8.17,
+        "type": "AC50",
+        "n": 4
+      },
+      "COX-2": {
+        "pchembl": 8.32,
+        "type": "IC50",
+        "n": 2
+      },
+      "D2": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "ET-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "MAO-B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "hERG": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "5-HT2A": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 2
+      },
+      "5-HT2B": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "SERT": {
+        "pchembl": null,
+        "type": "IC50",
+        "n": 3
+      },
+      "BSEP": {
+        "pchembl": 4.06,
+        "type": "AC50",
+        "n": 2
+      }
+    },
+    "n_any_record": 12,
+    "n_quantified": 3,
+    "n_potent_1uM": 2,
+    "potent_list": [
+      "COX-1",
+      "COX-2"
+    ]
+  }
+}
