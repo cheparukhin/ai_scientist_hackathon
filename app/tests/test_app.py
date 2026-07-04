@@ -101,3 +101,34 @@ def test_app_validation_panel_present():
     idx_col = next(c for c in tbl.column_names if c.startswith("index"))
     n_drugs = len(set(tbl.column(idx_col).to_pylist()))
     assert n_drugs == 10, n_drugs
+
+
+# ---------------- N6 ----------------
+
+TROGLITAZONE = "Cc1c(C)c2c(c(C)c1O)CCC(C)(COc1ccc(CC3SC(=O)NC3=O)cc1)O2"
+
+
+def test_app_troglitazone_m2_section_and_m1_headline():
+    at = _run(TROGLITAZONE)
+    assert not at.exception
+    blob = " ".join(m.value for m in at.markdown)
+    # M2 model-predicted section present and mentions hepatotox
+    assert "model-predicted" in blob, blob[:500]
+    assert "hepatotox" in blob.lower(), blob[:500]
+    # M1 assays-to-culprit headline still renders (metric elements present)
+    assert "Assays-to-culprit" in blob, blob[:500]
+    metric_labels = [m.label for m in at.metric]
+    assert "Killer assay" in metric_labels, metric_labels
+
+
+def test_troglitazone_narrative_fallback_mentions_m2_no_probability(monkeypatch):
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    from agent import narrative_report
+    from core import score_candidate, build_plan
+    from outcome_modules import outcome_panel
+    r = score_candidate(TROGLITAZONE)
+    plan = build_plan(r)
+    m2 = outcome_panel(r["canonical_smiles"])
+    txt = narrative_report(r, plan, m2)
+    assert "model-predicted" in txt.lower(), txt
+    assert "probability" not in txt.lower(), txt

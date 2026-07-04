@@ -33,12 +33,38 @@ SYSTEM = (
     "similarity already flags it and the engine adds most value for novel chemotypes.\n"
     "- Name the shared mechanism/off-target, the linked failed drug(s), and recommend the "
     "first assay to run and why (severity + resemblance to withdrawn/failed drugs).\n"
+    "- If model_predicted_modules are present, you MAY add ONE sentence on any liver "
+    "(hepatotox), mitochondrial, or reactive-metabolite finding, but ONLY framed as a "
+    "LOWER-TIER, MODEL-PREDICTED signal that is LESS VALIDATED than the off-target core and "
+    "needs experimental confirmation. Use the exact phrase 'model-predicted'. Reactive-"
+    "metabolite items are structural ALERTS (hypotheses), not predictions. Never merge these "
+    "into the assays-to-culprit claim and never state a probability.\n"
     "Write 3-6 sentences, plain prose, no markdown headers, no bullet lists."
 )
 
 
-def _evidence_from(result, plan):
-    """Distill result+plan into a compact JSON evidence packet for the LLM."""
+def _m2_summary(m2):
+    """Compact, tier-labelled summary of the M2 model-predicted modules for the packet."""
+    if not m2:
+        return None
+    flagged = {ep: d for ep, d in m2.get("endpoints", {}).items() if d.get("flagged")}
+    return {
+        "evidence_tier": "model-predicted (LOWER tier than M1; less validated; confirm experimentally)",
+        "reactive_metabolite_alerts": [
+            {"liability": a["name"], "citation": a["citation"], "kind": "structural alert (hypothesis)"}
+            for a in m2.get("reactive", [])
+        ][:6],
+        "flagged_organ_tox": [
+            {"endpoint": ep, "enrichment_z": d["z"], "nearest_analog": d["nearest"]["name"],
+             "citation": d["nearest"]["citation"]}
+            for ep, d in flagged.items()
+        ],
+        "note": "Similarity-enrichment / structural alerts, never a probability of harm.",
+    }
+
+
+def _evidence_from(result, plan, m2=None):
+    """Distill result+plan(+M2) into a compact JSON evidence packet for the LLM."""
     if result.get("status") == "abstain":
         return {
             "status": "abstain",
@@ -80,6 +106,9 @@ def _evidence_from(result, plan):
         "weak_coverage": result["flags"]["weak_coverage"],
         "scope_note": "Off-target-mediated failures only; blind to metabolite and hepatotoxicity.",
     }
+    m2s = _m2_summary(m2)
+    if m2s:
+        ev["model_predicted_modules"] = m2s
     return ev
 
 
@@ -114,14 +143,36 @@ def _fallback(ev):
     parts.append(
         "Scope: this covers off-target-mediated failures only and is blind to metabolite-driven and "
         "liver toxicity - treat those as weak-coverage, not cleared.")
+    m2 = ev.get("model_predicted_modules")
+    if m2:
+        flagged = m2.get("flagged_organ_tox", [])
+        alerts = m2.get("reactive_metabolite_alerts", [])
+        if flagged:
+            eps = ", ".join(f"{d['endpoint']} (nearest {d['nearest_analog']})" for d in flagged)
+            parts.append(
+                f"Separately and at a lower, model-predicted tier (less validated than the "
+                f"off-target core, confirm experimentally): read-across flags {eps}.")
+        if alerts:
+            liabs = ", ".join(a["liability"] for a in alerts[:3])
+            parts.append(
+                f"Model-predicted reactive-metabolite structural alerts (hypotheses, not "
+                f"predictions): {liabs}.")
+        if not flagged and not alerts:
+            parts.append(
+                "The model-predicted (lower-tier) metabolism/organ-tox modules flagged nothing, "
+                "but that is not a clean bill of health.")
     return " ".join(parts)
 
 
-def narrative_report(result, plan=None):
-    """Return a grounded med-chemist narrative string. Never raises."""
+def narrative_report(result, plan=None, m2=None):
+    """Return a grounded med-chemist narrative string. Never raises.
+
+    m2: optional outcome_modules.outcome_panel(...) dict - mentioned ONLY as a lower-tier,
+    model-predicted signal needing confirmation (never merged into the M1 claim).
+    """
     if plan is None and result.get("status") == "ok":
         plan = build_plan(result)
-    ev = _evidence_from(result, plan)
+    ev = _evidence_from(result, plan, m2)
 
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:

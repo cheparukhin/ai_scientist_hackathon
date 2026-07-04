@@ -189,7 +189,7 @@ app/
   includes a nitro/aniline alert; metformin → hepatotox NOT flagged and no reactive alert;
   every endpoint dict has `tier=="model-predicted"` and no key named `probability`/`p_toxic`.
 
-### [ ] N6 — Fuse M2 into UI + narrative
+### [x] N6 — Fuse M2 into UI + narrative
 - `streamlit_app.py`: below the M1 plan/evidence, add a clearly-separated section
   **"Metabolism / organ-tox — model-predicted (lower evidence tier, less validated than the
   off-target core)"** showing: reactive-metabolite alerts (as chips/list with the matched

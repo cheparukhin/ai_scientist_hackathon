@@ -20,6 +20,7 @@ import json
 from core import EXAMPLES, build_plan, score_candidate  # noqa: E402
 from agent import narrative_report  # noqa: E402
 from render import mol_png  # noqa: E402
+from outcome_modules import outcome_panel  # noqa: E402
 import validation as V  # noqa: E402
 
 _REF_FAILURES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -239,11 +240,46 @@ if run or smiles:
         } for e in r["evidence"]])
         st.dataframe(ev_df, hide_index=True, width="stretch")
 
+    # ---- M2: metabolism / organ-tox, model-predicted (LOWER tier than M1) (N6) ----
+    st.divider()
+    st.markdown("### 🧬 Metabolism / organ-tox — model-predicted "
+                "(lower evidence tier, less validated than the off-target core)")
+    st.caption(
+        "Separate, **lower-tier** modules for liabilities the validated M1 engine is blind to "
+        "(metabolite-driven & liver/mito). These are **similarity-enrichment / structural "
+        "alerts, not probabilities of harm** — and they do **not** affect the assays-to-culprit "
+        "headline above (that metric is M1-only)."
+    )
+    m2 = outcome_panel(result["canonical_smiles"])
+
+    st.markdown("**Reactive-metabolite alerts** (structural hypotheses — confirm experimentally):")
+    if m2["reactive"]:
+        for a in m2["reactive"]:
+            st.markdown(f"- ⚠️ **{a['name']}** — {a['note']}  \n  _{a['citation']}_")
+    else:
+        st.write("No reactive-metabolite structural alert matched — still not a clean bill of health.")
+
+    st.markdown("**Hepatotox / mito read-across** (z vs the 24-drug background; nearest curated analog):")
+    ep_rows = []
+    for ep, d in m2["endpoints"].items():
+        ep_rows.append({
+            "Endpoint": ep,
+            "z (enrichment)": d["z"],
+            "Flagged": "● model-predicted" if d["flagged"] else "",
+            "Nearest analog": f"{d['nearest']['name']} (Tanimoto {d['nearest']['sim']})",
+            "Provenance / citation": d["nearest"]["citation"],
+        })
+    st.dataframe(pd.DataFrame(ep_rows), hide_index=True, width="stretch")
+    if not any(d["flagged"] for d in m2["endpoints"].values()) and not m2["reactive"]:
+        st.info("No model-predicted organ-tox liability flagged — **still not a clean bill of "
+                "health**; this tier is less validated than the M1 core.")
+    st.caption(m2["caveat"])
+
     # ---- LLM narrative ----
     st.markdown("### Med-chemist narrative")
     key_set = bool(os.environ.get("ANTHROPIC_API_KEY"))
     with st.spinner("Generating grounded narrative..."):
-        st.write(narrative_report(result, plan))
+        st.write(narrative_report(result, plan, m2))
     if not key_set:
         st.caption("_ANTHROPIC_API_KEY not set — showing the deterministic templated report "
                    "(fully grounded). Set the key for the LLM-generated version._")
