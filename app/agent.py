@@ -29,16 +29,16 @@ SYSTEM = (
     "Speak in terms of resemblance, priority, and which assay to run first.\n"
     "- The tool sees OFF-TARGET liabilities only. It is blind to metabolite-driven and liver "
     "(hepatotoxicity) toxicity - do not imply the molecule is 'clear'; note this scope limit.\n"
-    "- If the evidence says the candidate is a known analog of a failed drug, say cheap "
-    "similarity already flags it and the engine adds most value for novel chemotypes.\n"
+    "- If the evidence says the candidate is a known analog of a failed drug, say a simple "
+    "structure lookup already flags it and the tool adds most value on genuinely novel molecules.\n"
     "- Name the shared mechanism/off-target, the linked failed drug(s), and recommend the "
     "first assay to run and why (severity + resemblance to withdrawn/failed drugs).\n"
-    "- If model_predicted_modules are present, you MAY add ONE sentence on any liver "
-    "(hepatotox), mitochondrial, or reactive-metabolite finding, but ONLY framed as a "
-    "LOWER-TIER, MODEL-PREDICTED signal that is LESS VALIDATED than the off-target core and "
-    "needs experimental confirmation. Use the exact phrase 'model-predicted'. Reactive-"
-    "metabolite items are structural ALERTS (hypotheses), not predictions. Never merge these "
-    "into the assays-to-culprit claim and never state a probability.\n"
+    "- If model_predicted_modules are present, you MAY add ONE sentence on any liver, "
+    "mitochondrial, or reactive-metabolite finding, but ONLY framed as a LOWER-CONFIDENCE "
+    "signal that is LESS VALIDATED than the off-target ranking and needs lab confirmation. "
+    "Use the phrase 'lower-confidence'. Reactive-metabolite items are structural ALERTS "
+    "(hunches), not predictions. Never merge these into the main test-ranking claim and never "
+    "state a probability.\n"
     "Write 3-6 sentences, plain prose, no markdown headers, no bullet lists."
 )
 
@@ -49,7 +49,7 @@ def _m2_summary(m2):
         return None
     flagged = {ep: d for ep, d in m2.get("endpoints", {}).items() if d.get("flagged")}
     return {
-        "evidence_tier": "model-predicted (LOWER tier than M1; less validated; confirm experimentally)",
+        "evidence_tier": "lower-confidence (less validated than the off-target ranking; confirm in the lab)",
         "reactive_metabolite_alerts": [
             {"liability": a["name"], "citation": a["citation"], "kind": "structural alert (hypothesis)"}
             for a in m2.get("reactive", [])
@@ -115,10 +115,10 @@ def _evidence_from(result, plan, m2=None):
 def _fallback(ev):
     """Deterministic templated report (no API key / SDK failure). Fully grounded."""
     if ev.get("status") == "abstain":
-        return ("Abstain: " + (ev.get("reason") or "outside applicability domain") + ". "
-                "This candidate falls outside the engine's chemical space, so no off-target "
-                "assay prioritization is offered. Note the engine is in any case blind to "
-                "metabolite-driven and liver toxicity.")
+        return ("Out of scope — the tool abstains rather than guess. "
+                + (ev.get("reason") or "This molecule is unlike the reference set") + ". "
+                "It falls outside the chemical space the tool can judge, so no test ranking is "
+                "offered. The tool is in any case blind to metabolite-driven and liver toxicity.")
     top = ev["top_liability"]
     parts = []
     if not top["any_liability_flagged"]:
@@ -126,41 +126,52 @@ def _fallback(ev):
             f"No strong off-target liability was flagged for this candidate; the highest-priority "
             f"assay is the {top['assay']} at rank {top['our_rank']}, but on weak signal.")
     else:
-        drugs = ", ".join(d["name"] for d in ev["linked_failed_drugs"][:3]) or "known failed drugs"
+        action_plain = {"no-go": "a likely no-go", "counter-screen": "a priority early screen",
+                        "monitor": "one to monitor"}.get(top["action_tag"], top["action_tag"])
+        linked = ev["linked_failed_drugs"][:3]
         parts.append(
-            f"The candidate most resembles ligands of the target behind {top['organ']}. We move the "
-            f"{top['assay']} to rank {top['our_rank']} (default panel rank {top['default_panel_rank']}) "
-            f"and tag it '{top['action_tag']}', because the chemotype resembles {drugs}, withdrawn or "
-            f"failed for this liability.")
-        cite = next((d["citation"] for d in ev["linked_failed_drugs"]), None)
-        if cite:
-            parts.append(f"Provenance: {cite}")
+            f"This candidate resembles known binders of the off-target behind {top['organ']}. We move "
+            f"the {top['assay']} to #{top['our_rank']} (a standard panel runs it "
+            f"#{top['default_panel_rank']}) and mark it {action_plain}.")
+        if linked:
+            drugs = ", ".join(d["name"].title() for d in linked)
+            parts.append(f"Its structure resembles {drugs} — drugs withdrawn or failed for this problem.")
+            cite = linked[0].get("citation")
+            if cite:
+                parts.append(f"Source: {cite}")
+        else:
+            parts.append(
+                "That ranking comes from other molecules linked to this target in the database, not "
+                "from recognising the candidate itself.")
     if ev["known_analog"]:
         na = ev["nearest_known_failure"]
         parts.append(
-            f"Note this candidate is a known analog of {na['name']} (Tanimoto {na['similarity']}), so "
-            f"cheap similarity already catches it; the engine adds most value for novel chemotypes.")
+            f"Note this candidate is structurally almost identical to the failed drug {na['name']} "
+            f"({int(round((na['similarity'] or 0) * 100))}% similar), so a simple structure lookup "
+            f"already flags it; the tool adds most value on genuinely novel molecules.")
     parts.append(
-        "Scope: this covers off-target-mediated failures only and is blind to metabolite-driven and "
-        "liver toxicity - treat those as weak-coverage, not cleared.")
+        "Scope: this covers off-target effects only and is blind to metabolite-driven and liver "
+        "toxicity - treat those as low-confidence, not cleared.")
+    _EP_PLAIN = {"hepatotox": "liver injury", "mito": "mitochondrial toxicity"}
     m2 = ev.get("model_predicted_modules")
     if m2:
         flagged = m2.get("flagged_organ_tox", [])
         alerts = m2.get("reactive_metabolite_alerts", [])
         if flagged:
-            eps = ", ".join(f"{d['endpoint']} (nearest {d['nearest_analog']})" for d in flagged)
+            eps = ", ".join(f"{_EP_PLAIN.get(d['endpoint'], d['endpoint'])} "
+                            f"(closest: {d['nearest_analog'].title()})" for d in flagged)
             parts.append(
-                f"Separately and at a lower, model-predicted tier (less validated than the "
-                f"off-target core, confirm experimentally): read-across flags {eps}.")
+                f"Separately, a lower-confidence check — less validated than the ranking above, so "
+                f"confirm it in the lab — flags possible {eps}.")
         if alerts:
             liabs = ", ".join(a["liability"] for a in alerts[:3])
             parts.append(
-                f"Model-predicted reactive-metabolite structural alerts (hypotheses, not "
+                f"It also raises reactive-metabolite structural alerts (hunches to confirm, not "
                 f"predictions): {liabs}.")
         if not flagged and not alerts:
             parts.append(
-                "The model-predicted (lower-tier) metabolism/organ-tox modules flagged nothing, "
-                "but that is not a clean bill of health.")
+                "The lower-confidence liver/metabolism check flagged nothing — but that is still "
+                "not a clean bill of health.")
     return " ".join(parts)
 
 

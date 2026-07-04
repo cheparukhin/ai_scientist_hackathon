@@ -47,11 +47,11 @@ def test_app_renders_candidate_structure_image():
 
 # ---------------- N3 ----------------
 
-def test_app_has_scope_expander():
+def test_app_has_limits_expander():
     at = _run(EXAMPLES["rimonabant"])
     assert not at.exception
     labels = [e.label for e in at.expander]
-    assert any("Scope" in (lbl or "") for lbl in labels), labels
+    assert any("Limits" in (lbl or "") for lbl in labels), labels
 
 
 # ---------------- N4 ----------------
@@ -88,7 +88,7 @@ def test_app_validation_panel_present():
     at = _run(EXAMPLES["rimonabant"])
     assert not at.exception
     labels = [e.label for e in at.expander]
-    assert any("Validation" in (lbl or "") for lbl in labels), labels
+    assert any("Track record" in (lbl or "") for lbl in labels), labels
     blob = " ".join(m.value for m in at.markdown)
     assert "11.3" in blob and "3.8" in blob, blob[:400]
     # bar chart: st.bar_chart renders as a vega_lite_chart; its dataset holds one row per
@@ -112,13 +112,12 @@ def test_app_troglitazone_m2_section_and_m1_headline():
     at = _run(TROGLITAZONE)
     assert not at.exception
     blob = " ".join(m.value for m in at.markdown)
-    # M2 model-predicted section present and mentions hepatotox
-    assert "model-predicted" in blob, blob[:500]
-    assert "hepatotox" in blob.lower(), blob[:500]
-    # M1 assays-to-culprit headline still renders (metric elements present)
-    assert "Assays-to-culprit" in blob, blob[:500]
+    # lower-confidence liver/metabolism section present and mentions the liver
+    assert "Extra checks" in blob, blob[:600]
+    assert "liver" in blob.lower(), blob[:600]
+    # off-target ranking headline still renders (metric elements present)
     metric_labels = [m.label for m in at.metric]
-    assert "Killer assay" in metric_labels, metric_labels
+    assert "Top-priority test" in metric_labels, metric_labels
 
 
 def test_troglitazone_narrative_fallback_mentions_m2_no_probability(monkeypatch):
@@ -130,7 +129,9 @@ def test_troglitazone_narrative_fallback_mentions_m2_no_probability(monkeypatch)
     plan = build_plan(r)
     m2 = outcome_panel(r["canonical_smiles"])
     txt = narrative_report(r, plan, m2)
-    assert "model-predicted" in txt.lower(), txt
+    # M2 findings mentioned, but explicitly framed as lower-confidence, and never a probability
+    assert "lower-confidence" in txt.lower(), txt
+    assert "liver" in txt.lower(), txt
     assert "probability" not in txt.lower(), txt
 
 

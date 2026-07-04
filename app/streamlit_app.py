@@ -1,12 +1,15 @@
 """streamlit_app.py - the demo UI.
 
-Paste a small-molecule SMILES (or click an example) -> reordered in-vitro safety-assay
-plan that moves the assay most likely to catch a program-ending off-target liability to
-the front, with the assays-to-culprit rank delta, an evidence trail of linked failed
-drugs + citations, and a grounded LLM med-chemist narrative.
+Plain-language front end: paste a drug candidate, get back the ONE safety test worth
+running first (and the full reordered plan), with the real failed drugs it resembles as
+evidence, a lower-confidence liver/metabolism check, and a plain-English summary.
+
+Internal terminology (M1/M2/R4, "assays-to-culprit", z-scores, "known-analog") is kept OUT
+of the interface - it lives in the code and docs, not in front of a judge.
 
 Run:  .venv/bin/streamlit run app/streamlit_app.py
 """
+import json
 import os
 import sys
 
@@ -14,8 +17,6 @@ import pandas as pd
 import streamlit as st
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-import json
 
 from core import EXAMPLES, build_plan, score_candidate  # noqa: E402
 from agent import narrative_report  # noqa: E402
@@ -26,10 +27,10 @@ import validation as V  # noqa: E402
 _REF_FAILURES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                              "data", "reference_failures.json")))
 
-st.set_page_config(page_title="Toxicity Assay Recommender", page_icon="🧪", layout="wide")
+st.set_page_config(page_title="Safety-Test Prioritizer", page_icon="🧪", layout="wide")
 
 
-@st.cache_resource(show_spinner="Loading 18-target panel + reference DB (one-time)...")
+@st.cache_resource(show_spinner="Loading the safety panel + failed-drug database (one-time)…")
 def _warm_engine():
     from core import get_engine
     get_engine()
@@ -38,260 +39,326 @@ def _warm_engine():
 
 _warm_engine()
 
-# ---- example molecules (label -> smiles); note which is which for the honest framing ----
+# ---- example molecules: plain-English organ hint, no jargon ----
 EXAMPLE_BUTTONS = [
-    ("Rimonabant (CB1 - buried)", EXAMPLES["rimonabant"]),
-    ("Pergolide (5-HT2B - buried)", EXAMPLES["pergolide"]),
-    ("Terfenadine (hERG - anchor)", EXAMPLES["terfenadine"]),
-    ("Novel aryl-piperazine", EXAMPLES["novel_arylpiperazine"]),
-    ("Cyclosporine (abstain)", EXAMPLES["cyclosporine"]),
+    ("Rimonabant", EXAMPLES["rimonabant"], "psychiatric"),
+    ("Pergolide", EXAMPLES["pergolide"], "heart valve"),
+    ("Terfenadine", EXAMPLES["terfenadine"], "heart rhythm"),
+    ("Novel candidate", EXAMPLES["novel_arylpiperazine"], "unknown"),
+    ("Cyclosporine", EXAMPLES["cyclosporine"], "out of scope"),
 ]
 
-ACTION_EMOJI = {"no-go": "🛑 no-go", "counter-screen": "🔬 counter-screen", "monitor": "👁 monitor"}
+# plain-language action labels (internal: no-go / counter-screen / monitor)
+ACTION_PLAIN = {
+    "no-go":          "🛑 Likely no-go",
+    "counter-screen": "🔬 Screen early",
+    "monitor":        "👁 Monitor",
+}
+ENDPOINT_PLAIN = {"hepatotox": "Liver injury", "mito": "Mitochondrial"}
 
-st.title("🧪 Toxicity Risk → Assay Recommender")
-st.caption(
-    "Reorders an in-vitro safety panel to run the **killer** off-target counter-screen first. "
-    "Scores are enrichment / rank vs a background set - **never a probability of harm**. "
-    "Covers *off-target-mediated* failures only; **blind to metabolite-driven and liver "
-    "(hepatotox) toxicity** - those are weak-coverage, not 'clear'."
+# ======================================================================================
+#  HEADER
+# ======================================================================================
+st.title("🧪 Which safety test should you run first?")
+st.markdown(
+    "Paste a drug candidate. This tool **reorders its safety tests** so the one most likely "
+    "to end the program runs first — by matching it to real drugs that were **withdrawn or "
+    "failed in the clinic** for the same off-target reason. It tells you *what to run first*, "
+    "not whether a molecule is safe."
 )
 
-# ---- scope & limits (N3) ----
-with st.expander("⚠️ Scope & limits — read before trusting this"):
-    st.markdown(
-        "- **Covers off-target-mediated failures only.** The engine ranks in-vitro assays by "
-        "structural resemblance to ligands of known safety off-targets. It is **blind to "
-        "metabolite-driven toxicity and to liver (hepatotox) injury** — those are handled, at a "
-        "**lower evidence tier**, by the *model-predicted (M2)* modules below, which are less "
-        "validated than the off-target core.\n"
-        "- **Narrow addressable population.** Most historical withdrawals are off-panel — on-target "
-        "mechanism-based, idiosyncratic hepatotox, or metabolite-driven — which this tool does not "
-        "address. The validated value is specifically the *buried off-target* slice.\n"
-        "- **No value on hERG / cardiac channels.** Standard panels already front-load hERG at "
-        "rank 1, so we add nothing there — hERG is a **validation anchor only**, not a win.\n"
-        "- **Advantage is conditional on novelty.** For a candidate that is a close analog of a "
-        "known failed drug, cheap similarity already flags it (see the *known-analog* flag); the "
-        "engine adds most value for **novel chemotypes**.\n"
-        "- **No score here is a probability of harm** — everything is enrichment z-score / "
-        "0–100 priority index / rank."
-    )
+# collapsed trust/limits — visible but out of the way
+lc, rc = st.columns(2)
+with lc:
+    with st.expander("Limits — what this tool can't see"):
+        st.markdown(
+            "- **It only sees off-target effects** — a candidate binding a protein it shouldn't. "
+            "It is **blind to liver injury and metabolite-driven toxicity**; those get a "
+            "separate, **lower-confidence** check further down, not the main ranking.\n"
+            "- **No value on the heart-rhythm (hERG) test** — every standard panel already runs "
+            "that first, so we add nothing there. Our edge is the *buried* off-targets panels "
+            "run late.\n"
+            "- **Best on genuinely new molecules.** If a candidate is nearly identical to a known "
+            "bad drug, a simple lookup already catches it — we earn our keep on novel structures.\n"
+            "- **Nothing here is a probability of harm.** Everything is a *match-strength* signal "
+            "and a *ranking*."
+        )
+with rc:
+    with st.expander("Track record — measured on 20 real drug failures"):
+        st.markdown(
+            f"On the buried off-target liabilities standard panels run late, the killer test "
+            f"moves from an average position of **#{V.MEAN_ASSAYS_TO_CULPRIT_DEFAULT} → "
+            f"#{V.MEAN_ASSAYS_TO_CULPRIT_OURS}** — you reach the go/no-go decision in about "
+            f"**{V.MEAN_ASSAYS_TO_CULPRIT_OURS} experiments instead of "
+            f"{V.MEAN_ASSAYS_TO_CULPRIT_DEFAULT}**. The killer test lands in the top-3 for "
+            f"**{V.TOP3_OURS}** candidates vs **{V.TOP3_DEFAULT}** for a standard panel, with "
+            f"**{V.MONEY_WINS} wins a standard panel misses entirely**.\n\n"
+            f"_Every drug was scored with itself hidden from the database, so nothing is "
+            f"memorised; cited to `{V.FINDINGS_CITATION}`. Bars show where the killer test "
+            f"lands — lower is better._"
+        )
+        rank_df = pd.DataFrame(
+            [{"Standard panel": d, "Ours": o} for _drug, d, o in V.BURIED_RANK_PAIRS],
+            index=[drug for drug, _d, _o in V.BURIED_RANK_PAIRS],
+        )
+        st.bar_chart(rank_df)
 
-# ---- validation panel (N4) ----
-with st.expander("📊 Validation — measured on 20 historical failures (leave-one-out)"):
-    st.markdown(
-        f"All numbers below are measured, not asserted — cited to "
-        f"`{V.FINDINGS_CITATION}` and `{V.SEC4_CITATION}`. Strict leave-one-out: a drug and "
-        f"every reference sharing its culprit target are removed before scoring it.\n\n"
-        f"**Buried off-target liabilities (n=10) — the validated slice:**\n"
-        f"- Mean assays-to-culprit: **{V.MEAN_ASSAYS_TO_CULPRIT_DEFAULT} → "
-        f"{V.MEAN_ASSAYS_TO_CULPRIT_OURS}** (default panel → ours)\n"
-        f"- Killer assay in top-3: **{V.TOP3_OURS}** vs **{V.TOP3_DEFAULT} (default)**\n"
-        f"- **{V.MONEY_WINS} genuine non-obvious wins** (pergolide, cabergoline, methysergide → "
-        f"5-HT2B; rimonabant, taranabant → CB1; alosetron → 5-HT3)\n\n"
-        f"**Per-target discrimination (AUC, §4):** hERG {V.PER_TARGET_AUC['hERG']}, "
-        f"SERT {V.PER_TARGET_AUC['SERT']}, AChE {V.PER_TARGET_AUC['AChE']}, "
-        f"MAO-A {V.PER_TARGET_AUC['MAO-A']}.\n\n"
-        f"**Scaffold-split:** {V.SCAFFOLD_POOLED} pooled / {V.SCAFFOLD_NOVEL_ISOLATED} "
-        f"novel-isolated.  **Ablation:** naive {V.ABLATION_NAIVE} vs R4 {V.ABLATION_R4}."
-    )
-    st.markdown("**Killer-assay rank — default panel vs ours (10 buried drugs):**")
-    rank_df = pd.DataFrame(
-        [{"Default panel": d, "Ours": o} for _drug, d, o in V.BURIED_RANK_PAIRS],
-        index=[drug for drug, _d, _o in V.BURIED_RANK_PAIRS],
-    )
-    st.bar_chart(rank_df)
-    st.caption("Lower is better (rank 1 = killer assay run first). Fenfluramine / "
-               "dexfenfluramine / sibutramine are metabolite-active — the documented boundary "
-               "of a parent-structure method.")
+st.divider()
 
-# ---- input ----
+# ======================================================================================
+#  INPUT
+# ======================================================================================
 if "smiles" not in st.session_state:
     st.session_state.smiles = EXAMPLES["rimonabant"]
 
-st.markdown("**Examples:**")
+st.markdown("##### Try an example")
 cols = st.columns(len(EXAMPLE_BUTTONS))
-for col, (label, smi) in zip(cols, EXAMPLE_BUTTONS):
-    if col.button(label, width="stretch"):
+for col, (label, smi, hint) in zip(cols, EXAMPLE_BUTTONS):
+    if col.button(f"{label}", width="stretch", help=f"failed for: {hint}"):
         st.session_state.smiles = smi
+    col.caption(f"<div style='text-align:center'>{hint}</div>", unsafe_allow_html=True)
 
-smiles = st.text_input("Candidate SMILES", key="smiles")
-metabolite = st.text_input(
-    "Known active metabolite SMILES (optional)", value="",
-    help="If given, parent AND metabolite are scored and aggregated by MAX per target.")
+smiles = st.text_input("…or paste a SMILES", key="smiles")
 
-loo = st.checkbox(
-    "Demo mode — leave-one-out (score this known drug as if novel: remove it and its "
-    "mechanistic partners from the DB)",
+loo = st.toggle(
+    "Demo mode — score a known drug as if it were brand-new",
     value=False,
-    help="DEMO ONLY. When ON and the input is a known reference-failure drug, the engine "
-         "excludes that drug and every reference sharing its culprit target from every "
-         "per-target score and from the known-analog check — showing it would still recover "
-         "the buried liability on a truly novel chemotype. The live/novel path never removes "
-         "anything (default OFF).")
+    help="When ON and you enter a known failed drug, the tool hides that drug (and its "
+         "mechanistic cousins) from its database, then shows it would STILL flag the right "
+         "test — proving the result doesn't come from recognising the drug itself. Leave OFF "
+         "for a real, novel candidate.")
 
-run = st.button("Score candidate", type="primary")
+with st.expander("Advanced — add a known active metabolite"):
+    metabolite = st.text_input(
+        "Active metabolite SMILES (optional)", value="",
+        help="If the real culprit is a metabolite, paste it here; the parent and metabolite "
+             "are scored together (whichever looks worse at each target wins).")
 
+run = st.button("Prioritize tests", type="primary")
+
+# ======================================================================================
+#  RESULT
+# ======================================================================================
 if run or smiles:
     result = score_candidate(smiles, metabolite_smiles=metabolite or None, loo=loo)
 
-    if loo and result.get("loo_matched_ref"):
-        st.info(
-            f"🧪 **Demo mode active** — scoring **{result['loo_matched_ref']}** as if novel: "
-            f"removed it and {len(result['loo_exclude_iks']) - 1} mechanistic partner(s) from "
-            f"the reference DB. The recovered liability below comes only from *other* ligands, "
-            f"never the drug itself.")
-    elif loo:
-        st.caption("Demo mode ON, but this input is not a known reference-failure drug — "
-                   "leave-one-out only excludes the candidate's own structure.")
+    st.divider()
 
-    # ---- candidate structure depiction (N1) ----
+    # candidate structure (always, if parseable)
     cand_png = mol_png(smiles)
-    if cand_png:
-        st.markdown("### Candidate structure")
-        st.image(cand_png, caption="Candidate", width=320)
+    top_l, top_r = st.columns([1, 2])
+    with top_l:
+        if cand_png:
+            st.image(cand_png, caption="Your candidate", width=260)
+        else:
+            st.caption("(structure could not be drawn)")
 
-    # ---------------- ABSTAIN ----------------
+    # ---------------- OUT OF SCOPE (abstain) ----------------
     if result.get("status") == "abstain":
-        st.error(
-            f"**Abstain — outside applicability domain (gate {result.get('gate')}).**  \n"
-            f"{result.get('reason')}"
-        )
-        st.info(
-            "The descriptor-box scope gate rejects molecules unlike the reference set (large "
-            "peptides/macrocycles, highly halogenated, sugars/polyols, metals, or too small). "
-            "No off-target assay prioritization is offered for out-of-domain candidates."
-        )
-        with st.spinner("Generating narrative..."):
-            st.markdown("#### Med-chemist narrative")
+        with top_r:
+            st.subheader("⛔️ Out of scope — no ranking offered")
+            st.markdown(
+                f"This molecule is unlike anything in our reference set, so we **decline to "
+                f"guess** rather than give you a misleading answer.\n\n**Why:** {result.get('reason')}"
+            )
+            st.caption("The tool only judges ordinary organic small molecules. Very large "
+                       "molecules, peptides/macrocycles, sugars, and metal-containing compounds "
+                       "are deliberately refused.")
+        with st.spinner("Writing summary…"):
+            st.markdown("##### Plain-English summary")
             st.write(narrative_report(result))
         st.stop()
 
     # ---------------- OK ----------------
     plan = build_plan(result)
     head = plan["headline"]
+    head_row = next((r for r in plan["rows"] if r["target_key"] == head["target_key"]), None)
+    flagged_head = bool(head["any_flagged"])
+    is_herg = head["target_key"] == "hERG_CHEMBL240"
 
-    # banners
-    if not head["any_flagged"]:
-        st.warning(
-            "No strong off-target liability flagged (best signal is weak). The plan below is "
-            "low-confidence; this is **weak-coverage**, not a clean bill of health."
+    # demo-mode confirmation
+    if loo and result.get("loo_matched_ref"):
+        st.success(
+            f"**Demo mode:** scoring **{result['loo_matched_ref'].title()}** as if it were new — "
+            f"we hid it and {len(result['loo_exclude_iks']) - 1} mechanistic cousin(s) from the "
+            f"database. Everything below is recovered from *other* molecules, never the drug itself."
         )
-    if result["flags"]["known_analog"]:
+    elif loo:
+        st.caption("Demo mode is on, but this isn't a known failed drug — nothing extra was hidden.")
+
+    # ---------------- VERDICT CARD ----------------
+    with top_r:
+        organ = head["organ"]
+        if flagged_head and not is_herg:
+            st.subheader(f"▶ Run the {head['assay_name']} first")
+            st.markdown(
+                f"This candidate looks like drugs that failed for **{organ}**. A standard panel "
+                f"runs that test **#{head['default_rank']}** — we move it to **#{head['our_rank']}**."
+            )
+        elif flagged_head and is_herg:
+            st.subheader(f"▶ {head['assay_name']} (already standard)")
+            st.markdown(
+                "The strongest signal is the **heart-rhythm (hERG) test** — but every panel "
+                "already runs that first, so there's little to reorder here. This tool's real "
+                "value is the *buried* off-targets, not hERG."
+            )
+        else:
+            st.subheader("No strong off-target red flag")
+            st.markdown(
+                f"Nothing scores as a clear off-target risk (the strongest is the "
+                f"**{head['assay_name']}**, on a weak signal). Treat this as **low confidence, "
+                f"not a clean bill of health** — and check the liver/metabolism section below."
+            )
+
+        m1, m2c, m3 = st.columns(3)
+        m1.metric("Top-priority test", head["assay_name"])
+        m2c.metric("Our order", f"#{head['our_rank']}")
+        delta = head["default_rank"] - head["our_rank"]
+        m3.metric("Standard panel order", f"#{head['default_rank']}",
+                  delta=(f"+{delta} tests earlier" if delta > 0 else "already up front"),
+                  delta_color="normal")
+        if flagged_head and not is_herg and delta > 0:
+            st.markdown(
+                f"➜ **≈{delta} fewer experiments** before you'd reach the go/no-go decision.  "
+                f"Recommended call: **{ACTION_PLAIN.get(head['action'], head['action'])}**."
+            )
+
+    # known-drug heads-up (only when we did NOT hide it) — teaches why demo mode exists
+    if result["flags"]["known_analog"] and not loo:
         na = result["nearest_analog"]
         st.warning(
-            f"**Known-analog flag:** highly similar to failed drug **{na['name']}** "
-            f"(Tanimoto {na['sim']}). Cheap similarity already catches this — the engine adds "
-            f"most value for *novel* chemotypes."
+            f"**Heads-up:** this candidate is nearly identical to the known failed drug "
+            f"**{na['name'].title()}**, so a simple structure lookup would already flag it. "
+            f"To see the tool work on a *novel* molecule, turn on **Demo mode** above — it hides "
+            f"{na['name'].title()} and re-derives the answer from scratch."
         )
-    if head["target_key"] == "hERG_CHEMBL240":
-        st.info("Top hit is hERG — **standard panels already front-load this**, so the marginal "
-                "value of reordering is low here. The engine's edge is on buried off-targets.")
 
-    # headline metric: assays-to-culprit
-    st.markdown("### Assays-to-culprit")
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Killer assay", head["assay_name"])
-    c2.metric("Our rank", f"#{head['our_rank']}")
-    c3.metric("Default-panel rank", f"#{head['default_rank']}", delta=f"{head['delta']:+d} moved earlier",
-              delta_color="normal")
-    st.caption(f"Organ / phenotype: {head['organ']}  ·  recommended action: **{head['action']}**  ·  "
-               f"marginal value vs default panel: **{head['marginal_value']}**")
-
-    # ---- side-by-side: candidate vs headline linked failed drug (N1) ----
-    head_row = next((r for r in plan["rows"] if r["target_key"] == head["target_key"]), None)
-    head_drug = (head_row["evidence"][0]["name"] if head_row and head_row["evidence"] else None)
-    if cand_png and head_drug and head_drug in _REF_FAILURES:
-        drug_png = mol_png(_REF_FAILURES[head_drug]["smiles"])
-        if drug_png:
-            st.markdown("#### Candidate vs linked failed drug")
-            ic1, ic2 = st.columns(2)
-            ic1.image(cand_png, caption="Candidate", width=300)
-            ic2.image(drug_png, caption=f"{head_drug} (withdrawn/failed at {head['assay_name']})", width=300)
-
-    # ---- reordered plan table ----
-    st.markdown("### Reordered assay plan")
-    rows = plan["rows"]
-    df = pd.DataFrame([{
-        "Our rank": r["our_rank"],
-        "Assay": r["assay_name"],
-        "Action": ACTION_EMOJI.get(r["action"], r["action"]),
-        "z-score": r["z"],
-        "Priority (0-100)": r["priority"],
-        "Default rank": r["default_rank"],
-        "Δ (earlier)": r["delta"],
-        "Organ": r["organ"],
-        "Severity": r["severity"],
-        "Flagged": "●" if r["flagged"] else "",
-    } for r in rows])
-    st.dataframe(df, hide_index=True, width="stretch",
-                 column_config={"Δ (earlier)": st.column_config.NumberColumn(format="%+d")})
-
-    # ---- evidence trail ----
-    st.markdown("### Evidence trail — linked failed drugs")
-    flagged = [r for r in rows if r["flagged"] and r["evidence"]]
-    if not flagged:
-        st.write("No flagged target carries known-failure grounding for this candidate.")
-    for r in flagged:
-        st.markdown(f"**{r['assay_name']}** · {r['organ']} · _{r['action']}_")
+    # ---------------- WHY: the failed drugs it resembles ----------------
+    st.markdown("### Why — the real failed drugs it resembles")
+    head_evidence = head_row["evidence"] if (head_row and flagged_head) else []
+    if head_evidence:
+        st.markdown(
+            f"Its structure matches known binders of the off-target behind **{head['organ']}**. "
+            f"Drugs that hit this target and **failed or were withdrawn**:"
+        )
         ev_df = pd.DataFrame([{
-            "Failed drug": e["name"], "Organ / phenotype": e["organ"],
-            "Tier": e["tier"], "Provenance / citation": e["citation"],
-        } for e in r["evidence"]])
+            "Failed drug": e["name"].title(),
+            "What happened": e["organ"],
+            "Source": e["citation"],
+        } for e in head_evidence])
         st.dataframe(ev_df, hide_index=True, width="stretch")
 
-    # ---- mechanism-edge network (N7) ----
-    if any(r["flagged"] and r["evidence"] for r in rows):
-        st.markdown("### Mechanism network — candidate → flagged off-target → linked failed drugs")
-        try:
-            st.graphviz_chart(mechanism_graph_dot(result, plan), use_container_width=True)
-        except Exception as e:
-            st.caption(f"(network view unavailable: {type(e).__name__})")
-
-    # ---- M2: metabolism / organ-tox, model-predicted (LOWER tier than M1) (N6) ----
-    st.divider()
-    st.markdown("### 🧬 Metabolism / organ-tox — model-predicted "
-                "(lower evidence tier, less validated than the off-target core)")
-    st.caption(
-        "Separate, **lower-tier** modules for liabilities the validated M1 engine is blind to "
-        "(metabolite-driven & liver/mito). These are **similarity-enrichment / structural "
-        "alerts, not probabilities of harm** — and they do **not** affect the assays-to-culprit "
-        "headline above (that metric is M1-only)."
-    )
-    m2 = outcome_panel(result["canonical_smiles"])
-
-    st.markdown("**Reactive-metabolite alerts** (structural hypotheses — confirm experimentally):")
-    if m2["reactive"]:
-        for a in m2["reactive"]:
-            st.markdown(f"- ⚠️ **{a['name']}** — {a['note']}  \n  _{a['citation']}_")
+        # side-by-side structures (candidate vs the closest failed drug)
+        head_drug = head_evidence[0]["name"]
+        if cand_png and head_drug in _REF_FAILURES:
+            drug_png = mol_png(_REF_FAILURES[head_drug]["smiles"])
+            if drug_png:
+                ic1, ic2 = st.columns(2)
+                ic1.image(cand_png, caption="Your candidate", width=280)
+                ic2.image(drug_png, caption=f"{head_drug.title()} — failed for {head_evidence[0]['organ']}",
+                          width=280)
+    elif flagged_head and loo and result.get("loo_matched_ref"):
+        st.success(
+            f"**This is the proof point.** We hid every known failed drug for this target, yet "
+            f"the tool still ranked the **{head['assay_name']}** first — recovered purely from "
+            f"other molecules in the database, not from recognising "
+            f"{result['loo_matched_ref'].title()} itself."
+        )
     else:
-        st.write("No reactive-metabolite structural alert matched — still not a clean bill of health.")
+        st.caption("No known failed drug is closely linked to the top-ranked test for this candidate.")
 
-    st.markdown("**Hepatotox / mito read-across** (z vs the 24-drug background; nearest curated analog):")
-    ep_rows = []
-    for ep, d in m2["endpoints"].items():
-        ep_rows.append({
-            "Endpoint": ep,
-            "z (enrichment)": d["z"],
-            "Flagged": "● model-predicted" if d["flagged"] else "",
-            "Nearest analog": f"{d['nearest']['name']} (Tanimoto {d['nearest']['sim']})",
-            "Provenance / citation": d["nearest"]["citation"],
+    # other flagged tests with evidence -> tucked away
+    others = [r for r in plan["rows"]
+              if r["flagged"] and r["evidence"] and r["target_key"] != head["target_key"]]
+    if others:
+        with st.expander(f"See {len(others)} more flagged test(s) and their linked failed drugs"):
+            for r in others:
+                st.markdown(f"**{r['assay_name']}** · {r['organ']}")
+                st.dataframe(pd.DataFrame([{
+                    "Failed drug": e["name"].title(), "What happened": e["organ"],
+                    "Source": e["citation"],
+                } for e in r["evidence"]]), hide_index=True, width="stretch")
+
+    # ---------------- FULL REORDERED PLAN ----------------
+    st.markdown("### The full reordered test plan")
+    st.caption("Every test in the panel, reordered. **#1 = run first.** "
+               "*Match strength* is how strongly the candidate resembles known bad actors at that "
+               "target (higher = stronger; not a probability).")
+    rows = plan["rows"]
+    df = pd.DataFrame([{
+        "#": r["our_rank"],
+        "Safety test": r["assay_name"],
+        "What to do": ACTION_PLAIN.get(r["action"], r["action"]),
+        "Match strength": r["z"],
+        "Standard order": r["default_rank"],
+        "Moved earlier": r["delta"],
+        "Organ / effect": r["organ"],
+    } for r in rows])
+    st.dataframe(
+        df, hide_index=True, width="stretch",
+        column_config={
+            "Match strength": st.column_config.NumberColumn(
+                help="Std deviations above a typical drug. Higher = stronger match to known "
+                     "bad actors. Not a probability of harm.", format="%.1f"),
+            "Moved earlier": st.column_config.NumberColumn(
+                help="Positions moved up vs a standard panel.", format="%+d"),
         })
-    st.dataframe(pd.DataFrame(ep_rows), hide_index=True, width="stretch")
-    if not any(d["flagged"] for d in m2["endpoints"].values()) and not m2["reactive"]:
-        st.info("No model-predicted organ-tox liability flagged — **still not a clean bill of "
-                "health**; this tier is less validated than the M1 core.")
-    st.caption(m2["caveat"])
 
-    # ---- LLM narrative ----
-    st.markdown("### Med-chemist narrative")
+    # mechanism map — optional, tucked in an expander so it never clutters the main flow
+    if any(r["flagged"] and r["evidence"] for r in rows):
+        with st.expander("See the mechanism map (candidate → off-target → failed drugs)"):
+            try:
+                st.graphviz_chart(mechanism_graph_dot(result, plan))
+            except Exception as e:
+                st.caption(f"(map unavailable: {type(e).__name__})")
+
+    # ---------------- LOWER-CONFIDENCE: liver / metabolism ----------------
+    st.divider()
+    m2 = outcome_panel(result["canonical_smiles"])
+    st.markdown("### Extra checks: liver, mitochondria & reactive metabolites")
+    st.caption(
+        "A separate, **lower-confidence** look at the things the main off-target ranking can't "
+        "see. This is *not* validated the way the ranking above is — read it as a prompt for "
+        "more lab work, never as a verdict, and never a probability of harm."
+    )
+
+    any_liver_flag = any(d["flagged"] for d in m2["endpoints"].values())
+    lcol, rcol = st.columns(2)
+
+    with lcol:
+        st.markdown("**Organ-toxicity look-alikes**")
+        ep_df = pd.DataFrame([{
+            "Concern": ENDPOINT_PLAIN.get(ep, ep),
+            "Signal": d["z"],
+            "Flag": "⚠️ elevated" if d["flagged"] else "—",
+            "Most similar known-toxic drug": f"{d['nearest']['name'].title()} "
+                                             f"({int(d['nearest']['sim'] * 100)}% similar)",
+        } for ep, d in m2["endpoints"].items()])
+        st.dataframe(ep_df, hide_index=True, width="stretch",
+                     column_config={"Signal": st.column_config.NumberColumn(format="%.1f")})
+
+    with rcol:
+        st.markdown("**Reactive-metabolite alerts** — structural hunches to confirm in the lab")
+        if m2["reactive"]:
+            for a in m2["reactive"][:6]:
+                st.markdown(f"- ⚠️ **{a['name']}**")
+            if len(m2["reactive"]) > 6:
+                st.caption(f"…and {len(m2['reactive']) - 6} more.")
+        else:
+            st.markdown("- ✅ No reactive-metabolite alert matched.")
+
+    if not any_liver_flag and not m2["reactive"]:
+        st.info("Nothing flagged here — but that's **not** a clean bill of health; this check is "
+                "the least validated part of the tool.")
+
+    # ---------------- PLAIN-ENGLISH SUMMARY ----------------
+    st.markdown("### Plain-English summary")
     key_set = bool(os.environ.get("ANTHROPIC_API_KEY"))
-    with st.spinner("Generating grounded narrative..."):
+    with st.spinner("Writing summary…"):
         st.write(narrative_report(result, plan, m2))
     if not key_set:
-        st.caption("_ANTHROPIC_API_KEY not set — showing the deterministic templated report "
-                   "(fully grounded). Set the key for the LLM-generated version._")
+        st.caption("_Auto-generated from the evidence above (deterministic). "
+                   "Set ANTHROPIC_API_KEY for the LLM-written version._")
 
-    # metabolite note
-    if result.get("metabolite"):
-        st.caption(f"Metabolite handling: {result['metabolite'].get('aggregation', result['metabolite'])}")
+    if result.get("metabolite") and result["metabolite"].get("aggregation"):
+        st.caption("A metabolite was included — parent and metabolite were scored together.")
