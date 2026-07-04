@@ -122,11 +122,12 @@ Before committing to a build we stress-tested the load-bearing assumptions:
 | Check | Question | Result | Verdict |
 |---|---|---|---|
 | **Specificity** (hERG) | Does the score separate blockers from non-blockers, or flag everything? | **ROC-AUC 0.894** — blockers (median 0.66) vs. assay-confirmed non-blockers (0.28); 19/19 common drugs scored low | ✅ discriminates; no false-positive flood |
+| **Cross-target replication** | Does discrimination hold beyond hERG (GPCR/transporter/enzyme)? | AUC **SERT 0.95, AChE 0.92, MAO-A 0.88** (hERG 0.89 replicates); 5-HT2B has ~no ChEMBL inactives → AUC degenerate, but 12/12 common drugs score low | ✅ holds across classes; clean negatives scarce for some GPCRs |
 | **Scaffold generalization** | Does it survive *novel* chemotypes (the real use case)? | Pooled leave-one-scaffold-out AUC **0.913**; a diverse single-ring holdout collapses to **0.667** | ⚠️ real, but degrades for truly novel, isolated chemotypes |
 | **Panel coverage** | How much of the safety panel can R4 serve? | **37/39 targets serviceable (34 rich)** — all aminergic GPCRs, transporters, enzymes, nuclear receptors. Gap: **BSEP 5 actives; mitochondrial = no single target** | ✅ broad off-target reach; ❌ liver is a data desert |
 | **Phase-0 curation** | Cheap merge or manual sink? | SMILES 20/20 auto; correct mechanism auto-derivable **7/20** (all the off-target cases); `failure_reason`/`tier` ~0% structured | ⚠️ hybrid: cheap for off-target drugs, ~2 person-weeks curation for the rest |
 
-**What this means for scope.** R4's off-target engine is **broad, not narrow** — 37/39 secondary-pharmacology targets spanning cardiac, CNS, GI, endocrine, and immune liabilities, and it genuinely discriminates (AUC 0.89 on hERG, the one target measured end-to-end). The honest boundary is **off-target-mediated (R4's domain) vs. metabolism/phenotypic**: liver DILI (BSEP/mito) and reactive-metabolite/idiosyncratic tox are *not* off-target-binding events, so no similarity method reaches them — they need outcome-trained models (the portfolio below). *Caveat:* coverage ≠ measured accuracy — only hERG has a validated AUC; per-target discrimination across the other 36 rich targets is expected (aminergic GPCRs are QSAR-tractable) but unmeasured.
+**What this means for scope.** R4's off-target engine is **broad, not narrow** — 37/39 secondary-pharmacology targets spanning cardiac, CNS, GI, endocrine, and immune liabilities, and it genuinely discriminates — now **measured on 4 targets across 3 classes** (hERG 0.89, SERT 0.95, AChE 0.92, MAO-A 0.88), so the breadth claim has empirical spine, not just a coverage count. The honest boundary is **off-target-mediated (R4's domain) vs. metabolism/phenotypic**: liver DILI (BSEP/mito) and reactive-metabolite/idiosyncratic tox are *not* off-target-binding events, so no similarity method reaches them — they need outcome-trained models (the portfolio below). *Caveat:* for some agonist GPCRs (e.g. 5-HT2B) ChEMBL has almost no assay-confirmed inactives, so specificity there rests on external-decoy sanity rather than a clean AUC; the remaining ~33 rich targets are still unmeasured (Phase 3).
 
 ### The tool is a *portfolio*, not one engine
 Breadth comes from the right method per domain, fused into one prioritized assay panel, each item tagged with an **evidence tier**:
@@ -224,6 +225,26 @@ The enrichment score measures *how likely* the candidate hits a target — **not
 
 Ranking ≈ (hit confidence, Layer 3) × (target severity) × (T1 clinical-failure grounding) × (margin, if known). Tag every recommendation with an **actionability label — no-go / counter-screen / monitor** — carried into Layer 4.
 
+**Starter severity/actionability table** (representative — expert-review before the pitch; grounded in Bowes-2012 ADR associations):
+
+| Off-target | Organ / phenotype | Severity | Default action |
+|---|---|---|---|
+| hERG (KCNH2) | cardiac / QT-prolongation, torsades | **high** | early-kill flag → hERG patch-clamp + iPSC-CM |
+| 5-HT2B | cardiac valve / fibrotic valvulopathy | **high** | early-kill flag → 5-HT2B counter-screen |
+| Nav1.5 | cardiac / conduction, arrhythmia | high | counter-screen |
+| µ-opioid | CNS / respiratory depression, abuse | high | counter-screen + exposure margin |
+| MAO-A | CV/CNS / hypertensive crisis, serotonin syndrome | high | counter-screen |
+| AChE | autonomic / cholinergic crisis | high | counter-screen |
+| PDE3 | cardiac / inotropy, ↑ mortality | high | counter-screen |
+| D2 | CNS / EPS, hyperprolactinemia | med | counter-screen |
+| M1–M3 muscarinic | autonomic / anticholinergic, HR | med | monitor / counter-screen |
+| α1A adrenergic | CV / orthostatic hypotension | med | monitor exposure margin |
+| COX-1 | GI / bleeding, ulceration | med | monitor |
+| SERT | CNS / serotonin syndrome (in combination) | med | monitor |
+| H1 | CNS / sedation | **low** | monitor |
+
+Severity is bumped **up** when the nearest neighbours are **T1 clinical failures** at that target (the hit demonstrably killed programs), and modulated by exposure margin where known.
+
 ### Layer 4 — organ/mechanism → assay mapping (derived, hand-authored; carries the Layer-3b actionability tag)
 | Mechanism / organ | Recommended assays (priority order) |
 |---|---|
@@ -240,9 +261,9 @@ Ranking ≈ (hit confidence, Layer 3) × (target severity) × (T1 clinical-failu
 - **Visualization** — candidate at center, linked failed drugs around it, **edges labeled by mechanism** and colored by organ; click a node → why it failed, mechanism, literature, suggested assay.
 
 ### Rigor: validation, calibration & applicability domain
+- **★ Assay-recovery — THE headline metric (compute for the demo, *not* post-MVP):** for held-out failures with a known mechanism, where does the **killer assay rank** in our panel vs. a naive baseline? The pitch number is literally *"we move the assay that would have caught it from rank N → top-3."* This *is* the product promise ("a better experiment plan"); target-AUC and organ discrimination below are **supporting**, not the headline.
 - **Scaffold-split CV (never random)** — random splits leak analogs and inflate everything; Bemis–Murcko split tests generalization to novel chemotypes.
-- **Per-organ discrimination:** ROC-AUC and **enrichment factor / precision@k** (triage-relevant).
-- **Assay-recovery (tests the actual product promise):** for held-out failures with a known mechanism, does the **correct assay appear in the top-1 / top-3** of the recommended panel? This validates the *"which assay first"* claim directly — organ discrimination alone doesn't.
+- **Per-target / per-organ discrimination (supporting):** ROC-AUC (measured: hERG 0.89, SERT 0.95, AChE 0.92, MAO-A 0.88) + **enrichment factor / precision@k**.
 - **Calibration:** does 4× enrichment map to a real elevated failure rate? Report a calibration curve; ranked-but-uncalibrated is fine for *prioritization* if not sold as P(harm).
 - **Baselines to beat:** plain ECFP (does R3/R4 add signal?) and ≥1 published predictor (ProTox / ADMET-AI) on the same holdout — demonstrate **lift**.
 - **Applicability domain (OECD):** flag and **abstain** outside the reference set's chemical/target space.
@@ -269,6 +290,7 @@ The de-risking (Phase 0) is **done** and reshaped the plan: build a **tiered por
 - [ ] **Evidence-tier + coverage flags as first-class output:** *mechanism-linked / weak-coverage / **abstain***.
 - [ ] **Severity/actionability table** (§4 Layer 3b): per-target *no-go / counter-screen / monitor* + the T1-failure severity signal — so ranking reflects *consequence*, not just hit-likelihood.
 - [ ] organ/mechanism → assay mapping → ranked panel + evidence trail; **retrospective leave-one-out demo** (§6).
+- [ ] **★ Assay-recovery metric — compute it for the demo:** show the killer assay moves from rank N (naive baseline) → top-3 (ours) on held-out failures. This is the headline number, not a Phase-3 nicety.
 
 **Phase 2 — M2: breadth for the metabolism/phenotypic gap**
 - [ ] Wrap outcome-models for what R4 can't reach: **DILI QSAR** (DILIrank), **mitochondrial** (Tox21 mito-membrane-potential model), **reactive-metabolite structural alerts**; optionally fold in **ADMET-AI / ProTox** endpoints.
@@ -277,7 +299,7 @@ The de-risking (Phase 0) is **done** and reshaped the plan: build a **tiered por
 
 **Phase 3 — Rigor & hardening (post-MVP)**
 - [ ] Measure **per-target AUC beyond hERG** (validate the breadth claim); swap class-Tanimoto → trained target-prediction (SEA / per-target QSAR); metabolite-active handling (fenfluramine).
-- [ ] Scaffold-split CV, calibration, **assay-recovery top-1/top-3**, baselines (ECFP, ProTox/ADMET-AI), ablation.
+- [ ] Scaffold-split CV, calibration, baselines (ECFP, ProTox/ADMET-AI), ablation. *(Assay-recovery moved to Phase 1 — it's the headline, not post-MVP.)*
 - [ ] Scale curation to ~200 drugs (~2 person-weeks); build the matched No-concern comparator.
 
 **Phase 4 — Stretch**
@@ -287,13 +309,13 @@ The de-risking (Phase 0) is **done** and reshaped the plan: build a **tiered por
 
 ## 6. Demo / pitch (investor-facing)
 
-Claim: **"our AI reasons like an experienced med chemist — links a candidate to clinical failures by *shared mechanism* (not just lookalikes), shows why, recommends the next experiment, and we can show it generalizes."** Framed honestly as a **retrospective leave-one-out demo** — hide a known failure's label, query it, show the system recovers the liability. Built on a **verified** pair (Terfenadine × Cisapride):
+Claim: **"our AI reasons like an experienced med chemist — links a candidate to clinical failures by *shared mechanism*, and reorders your safety-assay plan so the killer test runs first."** The headline is a **number, not a vibe: we move the assay that would have caught the liability from rank N into the top-3.** Framed honestly as a **retrospective leave-one-out demo** — hide a known failure's label, query it, show the system recovers the liability *and* re-ranks the assay plan. Built on a **verified** pair (Terfenadine × Cisapride):
 
 1. Paste **terfenadine** as the "candidate," its own tox label hidden (leave-one-out).
 2. *Screening against N toxicity-causal clinical failures vs. matched No-concern drugs…*
 3. **The honest hook:** *"A 2D-similarity tool scores terfenadine against cisapride at 0.19 — it would miss the link. But both block hERG."*
 4. **Mechanism result (real, from our prototype):** *"terfenadine flags the hERG class at **z = +6.4** above background — even with terfenadine and cisapride removed from the reference set. Shared predicted hERG liability with drugs withdrawn for QT/TdP."* (An organ-level `N×` enrichment can be shown too — but only once computed against the matched comparator; don't display a placeholder.)
-5. **Ranked assay panel** — hERG patch-clamp → iPSC-cardiomyocyte, each tagged with the driving failed drug + tier + citation.
+5. **The headline — assay-ranking gain:** the assay that would have caught terfenadine (hERG patch-clamp) sits at rank N in a naive/alphabetical safety plan; our tool puts it **top-3, tagged *no-go*** — because terfenadine resembles drugs *withdrawn* for QT, not benign hERG ligands (severity from Layer 3b). Each item carries the driving failed drug + tier + citation.
 6. **Trust signal:** paste an out-of-domain molecule → the tool **abstains** ("outside applicability domain").
 7. Mechanism-edge network; click a node to inspect a failed drug.
 

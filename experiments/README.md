@@ -16,6 +16,7 @@ Backing evidence for the design claims in `../toxicity-assay-recommender.md` §4
 | `exp2_scaffold.py` | **E6 — scaffold generalization** (leave-one-Bemis-Murcko-cluster-out) | Pooled holdout **AUC 0.913**; congeneric series resilient (0.92–0.98) but a diverse single-ring holdout collapses to **0.667** → real but degrades for truly novel isolated chemotypes |
 | `census.py` | **E7a — panel coverage census** (39 Bowes/SAFETYscan targets, # ChEMBL actives pChEMBL≥6) | **37/39 serviceable, 34 rich**; aminergic GPCRs/transporters/enzymes all rich; **BSEP=5, mito=no target, KCNQ1=0** → broad off-target reach, liver is a data desert |
 | `phase0_probe.py` + `phase0_potency.py` | **E7b — Phase-0 curation feasibility** (20 tox-failure drugs) | SMILES 20/20 auto; correct mechanism auto-derivable **7/20** (all off-target cases); `failure_reason`/`tier` ~0% structured → hybrid: cheap for off-target drugs, ~2 person-weeks manual for the rest |
+| `exp3_multitarget.py` | **E8 — cross-target specificity** (E5 method on non-cardiac targets) | AUC **SERT 0.95, AChE 0.92, MAO-A 0.88** (hERG 0.89 replicates across transporter+enzyme classes); **5-HT2B AUC degenerate** (only 1 ChEMBL inactive) → specificity there via external decoys (12/12 common drugs low). Breadth claim has empirical spine |
 
 `results.json` = E4 output. `exp1_results.json`/`exp2_results.json` = E5/E6. `census_results.csv`/`.json` = E7a (per-target active counts). `phase0_results.json`/`phase0_potency.json` = E7b.
 
