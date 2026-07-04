@@ -16,6 +16,7 @@ Honesty guardrails (BUILD.md sec 2) live in M2/UI copy; this module returns z-sc
 N-fold enrichment and ranks - never a probability of harm.
 """
 import json
+import math
 import os
 import statistics
 
@@ -170,6 +171,116 @@ class _Engine:
     def refs_for_target(self, target_key):
         """All reference-failure drugs whose culprit target is this panel target."""
         return [meta for _n, _f, meta in self.ref if meta.get("culprit_target_key") == target_key]
+
+    def max_ref_sim_at_target(self, fp, target_key):
+        """Max single Tanimoto from fp to any reference failure whose culprit is target_key."""
+        best = 0.0
+        for _n, rfp, meta in self.ref:
+            if meta.get("culprit_target_key") == target_key:
+                best = max(best, DataStructs.TanimotoSimilarity(fp, rfp))
+        return best
+
+
+# ---- Layer-3b severity re-weight (consequence weighting; gentle so it never breaks
+#      the validated z-driven assays-to-culprit ranking) ----
+SEV_WEIGHT = {"high": 1.0, "med": 0.9, "low": 0.8}
+
+
+def _priority(z, severity):
+    """0-100 priority INDEX (NOT a probability). Saturating map of severity-weighted z."""
+    eff = max(z, 0.0) * SEV_WEIGHT.get(severity, 0.9)
+    return eff, int(round(100 * (1 - math.exp(-eff / 3.0))))
+
+
+def build_plan(result, fp=None):
+    """Turn a score_candidate() 'ok' result into a reordered assay plan with evidence.
+
+    Returns None if the result abstained. Otherwise:
+      {status, rows:[...ordered by our_rank...], headline:{...}, flagged:[keys]}
+    Each row: target_key, assay_name, organ, severity, z, priority(int 0-100),
+      our_rank, default_rank, delta, action(no-go|counter-screen|monitor),
+      flagged(bool), grounded(bool), evidence:[failed-drug dicts], marginal_value, note.
+    """
+    if result.get("status") != "ok":
+        return None
+
+    eng = get_engine()
+    panel = eng.panel
+    baseline = json.load(open(os.path.join(DATA, "baseline_order.json")))["order"]
+    default_rank = {t: i + 1 for i, t in enumerate(baseline)}
+
+    if fp is None:
+        _m, fp, _d = _fp_and_desc(result["canonical_smiles"])
+
+    scored = result["targets"]
+
+    # effective (severity-weighted) priority per target -> our ranking
+    eff = {}
+    for t in eng.targets:
+        e, _p = _priority(scored[t]["z"], panel[t]["severity"])
+        eff[t] = e
+    our_order = sorted(eng.targets, key=lambda t: (eff[t], scored[t]["z"]), reverse=True)
+    our_rank = {t: i + 1 for i, t in enumerate(our_order)}
+
+    rows = []
+    for t in our_order:
+        z = scored[t]["z"]
+        sev = panel[t]["severity"]
+        _e, prio = _priority(z, sev)
+        flagged = z >= FLAG_Z
+        # grounded = candidate structurally resembles a KNOWN failed drug at THIS target
+        grounded = (fp is not None) and (eng.max_ref_sim_at_target(fp, t) >= KNOWN_ANALOG_T)
+        evidence = [
+            {"name": m["name"], "organ": m["organ"], "tier": m["tier"], "citation": m["citation"]}
+            for m in eng.refs_for_target(t)
+        ]
+
+        # action tag from severity + flagging + known-failure grounding
+        if not flagged:
+            action = "monitor"
+        elif sev == "high":
+            action = "no-go" if grounded else "counter-screen"
+        elif sev == "med":
+            action = "counter-screen"
+        else:
+            action = "monitor"
+
+        rows.append({
+            "target_key": t,
+            "assay_name": panel[t]["assay_name"],
+            "organ": panel[t]["organ"],
+            "severity": sev,
+            "marginal_value": panel[t]["marginal_value"],
+            "note": panel[t]["note"],
+            "z": round(z, 2),
+            "priority": prio,
+            "our_rank": our_rank[t],
+            "default_rank": default_rank[t],
+            "delta": default_rank[t] - our_rank[t],
+            "action": action,
+            "flagged": flagged,
+            "grounded": grounded,
+            "evidence": evidence,
+        })
+
+    flagged_keys = [r["target_key"] for r in rows if r["flagged"]]
+
+    # headline = the top flagged assay (the one our reordering moves to catch the
+    # program-ending liability first). Falls back to rank-1 assay if nothing flagged.
+    head_row = next((r for r in rows if r["flagged"]), rows[0])
+    headline = {
+        "assay_name": head_row["assay_name"],
+        "target_key": head_row["target_key"],
+        "our_rank": head_row["our_rank"],
+        "default_rank": head_row["default_rank"],
+        "delta": head_row["delta"],
+        "organ": head_row["organ"],
+        "action": head_row["action"],
+        "marginal_value": head_row["marginal_value"],
+        "any_flagged": bool(flagged_keys),
+    }
+
+    return {"status": "ok", "rows": rows, "headline": headline, "flagged": flagged_keys}
 
 
 _ENGINE = None

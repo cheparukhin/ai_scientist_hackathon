@@ -90,7 +90,7 @@ Add `app/data/panel_actives.json` to `.gitignore` (regenerable cache).
   4. Return z-vector + flags.
 - **Acceptance (`tests/test_core.py`):** rimonabant → CB1 is top-scoring (z high); pergolide → 5-HT2B in top-3; cyclosporine → `status=="abstain"`; terfenadine → known-analog or hERG top (note as validation anchor).
 
-### [ ] M2 — Ranking + reordered plan + evidence (`core.py` cont.)
+### [x] M2 — Ranking + reordered plan + evidence (`core.py` cont.)
 - Apply Layer-3b severity re-weight → priority per target; map targets→assays (Layer-4); rank → reordered plan.
 - Compute **assays-to-culprit delta**: rank of each flagged assay in `baseline_order` vs. ours.
 - Attach evidence trail: for each top flagged target, the linked `reference_failures` drugs (name, organ, tier, citation).
