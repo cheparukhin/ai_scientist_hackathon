@@ -1,10 +1,12 @@
 # Toxicity Risk → Assay Recommender (MVP)
 
+Broader orientation: [`../README.md`](../README.md).
+
 Paste a small-molecule SMILES → a **reordered in-vitro safety-assay plan** that moves the
 assay most likely to catch a program-ending **off-target** liability to the front, with an
 evidence trail (linked failed drugs + citations) and a grounded LLM med-chemist narrative.
 
-Product metric on screen — **assays-to-culprit**: the killer assay's rank in a default panel
+Product metric on screen — **assays until culprit**: the killer assay's rank in a default panel
 vs. in our plan (e.g. rimonabant CB1 counter-screen: default rank 15 → ours rank 1).
 
 ## Run
@@ -21,7 +23,7 @@ uv pip install --python .venv streamlit anthropic pytest      # rdkit already in
 .venv/bin/streamlit run app/streamlit_app.py
 
 # tests
-.venv/bin/python -m pytest app/tests/test_core.py -q
+.venv/bin/python -m pytest app/tests -q
 ```
 
 Set `ANTHROPIC_API_KEY` for the LLM narrative (model `claude-opus-4-8`); without it the app
@@ -37,11 +39,14 @@ degrades to a deterministic, fully-grounded templated report and still runs.
 
 ## Method (reused from `experiments/`, not reinvented)
 
+The main engine is **off-target class matching**.
 Per panel target: mean-top5 ECFP4 (Morgan r=2, 2048-bit) Tanimoto to that target's ChEMBL
 actives, z-scored vs a 24-drug background (`experiments/score.py`). **No leave-one-out** on the
-live path. Layer-3b severity re-weight → priority; Layer-4 target→assay map; descriptor-box
-abstain gate (`experiments/derisk/abstain/calibrate_ad.py`); known-analog flag at Tanimoto ≥ 0.5;
-metabolite MAX-aggregation.
+live path; leave-one-out exists only for demo/validation mode. Layer-3b severity re-weight →
+priority; Layer-4 target→assay map; descriptor-box abstain gate
+(`experiments/derisk/abstain/calibrate_ad.py`); known analog flag at Tanimoto ≥ 0.5; metabolite
+MAX-aggregation. Liver/mito/reactive-metabolite checks are lower-confidence organ-tox modules and
+do not change the validated off-target headline.
 
 ## Honesty guardrails (enforced in code + copy)
 
@@ -62,7 +67,9 @@ app/
   fetch_panel.py   builds panel_actives.json from ChEMBL
   build_reference.py  builds reference_failures.json from experiments/derisk/drugs.json + citations
   core.py          score_candidate() + build_plan() — the engine
+  outcome_modules.py lower-confidence liver/mito/reactive-metabolite checks
+  render.py        molecule drawings + mechanism graph
   agent.py         narrative_report() — grounded Anthropic SDK, templated fallback
   streamlit_app.py the demo UI
-  tests/test_core.py  acceptance checks (10 tests)
+  tests/          core, outcome-module, and Streamlit render checks
 ```

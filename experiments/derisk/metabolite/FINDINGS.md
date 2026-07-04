@@ -2,7 +2,7 @@
 
 Method: exact reuse of experiments/score.py scoring — mean top-5 Tanimoto (ECFP4,
 Morgan r=2, 2048-bit) to a target's ChEMBL active class, as a z vs the same 24-drug
-BACKGROUND. LOO removes the query InChIKey + named mechanistic partners
+BACKGROUND. Leave-one-out removes the query InChIKey + named mechanistic partners
 (fenfluramine/norfenfluramine/benfluorex + pergolide/cabergoline for 5-HT2B;
 terfenadine/fexofenadine + cisapride/astemizole for hERG). ChEMBL actives
 (pChEMBL>=6, IC50/Ki/Kd): 5-HT2B 1,214 · hERG 1,483 · SERT 1,563.

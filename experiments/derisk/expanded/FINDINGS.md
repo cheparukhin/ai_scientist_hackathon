@@ -36,9 +36,9 @@
 | sparfloxacin | cardiac_herg | hERG | 6 | 1 | 1 | −0.53 |
 | mesoridazine | cardiac_herg | hERG | 7 | 1 | 1 | +1.07 |
 
-## Recovery + expected assays-to-culprit
+## Recovery + expected assays until culprit
 
-| | Top-1 (Ours/B/C) | Top-3 (Ours/B/C) | Mean assays-to-culprit (Ours/B/C) |
+| | Top-1 (Ours/B/C) | Top-3 (Ours/B/C) | Mean assays until culprit (Ours/B/C) |
 |---|---|---|---|
 | **Buried (n=10)** | **7** / 0 / 0 | **7** / 1 / 5 | **3.80** / 11.30 / 5.70 |
 | **Cardiac_hERG (n=10)** | 4 / 10 / 10 | 5 / 10 / 10 | 3.60 / 1.00 / 1.00 |
@@ -50,7 +50,7 @@
 The n=6 pergolide singleton is now **6 wins across 3 mechanistically distinct buried liabilities.** These are exactly the assays a cardiac-front-loaded panel buries at ranks 11–15 and that our tool lifts to rank 1.
 
 ## Honesty checks — every buried miss, explained (killer NOT in top-3)
-- **fenfluramine (rank 13, z=+0.35)** and **dexfenfluramine (rank 13, z=+0.35):** the 5-HT2B agonist is the *metabolite* norfenfluramine; the parent carries no 5-HT2B signal. Known, disclosed limitation (metabolite-active) — R4 cannot see it. Its top hits are hERG/alpha1A/5-HT2A (amphetamine-like), not 5-HT2B.
+- **fenfluramine (rank 13, z=+0.35)** and **dexfenfluramine (rank 13, z=+0.35):** the 5-HT2B agonist is the *metabolite* norfenfluramine; the parent carries no 5-HT2B signal. Known, disclosed limitation (metabolite-active) — parent-structure off-target class matching cannot see it. Its top hits are hERG/alpha1A/5-HT2A (amphetamine-like), not 5-HT2B.
 - **sibutramine (rank 5, z=+0.40):** NET inhibition is driven by its desmethyl metabolites; the parent's strongest signal is DAT (z=+1.55) > NET (z=+0.40). Same metabolite issue + monoamine-transporter cross-talk. Still beats B (rank 13) and C (14), just not into top-3.
 - **mibefradil is a hit (Ours rank 1) but NOT a "money" win** because its culprit Cav1.2 is a cardiac ion channel that Baseline B already front-loads to rank 3 — so B also catches it. Correctly excluded from the money count.
 
@@ -61,5 +61,5 @@ The crown-jewel claim **generalizes** — but only where the honest framing alwa
 
 ## Files
 - `exp_fetch.py` — ChEMBL fetch for 18 targets (→ `exp_actives.json`)
-- `exp_score.py` — strict-LOO scoring + three-way ranking, per-category recovery, money number (→ `results.json`)
-- `results.json` — full z-vectors, per-drug ranks (Ours/B/C), recovery counts, mean expected-assays-to-culprit, money drugs
+- `exp_score.py` — strict leave-one-out scoring + three-way ranking, per-category recovery, money number (→ `results.json`)
+- `results.json` — full z-vectors, per-drug ranks (Ours/B/C), recovery counts, mean expected assays until culprit, money drugs

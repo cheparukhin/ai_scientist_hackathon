@@ -38,7 +38,7 @@ Grouped by which of the three axes each occupies. **The pattern to notice: A×B 
 
 **1. AbbVie OTSA — "Off-Target Safety Assessment" (in silico off-target profiling framework).**
 *What it does:* hierarchical similarity (2D Tanimoto → SEA → local QSAR → 3D pocket similarity → docking → ML) over >7,000 targets, cross-referenced to ~2M preclinical + clinical safety alerts, to predict a candidate's off-target liabilities before/beyond the in-vitro panel.
-*How it differs:* This is essentially **our R4 engine, industrialized, plus an alert layer.** But (a) its reference is a broad alert database, **not a curated *toxicity-causal clinical-failure* set** (T1); (b) its output is a **predicted off-target/liability list**, not a **re-ordered in-vitro assay plan** with an actionability tag; (c) it does not frame the deliverable as "the assay that would have caught this moves to top-3." Closest thing to us on A(partial)×B; **misses C**. *Cite it; position our differentiator as the assay-triage + clinical-failure grounding on top of an R4-style engine, which OTSA itself demonstrates is feasible.*
+*How it differs:* This is essentially **our off-target class-matching engine, industrialized, plus an alert layer.** But (a) its reference is a broad alert database, **not a curated toxicity-causal clinical-failure set**; (b) its output is a **predicted off-target/liability list**, not a **re-ordered in-vitro assay plan** with an actionability tag; (c) it does not frame the deliverable as "the assay that would have caught this moves to top-3." Closest thing to us on A(partial)×B; **misses C**. *Cite it; position our differentiator as the assay-triage + clinical-failure grounding on top of off-target class matching, which OTSA itself demonstrates is feasible.*
 
 **2. Albert, Skinner et al. 2025 — SAFETYscan47 on 52 discontinued compounds (ACS Pharmacol Transl Sci, DOI 10.1021/acsptsci.5c00452). VERIFIED (§3).**
 *What it does:* runs 52 safety-discontinued clinical compounds (2001–2021) through the **full 47-target** Eurofins panel; shows the panel detects off-target activities that rationalize the ADRs, and that the primary target doesn't predict off-target risk.
@@ -90,7 +90,7 @@ Grouped by which of the three axes each occupies. **The pattern to notice: A×B 
 ## 5. Must-cite / must-differentiate in the pitch
 
 1. **Albert/Skinner 2025 (SAFETYscan47)** — the doc's own closest paper; verified. Differentiate: we *prioritize a subset* via similarity; they screen everything.
-2. **AbbVie OTSA** (in-silico off-target profiling, ~2M alerts) — closest *engine*; nearest thing to R4 + clinical alerts. Differentiate: we add clinical-failure grounding + a **ranked assay plan** on top.
+2. **AbbVie OTSA** (in-silico off-target profiling, ~2M alerts) — closest *engine*; nearest thing to off-target class matching + clinical alerts. Differentiate: we add clinical-failure grounding + a **ranked assay plan** on top.
 3. **ToxEvaluator (Pfizer, 2016)** — closest A×B *integration*. Differentiate: prospective per-candidate recommender vs. their post-hoc finding-interpretation tool.
 4. **Deaton 2019** — prior art for "prioritize which secondary-pharmacology targets to screen." Differentiate: our prioritization is similarity-to-clinical-failures, not genetics.
 5. **Zatorski 2025 / Xue 2013** — prior art for "link candidate to withdrawn drugs and predict tox." Differentiate: they output a flag/probability; we output the ranked experiment plan.

@@ -10,7 +10,7 @@ drugs against a 14-target safety panel.
   5-HT2A 1505, D2 1523, M2 1397, alpha1A 1354, mu-opioid 1394, SERT 1563, AChE 1310,
   MAO-A 831, COX-1 393, H1 1285. (ar_actives.json)
 - **Scoring:** identical to score.py — per target, mean-top5 ECFP4 (Morgan r=2, 2048-bit)
-  Tanimoto to that target's actives, z-scored vs the same 24-drug background. Strict LOO:
+  Tanimoto to that target's actives, z-scored vs the same 24-drug background. Strict leave-one-out:
   query InChIKey + its mechanistic-class partners removed from every class before scoring.
 - **Three rankings of the 14 assays, killer-assay rank recorded under each:**
   - Ours — assays by candidate z-score, descending.
@@ -79,5 +79,5 @@ do NOT hang the "we reorder the panel" headline on it: it is a no-op against rea
 
 ## Files
 - ar_fetch.py — ChEMBL fetch (-> ar_actives.json)
-- ar_score.py — LOO scoring + three-way ranking (-> results.json)
+- ar_score.py — leave-one-out scoring + three-way ranking (-> results.json)
 - results.json — full z-vectors, per-drug ranks, recovery rates, both baseline orders
