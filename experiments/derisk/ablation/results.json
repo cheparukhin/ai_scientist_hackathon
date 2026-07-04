@@ -1,0 +1,711 @@
+{
+ "targets": [
+  "hERG_CHEMBL240",
+  "Nav15_CHEMBL1980",
+  "Cav12_CHEMBL1940",
+  "5HT2B_CHEMBL1833",
+  "5HT2A_CHEMBL224",
+  "D2_CHEMBL217",
+  "M2_CHEMBL211",
+  "alpha1A_CHEMBL229",
+  "muOpioid_CHEMBL233",
+  "SERT_CHEMBL228",
+  "AChE_CHEMBL220",
+  "MAOA_CHEMBL1951",
+  "COX1_CHEMBL221",
+  "H1_CHEMBL231",
+  "5HT3_CHEMBL1899",
+  "NET_CHEMBL222",
+  "DAT_CHEMBL238",
+  "CB1_CHEMBL218"
+ ],
+ "assay": {
+  "hERG_CHEMBL240": "hERG",
+  "Nav15_CHEMBL1980": "Nav1.5",
+  "Cav12_CHEMBL1940": "Cav1.2",
+  "5HT2A_CHEMBL224": "5-HT2A",
+  "5HT2B_CHEMBL1833": "5-HT2B",
+  "5HT3_CHEMBL1899": "5-HT3",
+  "D2_CHEMBL217": "D2",
+  "M2_CHEMBL211": "M2",
+  "alpha1A_CHEMBL229": "alpha1A",
+  "H1_CHEMBL231": "H1",
+  "muOpioid_CHEMBL233": "mu-opioid",
+  "SERT_CHEMBL228": "SERT",
+  "NET_CHEMBL222": "NET",
+  "DAT_CHEMBL238": "DAT",
+  "CB1_CHEMBL218": "CB1",
+  "AChE_CHEMBL220": "AChE",
+  "MAOA_CHEMBL1951": "MAO-A",
+  "COX1_CHEMBL221": "COX-1"
+ },
+ "bg_stats": {
+  "hERG_CHEMBL240": [
+   0.22616128769118682,
+   0.05455577702765619
+  ],
+  "Nav15_CHEMBL1980": [
+   0.17369778207339304,
+   0.03372426574679393
+  ],
+  "Cav12_CHEMBL1940": [
+   0.16102890811712936,
+   0.05749215198958259
+  ],
+  "5HT2B_CHEMBL1833": [
+   0.2326096459117087,
+   0.05753660826613677
+  ],
+  "5HT2A_CHEMBL224": [
+   0.21917403336295496,
+   0.05223483977957813
+  ],
+  "D2_CHEMBL217": [
+   0.22321068729554727,
+   0.0501991118852534
+  ],
+  "M2_CHEMBL211": [
+   0.22442595812528626,
+   0.0435281526215664
+  ],
+  "alpha1A_CHEMBL229": [
+   0.21327366797176692,
+   0.04947963176928343
+  ],
+  "muOpioid_CHEMBL233": [
+   0.2314072996665105,
+   0.06547287111073852
+  ],
+  "SERT_CHEMBL228": [
+   0.23993317040683274,
+   0.10784859633575736
+  ],
+  "AChE_CHEMBL220": [
+   0.23377422883323593,
+   0.08061480683900835
+  ],
+  "MAOA_CHEMBL1951": [
+   0.2419570312732773,
+   0.07244269592099452
+  ],
+  "COX1_CHEMBL221": [
+   0.2347825371931228,
+   0.0844660921167416
+  ],
+  "H1_CHEMBL231": [
+   0.24021804508624914,
+   0.11590585945998817
+  ],
+  "5HT3_CHEMBL1899": [
+   0.19503633207287652,
+   0.04377254290031231
+  ],
+  "NET_CHEMBL222": [
+   0.25260010937275595,
+   0.1074554300797216
+  ],
+  "DAT_CHEMBL238": [
+   0.25589111125949876,
+   0.11276025440580535
+  ],
+  "CB1_CHEMBL218": [
+   0.22902533602005995,
+   0.062266490046398185
+  ]
+ },
+ "per_drug": {
+  "pergolide": {
+   "category": "buried",
+   "killer_target": "5HT2B_CHEMBL1833",
+   "killer_assay": "5-HT2B",
+   "n_partners_retained": 4,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 10.0,
+   "R4_killer_z": 2.248876179386041,
+   "NAIVE_killer_maxsim": 0.40476190476190477,
+   "NAIVE_chembl_killer_sim": 0.1,
+   "R4_top3": [
+    "5-HT2B",
+    "D2",
+    "5-HT2A"
+   ],
+   "NAIVE_top3": [
+    "5-HT2B",
+    "hERG",
+    "Cav1.2"
+   ]
+  },
+  "cabergoline": {
+   "category": "buried",
+   "killer_target": "5HT2B_CHEMBL1833",
+   "killer_assay": "5-HT2B",
+   "n_partners_retained": 4,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 11.0,
+   "R4_killer_z": 5.918397374240611,
+   "NAIVE_killer_maxsim": 0.40476190476190477,
+   "NAIVE_chembl_killer_sim": 0.11214953271028037,
+   "R4_top3": [
+    "5-HT2B",
+    "5-HT2A",
+    "D2"
+   ],
+   "NAIVE_top3": [
+    "5-HT2B",
+    "Cav1.2",
+    "hERG"
+   ]
+  },
+  "fenfluramine": {
+   "category": "buried",
+   "killer_target": "5HT2B_CHEMBL1833",
+   "killer_assay": "5-HT2B",
+   "n_partners_retained": 4,
+   "rank_R4": 13.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 9.0,
+   "R4_killer_z": 0.35056273931247195,
+   "NAIVE_killer_maxsim": 1.0,
+   "NAIVE_chembl_killer_sim": 0.10810810810810811,
+   "R4_top3": [
+    "hERG",
+    "alpha1A",
+    "5-HT2A"
+   ],
+   "NAIVE_top3": [
+    "5-HT2B",
+    "CB1",
+    "hERG"
+   ]
+  },
+  "dexfenfluramine": {
+   "category": "buried",
+   "killer_target": "5HT2B_CHEMBL1833",
+   "killer_assay": "5-HT2B",
+   "n_partners_retained": 4,
+   "rank_R4": 13.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 9.0,
+   "R4_killer_z": 0.35056273931247195,
+   "NAIVE_killer_maxsim": 1.0,
+   "NAIVE_chembl_killer_sim": 0.10810810810810811,
+   "R4_top3": [
+    "hERG",
+    "alpha1A",
+    "5-HT2A"
+   ],
+   "NAIVE_top3": [
+    "5-HT2B",
+    "CB1",
+    "hERG"
+   ]
+  },
+  "methysergide": {
+   "category": "buried",
+   "killer_target": "5HT2B_CHEMBL1833",
+   "killer_assay": "5-HT2B",
+   "n_partners_retained": 4,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 13.0,
+   "R4_killer_z": 6.599223674366228,
+   "NAIVE_killer_maxsim": 0.18181818181818182,
+   "NAIVE_chembl_killer_sim": 0.09375,
+   "R4_top3": [
+    "5-HT2B",
+    "D2",
+    "5-HT2A"
+   ],
+   "NAIVE_top3": [
+    "5-HT2B",
+    "hERG",
+    "5-HT3"
+   ]
+  },
+  "rimonabant": {
+   "category": "buried",
+   "killer_target": "CB1_CHEMBL218",
+   "killer_assay": "CB1",
+   "n_partners_retained": 1,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 3.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 1.0,
+   "R4_killer_z": 10.777381251368919,
+   "NAIVE_killer_maxsim": 0.15,
+   "NAIVE_chembl_killer_sim": 0.3835616438356164,
+   "R4_top3": [
+    "CB1",
+    "hERG",
+    "5-HT2A"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "NET",
+    "CB1"
+   ]
+  },
+  "taranabant": {
+   "category": "buried",
+   "killer_target": "CB1_CHEMBL218",
+   "killer_assay": "CB1",
+   "n_partners_retained": 1,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 4.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 13.0,
+   "R4_killer_z": 8.628278015703343,
+   "NAIVE_killer_maxsim": 0.15,
+   "NAIVE_chembl_killer_sim": 0.09259259259259259,
+   "R4_top3": [
+    "CB1",
+    "Nav1.5",
+    "hERG"
+   ],
+   "NAIVE_top3": [
+    "5-HT2B",
+    "hERG",
+    "NET"
+   ]
+  },
+  "alosetron": {
+   "category": "buried",
+   "killer_target": "5HT3_CHEMBL1899",
+   "killer_assay": "5-HT3",
+   "n_partners_retained": 0,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 12.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 17.0,
+   "R4_killer_z": 2.949893532267774,
+   "NAIVE_killer_maxsim": 0.0,
+   "NAIVE_chembl_killer_sim": 0.08695652173913043,
+   "R4_top3": [
+    "5-HT3",
+    "5-HT2A",
+    "hERG"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT2B",
+    "Cav1.2"
+   ]
+  },
+  "sibutramine": {
+   "category": "buried",
+   "killer_target": "NET_CHEMBL222",
+   "killer_assay": "NET",
+   "n_partners_retained": 0,
+   "rank_R4": 4.0,
+   "rank_NAIVE": 12.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 8.5,
+   "R4_killer_z": 0.47512429889118013,
+   "NAIVE_killer_maxsim": 0.0,
+   "NAIVE_chembl_killer_sim": 0.0967741935483871,
+   "R4_top3": [
+    "DAT",
+    "mu-opioid",
+    "SERT"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "CB1",
+    "Cav1.2"
+   ]
+  },
+  "mibefradil": {
+   "category": "buried",
+   "killer_target": "Cav12_CHEMBL1940",
+   "killer_assay": "Cav1.2",
+   "n_partners_retained": 0,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 12.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 5.0,
+   "R4_killer_z": 10.007033928223223,
+   "NAIVE_killer_maxsim": 0.0,
+   "NAIVE_chembl_killer_sim": 0.15254237288135594,
+   "R4_top3": [
+    "Cav1.2",
+    "hERG",
+    "alpha1A"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT2B",
+    "5-HT3"
+   ]
+  },
+  "terfenadine": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 8.0,
+   "R4_killer_z": 6.378417302214541,
+   "NAIVE_killer_maxsim": 0.21052631578947367,
+   "NAIVE_chembl_killer_sim": 0.14285714285714285,
+   "R4_top3": [
+    "hERG",
+    "M2",
+    "H1"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT2B",
+    "CB1"
+   ]
+  },
+  "cisapride": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 3.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 17.0,
+   "R4_killer_z": 2.7918393977251723,
+   "NAIVE_killer_maxsim": 0.2631578947368421,
+   "NAIVE_chembl_killer_sim": 0.06976744186046512,
+   "R4_top3": [
+    "5-HT3",
+    "D2",
+    "hERG"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT2B",
+    "CB1"
+   ]
+  },
+  "astemizole": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 9.0,
+   "R4_killer_z": 6.222350208662107,
+   "NAIVE_killer_maxsim": 0.2631578947368421,
+   "NAIVE_chembl_killer_sim": 0.1506849315068493,
+   "R4_top3": [
+    "hERG",
+    "5-HT3",
+    "alpha1A"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT3",
+    "Cav1.2"
+   ]
+  },
+  "grepafloxacin": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 5.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 17.0,
+   "R4_killer_z": -0.2040775793202571,
+   "NAIVE_killer_maxsim": 0.5,
+   "NAIVE_chembl_killer_sim": 0.05194805194805195,
+   "R4_top3": [
+    "5-HT3",
+    "Nav1.5",
+    "M2"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "CB1",
+    "5-HT2B"
+   ]
+  },
+  "sertindole": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 17.0,
+   "R4_killer_z": 9.921976946718551,
+   "NAIVE_killer_maxsim": 0.23333333333333334,
+   "NAIVE_chembl_killer_sim": 0.05063291139240506,
+   "R4_top3": [
+    "hERG",
+    "H1",
+    "5-HT2A"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT3",
+    "CB1"
+   ]
+  },
+  "thioridazine": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 7.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 11.0,
+   "R4_killer_z": 0.9129455778899186,
+   "NAIVE_killer_maxsim": 0.6964285714285714,
+   "NAIVE_chembl_killer_sim": 0.10294117647058823,
+   "R4_top3": [
+    "M2",
+    "5-HT2B",
+    "D2"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT2B",
+    "CB1"
+   ]
+  },
+  "terodiline": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 1.0,
+   "rank_NAIVE": 2.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 1.0,
+   "R4_killer_z": 1.423151816796138,
+   "NAIVE_killer_maxsim": 0.21052631578947367,
+   "NAIVE_chembl_killer_sim": 0.23255813953488372,
+   "R4_top3": [
+    "hERG",
+    "CB1",
+    "5-HT2A"
+   ],
+   "NAIVE_top3": [
+    "5-HT2B",
+    "hERG",
+    "CB1"
+   ]
+  },
+  "droperidol": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 5.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 12.0,
+   "R4_killer_z": 2.909543345405477,
+   "NAIVE_killer_maxsim": 0.21348314606741572,
+   "NAIVE_chembl_killer_sim": 0.0945945945945946,
+   "R4_top3": [
+    "D2",
+    "5-HT2A",
+    "alpha1A"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT3",
+    "Cav1.2"
+   ]
+  },
+  "sparfloxacin": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 6.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 17.0,
+   "R4_killer_z": -0.5280359831190939,
+   "NAIVE_killer_maxsim": 0.5,
+   "NAIVE_chembl_killer_sim": 0.0547945205479452,
+   "R4_top3": [
+    "5-HT3",
+    "mu-opioid",
+    "H1"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "5-HT2B",
+    "Cav1.2"
+   ]
+  },
+  "mesoridazine": {
+   "category": "cardiac_herg",
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG",
+   "n_partners_retained": 9,
+   "rank_R4": 7.0,
+   "rank_NAIVE": 1.0,
+   "rank_NAIVE_strictLOO": 12.0,
+   "rank_NAIVE_chembl": 13.0,
+   "R4_killer_z": 1.0716699957293379,
+   "NAIVE_killer_maxsim": 0.6964285714285714,
+   "NAIVE_chembl_killer_sim": 0.10144927536231885,
+   "R4_top3": [
+    "M2",
+    "5-HT2B",
+    "alpha1A"
+   ],
+   "NAIVE_top3": [
+    "hERG",
+    "CB1",
+    "5-HT3"
+   ]
+  }
+ },
+ "summary": {
+  "all": {
+   "R4": {
+    "top1": 11,
+    "top3": 12,
+    "mean_rank": 3.7,
+    "n": 20
+   },
+   "NAIVE_2D": {
+    "top1": 14,
+    "top3": 16,
+    "mean_rank": 2.95,
+    "n": 20
+   },
+   "NAIVE_2D_strictLOO": {
+    "top1": 0,
+    "top3": 0,
+    "mean_rank": 12.0,
+    "n": 20
+   },
+   "NAIVE_2D_chembl": {
+    "top1": 2,
+    "top3": 2,
+    "mean_rank": 10.93,
+    "n": 20
+   }
+  },
+  "buried": {
+   "R4": {
+    "top1": 7,
+    "top3": 7,
+    "mean_rank": 3.7,
+    "n": 10
+   },
+   "NAIVE_2D": {
+    "top1": 5,
+    "top3": 6,
+    "mean_rank": 4.8,
+    "n": 10
+   },
+   "NAIVE_2D_strictLOO": {
+    "top1": 0,
+    "top3": 0,
+    "mean_rank": 12.0,
+    "n": 10
+   },
+   "NAIVE_2D_chembl": {
+    "top1": 1,
+    "top3": 1,
+    "mean_rank": 9.65,
+    "n": 10
+   }
+  },
+  "cardiac_herg": {
+   "R4": {
+    "top1": 4,
+    "top3": 5,
+    "mean_rank": 3.7,
+    "n": 10
+   },
+   "NAIVE_2D": {
+    "top1": 9,
+    "top3": 10,
+    "mean_rank": 1.1,
+    "n": 10
+   },
+   "NAIVE_2D_strictLOO": {
+    "top1": 0,
+    "top3": 0,
+    "mean_rank": 12.0,
+    "n": 10
+   },
+   "NAIVE_2D_chembl": {
+    "top1": 1,
+    "top3": 1,
+    "mean_rank": 12.2,
+    "n": 10
+   }
+  }
+ },
+ "verdict": {
+  "R4_top3_NAIVE_not": [
+   "taranabant",
+   "alosetron",
+   "mibefradil"
+  ],
+  "NAIVE_top3_R4_not": [
+   "fenfluramine",
+   "dexfenfluramine",
+   "grepafloxacin",
+   "thioridazine",
+   "droperidol",
+   "sparfloxacin",
+   "mesoridazine"
+  ],
+  "NAIVE_ties_or_beats_R4": [
+   "pergolide",
+   "cabergoline",
+   "fenfluramine",
+   "dexfenfluramine",
+   "methysergide",
+   "terfenadine",
+   "cisapride",
+   "astemizole",
+   "grepafloxacin",
+   "sertindole",
+   "thioridazine",
+   "droperidol",
+   "sparfloxacin",
+   "mesoridazine"
+  ],
+  "n_drugs": 20
+ },
+ "n_actives": {
+  "hERG_CHEMBL240": 1483,
+  "Nav15_CHEMBL1980": 258,
+  "Cav12_CHEMBL1940": 70,
+  "5HT2B_CHEMBL1833": 1214,
+  "5HT2A_CHEMBL224": 1505,
+  "D2_CHEMBL217": 1523,
+  "M2_CHEMBL211": 1397,
+  "alpha1A_CHEMBL229": 1354,
+  "muOpioid_CHEMBL233": 1394,
+  "SERT_CHEMBL228": 1563,
+  "AChE_CHEMBL220": 1310,
+  "MAOA_CHEMBL1951": 831,
+  "COX1_CHEMBL221": 393,
+  "H1_CHEMBL231": 1285,
+  "5HT3_CHEMBL1899": 740,
+  "NET_CHEMBL222": 1521,
+  "DAT_CHEMBL238": 1387,
+  "CB1_CHEMBL218": 1266
+ }
+}

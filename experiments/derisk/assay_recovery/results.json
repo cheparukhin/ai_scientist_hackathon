@@ -1,0 +1,415 @@
+{
+ "targets": [
+  "hERG_CHEMBL240",
+  "Nav15_CHEMBL1980",
+  "Cav12_CHEMBL1940",
+  "5HT2B_CHEMBL1833",
+  "5HT2A_CHEMBL224",
+  "D2_CHEMBL217",
+  "M2_CHEMBL211",
+  "alpha1A_CHEMBL229",
+  "muOpioid_CHEMBL233",
+  "SERT_CHEMBL228",
+  "AChE_CHEMBL220",
+  "MAOA_CHEMBL1951",
+  "COX1_CHEMBL221",
+  "H1_CHEMBL231"
+ ],
+ "assay": {
+  "hERG_CHEMBL240": "hERG patch-clamp",
+  "Nav15_CHEMBL1980": "Nav1.5 electrophysiology",
+  "Cav12_CHEMBL1940": "Cav1.2 electrophysiology",
+  "5HT2B_CHEMBL1833": "5-HT2B counter-screen",
+  "5HT2A_CHEMBL224": "5-HT2A binding",
+  "D2_CHEMBL217": "D2 binding",
+  "M2_CHEMBL211": "M2 muscarinic binding",
+  "alpha1A_CHEMBL229": "alpha1A binding",
+  "muOpioid_CHEMBL233": "mu-opioid binding",
+  "SERT_CHEMBL228": "SERT uptake",
+  "AChE_CHEMBL220": "AChE inhibition",
+  "MAOA_CHEMBL1951": "MAO-A inhibition",
+  "COX1_CHEMBL221": "COX-1 inhibition",
+  "H1_CHEMBL231": "H1 binding"
+ },
+ "baseline_A_alpha_order": [
+  "5-HT2A binding",
+  "5-HT2B counter-screen",
+  "AChE inhibition",
+  "alpha1A binding",
+  "Cav1.2 electrophysiology",
+  "COX-1 inhibition",
+  "D2 binding",
+  "H1 binding",
+  "hERG patch-clamp",
+  "M2 muscarinic binding",
+  "MAO-A inhibition",
+  "mu-opioid binding",
+  "Nav1.5 electrophysiology",
+  "SERT uptake"
+ ],
+ "baseline_B_order": [
+  "hERG patch-clamp",
+  "Nav1.5 electrophysiology",
+  "Cav1.2 electrophysiology",
+  "5-HT2A binding",
+  "5-HT2B counter-screen",
+  "D2 binding",
+  "alpha1A binding",
+  "M2 muscarinic binding",
+  "H1 binding",
+  "mu-opioid binding",
+  "SERT uptake",
+  "MAO-A inhibition",
+  "AChE inhibition",
+  "COX-1 inhibition"
+ ],
+ "bg_stats": {
+  "hERG_CHEMBL240": [
+   0.22616128769118682,
+   0.05455577702765619
+  ],
+  "Nav15_CHEMBL1980": [
+   0.17369778207339304,
+   0.03372426574679393
+  ],
+  "Cav12_CHEMBL1940": [
+   0.16102890811712936,
+   0.05749215198958259
+  ],
+  "5HT2B_CHEMBL1833": [
+   0.2326096459117087,
+   0.05753660826613677
+  ],
+  "5HT2A_CHEMBL224": [
+   0.21917403336295496,
+   0.05223483977957813
+  ],
+  "D2_CHEMBL217": [
+   0.22321068729554727,
+   0.0501991118852534
+  ],
+  "M2_CHEMBL211": [
+   0.23073581728021583,
+   0.05386293359845932
+  ],
+  "alpha1A_CHEMBL229": [
+   0.21327366797176692,
+   0.04947963176928343
+  ],
+  "muOpioid_CHEMBL233": [
+   0.2314072996665105,
+   0.06547287111073852
+  ],
+  "SERT_CHEMBL228": [
+   0.2425998370734994,
+   0.11972693925062261
+  ],
+  "AChE_CHEMBL220": [
+   0.23377422883323593,
+   0.08061480683900835
+  ],
+  "MAOA_CHEMBL1951": [
+   0.2419570312732773,
+   0.07244269592099452
+  ],
+  "COX1_CHEMBL221": [
+   0.24864569508785966,
+   0.1253744964116183
+  ],
+  "H1_CHEMBL231": [
+   0.24021804508624914,
+   0.11590585945998817
+  ]
+ },
+ "z": {
+  "terfenadine": {
+   "hERG_CHEMBL240": 6.378417302214541,
+   "Nav15_CHEMBL1980": 1.863256047263897,
+   "Cav12_CHEMBL1940": -0.1735008830868741,
+   "5HT2B_CHEMBL1833": 1.6976811558814424,
+   "5HT2A_CHEMBL224": 2.4917376489995577,
+   "D2_CHEMBL217": 3.182387424443687,
+   "M2_CHEMBL211": 3.067906528090296,
+   "alpha1A_CHEMBL229": 2.2464041560611268,
+   "muOpioid_CHEMBL233": 1.5408599690716873,
+   "SERT_CHEMBL228": 1.1793723831246847,
+   "AChE_CHEMBL220": 0.6249280483765807,
+   "MAOA_CHEMBL1951": 0.01987879379475999,
+   "COX1_CHEMBL221": -0.3313030123220939,
+   "H1_CHEMBL231": 3.533658346117249
+  },
+  "cisapride": {
+   "hERG_CHEMBL240": 5.2199513170253065,
+   "Nav15_CHEMBL1980": 2.2597482784491305,
+   "Cav12_CHEMBL1940": -0.055083064273549955,
+   "5HT2B_CHEMBL1833": 4.411277250504403,
+   "5HT2A_CHEMBL224": 2.4268507724192334,
+   "D2_CHEMBL217": 5.066036974392576,
+   "M2_CHEMBL211": 1.149519870760607,
+   "alpha1A_CHEMBL229": 2.1283661815843673,
+   "muOpioid_CHEMBL233": 0.3805246345596198,
+   "SERT_CHEMBL228": 0.6753559522607538,
+   "AChE_CHEMBL220": 1.008763975231474,
+   "MAOA_CHEMBL1951": 0.0975864875374161,
+   "COX1_CHEMBL221": -0.3775683739897511,
+   "H1_CHEMBL231": 0.8853135616542812
+  },
+  "astemizole": {
+   "hERG_CHEMBL240": 6.222350208662107,
+   "Nav15_CHEMBL1980": 1.8992035048027318,
+   "Cav12_CHEMBL1940": 0.41895732919298667,
+   "5HT2B_CHEMBL1833": 2.4457553922452586,
+   "5HT2A_CHEMBL224": 2.693153117548548,
+   "D2_CHEMBL217": 2.3682865759214153,
+   "M2_CHEMBL211": 1.4095345671432844,
+   "alpha1A_CHEMBL229": 3.2667554342376093,
+   "muOpioid_CHEMBL233": 1.783714358468708,
+   "SERT_CHEMBL228": 0.7849940046870316,
+   "AChE_CHEMBL220": 1.0198509712778085,
+   "MAOA_CHEMBL1951": 0.351402236882136,
+   "COX1_CHEMBL221": 0.122906015652196,
+   "H1_CHEMBL231": 2.8982270888340746
+  },
+  "thioridazine": {
+   "hERG_CHEMBL240": 2.5902889669032523,
+   "Nav15_CHEMBL1980": -0.42405730349510146,
+   "Cav12_CHEMBL1940": 0.15740746233701539,
+   "5HT2B_CHEMBL1833": 2.596988121949321,
+   "5HT2A_CHEMBL224": 1.2221288661728138,
+   "D2_CHEMBL217": 4.827851649349693,
+   "M2_CHEMBL211": 2.280445608569677,
+   "alpha1A_CHEMBL229": 1.1977478273556277,
+   "muOpioid_CHEMBL233": 0.07914707205997688,
+   "SERT_CHEMBL228": 0.41213078108163276,
+   "AChE_CHEMBL220": 0.40475129575633095,
+   "MAOA_CHEMBL1951": -0.6696407399724499,
+   "COX1_CHEMBL221": 0.14157408177267147,
+   "H1_CHEMBL231": 1.2543362200897592
+  },
+  "pergolide": {
+   "hERG_CHEMBL240": -0.4863879334188976,
+   "Nav15_CHEMBL1980": -1.3305147447861274,
+   "Cav12_CHEMBL1940": -0.03239856615173167,
+   "5HT2B_CHEMBL1833": 2.4971653072337485,
+   "5HT2A_CHEMBL224": 1.6281407906943033,
+   "D2_CHEMBL217": 2.142638374151797,
+   "M2_CHEMBL211": -0.7280211461963392,
+   "alpha1A_CHEMBL229": -0.19877073456964356,
+   "muOpioid_CHEMBL233": 0.09887644710780844,
+   "SERT_CHEMBL228": 0.18663500722598883,
+   "AChE_CHEMBL220": 0.2206669398283265,
+   "MAOA_CHEMBL1951": -0.5473183145360484,
+   "COX1_CHEMBL221": -0.8398209157417861,
+   "H1_CHEMBL231": 0.3188360769678171
+  },
+  "fenfluramine": {
+   "hERG_CHEMBL240": 1.7204313190581462,
+   "Nav15_CHEMBL1980": 0.7358873106287783,
+   "Cav12_CHEMBL1940": 0.13728361861672028,
+   "5HT2B_CHEMBL1833": 0.35056273931247195,
+   "5HT2A_CHEMBL224": 1.3691695591267994,
+   "D2_CHEMBL217": 0.7173210345424404,
+   "M2_CHEMBL211": 0.4623400398937748,
+   "alpha1A_CHEMBL229": 1.3972324841424553,
+   "muOpioid_CHEMBL233": 0.6617516623844524,
+   "SERT_CHEMBL228": 0.794475343713052,
+   "AChE_CHEMBL220": 0.5569575903480269,
+   "MAOA_CHEMBL1951": 0.5746820008303007,
+   "COX1_CHEMBL221": -0.1721251997087052,
+   "H1_CHEMBL231": 0.07912804520466056
+  }
+ },
+ "per_drug": {
+  "terfenadine": {
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG patch-clamp",
+   "rank_ours": 1,
+   "rank_baselineA_alpha": 9,
+   "rank_baselineB_default": 1,
+   "killer_z": 6.378417302214541,
+   "ours_ranked_assays": [
+    "hERG patch-clamp",
+    "H1 binding",
+    "D2 binding",
+    "M2 muscarinic binding",
+    "5-HT2A binding",
+    "alpha1A binding",
+    "Nav1.5 electrophysiology",
+    "5-HT2B counter-screen",
+    "mu-opioid binding",
+    "SERT uptake",
+    "AChE inhibition",
+    "MAO-A inhibition",
+    "Cav1.2 electrophysiology",
+    "COX-1 inhibition"
+   ],
+   "ours_top3_assays": [
+    "hERG patch-clamp",
+    "H1 binding",
+    "D2 binding"
+   ]
+  },
+  "cisapride": {
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG patch-clamp",
+   "rank_ours": 1,
+   "rank_baselineA_alpha": 9,
+   "rank_baselineB_default": 1,
+   "killer_z": 5.2199513170253065,
+   "ours_ranked_assays": [
+    "hERG patch-clamp",
+    "D2 binding",
+    "5-HT2B counter-screen",
+    "5-HT2A binding",
+    "Nav1.5 electrophysiology",
+    "alpha1A binding",
+    "M2 muscarinic binding",
+    "AChE inhibition",
+    "H1 binding",
+    "SERT uptake",
+    "mu-opioid binding",
+    "MAO-A inhibition",
+    "Cav1.2 electrophysiology",
+    "COX-1 inhibition"
+   ],
+   "ours_top3_assays": [
+    "hERG patch-clamp",
+    "D2 binding",
+    "5-HT2B counter-screen"
+   ]
+  },
+  "astemizole": {
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG patch-clamp",
+   "rank_ours": 1,
+   "rank_baselineA_alpha": 9,
+   "rank_baselineB_default": 1,
+   "killer_z": 6.222350208662107,
+   "ours_ranked_assays": [
+    "hERG patch-clamp",
+    "alpha1A binding",
+    "H1 binding",
+    "5-HT2A binding",
+    "5-HT2B counter-screen",
+    "D2 binding",
+    "Nav1.5 electrophysiology",
+    "mu-opioid binding",
+    "M2 muscarinic binding",
+    "AChE inhibition",
+    "SERT uptake",
+    "Cav1.2 electrophysiology",
+    "MAO-A inhibition",
+    "COX-1 inhibition"
+   ],
+   "ours_top3_assays": [
+    "hERG patch-clamp",
+    "alpha1A binding",
+    "H1 binding"
+   ]
+  },
+  "thioridazine": {
+   "killer_target": "hERG_CHEMBL240",
+   "killer_assay": "hERG patch-clamp",
+   "rank_ours": 3,
+   "rank_baselineA_alpha": 9,
+   "rank_baselineB_default": 1,
+   "killer_z": 2.5902889669032523,
+   "ours_ranked_assays": [
+    "D2 binding",
+    "5-HT2B counter-screen",
+    "hERG patch-clamp",
+    "M2 muscarinic binding",
+    "H1 binding",
+    "5-HT2A binding",
+    "alpha1A binding",
+    "SERT uptake",
+    "AChE inhibition",
+    "Cav1.2 electrophysiology",
+    "COX-1 inhibition",
+    "mu-opioid binding",
+    "Nav1.5 electrophysiology",
+    "MAO-A inhibition"
+   ],
+   "ours_top3_assays": [
+    "D2 binding",
+    "5-HT2B counter-screen",
+    "hERG patch-clamp"
+   ]
+  },
+  "pergolide": {
+   "killer_target": "5HT2B_CHEMBL1833",
+   "killer_assay": "5-HT2B counter-screen",
+   "rank_ours": 1,
+   "rank_baselineA_alpha": 2,
+   "rank_baselineB_default": 5,
+   "killer_z": 2.4971653072337485,
+   "ours_ranked_assays": [
+    "5-HT2B counter-screen",
+    "D2 binding",
+    "5-HT2A binding",
+    "H1 binding",
+    "AChE inhibition",
+    "SERT uptake",
+    "mu-opioid binding",
+    "Cav1.2 electrophysiology",
+    "alpha1A binding",
+    "hERG patch-clamp",
+    "MAO-A inhibition",
+    "M2 muscarinic binding",
+    "COX-1 inhibition",
+    "Nav1.5 electrophysiology"
+   ],
+   "ours_top3_assays": [
+    "5-HT2B counter-screen",
+    "D2 binding",
+    "5-HT2A binding"
+   ]
+  },
+  "fenfluramine": {
+   "killer_target": "5HT2B_CHEMBL1833",
+   "killer_assay": "5-HT2B counter-screen",
+   "rank_ours": 11,
+   "rank_baselineA_alpha": 2,
+   "rank_baselineB_default": 5,
+   "killer_z": 0.35056273931247195,
+   "ours_ranked_assays": [
+    "hERG patch-clamp",
+    "alpha1A binding",
+    "5-HT2A binding",
+    "SERT uptake",
+    "Nav1.5 electrophysiology",
+    "D2 binding",
+    "mu-opioid binding",
+    "MAO-A inhibition",
+    "AChE inhibition",
+    "M2 muscarinic binding",
+    "5-HT2B counter-screen",
+    "Cav1.2 electrophysiology",
+    "H1 binding",
+    "COX-1 inhibition"
+   ],
+   "ours_top3_assays": [
+    "hERG patch-clamp",
+    "alpha1A binding",
+    "5-HT2A binding"
+   ]
+  }
+ },
+ "recovery": {
+  "ours": {
+   "top1": 4,
+   "top3": 5,
+   "n": 6
+  },
+  "baselineA": {
+   "top1": 0,
+   "top3": 2,
+   "n": 6
+  },
+  "baselineB": {
+   "top1": 4,
+   "top3": 4,
+   "n": 6
+  }
+ }
+}

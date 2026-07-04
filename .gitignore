@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.pyc
+
+# Regenerable ChEMBL network caches (re-fetch via the *_fetch.py / fetch_actives.py scripts)
+actives.json
+*_actives.json
+
+# uv virtual environment
+.venv/

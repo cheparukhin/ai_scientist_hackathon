@@ -1,0 +1,218 @@
+{
+ "targets": [
+  "5HT2B_CHEMBL1833",
+  "hERG_CHEMBL240",
+  "SERT_CHEMBL228"
+ ],
+ "n_actives": {
+  "5HT2B_CHEMBL1833": 1214,
+  "hERG_CHEMBL240": 1483,
+  "SERT_CHEMBL228": 1563
+ },
+ "bg_stats": {
+  "5HT2B_CHEMBL1833": {
+   "mean": 0.2326096459117087,
+   "sd": 0.05753660826613677,
+   "max": 0.38522353222814054
+  },
+  "hERG_CHEMBL240": {
+   "mean": 0.22616128769118682,
+   "sd": 0.05455577702765619,
+   "max": 0.3544628139477236
+  },
+  "SERT_CHEMBL228": {
+   "mean": 0.2425998370734994,
+   "sd": 0.11972693925062261,
+   "max": 0.7814536340852131
+  }
+ },
+ "scored": {
+  "fenfluramine": {
+   "smiles": "CCNC(C)CC1=CC(=CC=C1)C(F)(F)F",
+   "inchikey": "DBGIVFWFUFKIQN-UHFFFAOYSA-N",
+   "primary_target": "5HT2B_CHEMBL1833",
+   "scores": {
+    "5HT2B_CHEMBL1833": {
+     "mean_top5": 0.25277983691623424,
+     "max": 0.3157894736842105,
+     "n_compared": 1213,
+     "z": 0.35056273931247195,
+     "self_in_class": false,
+     "n_excluded": 5
+    },
+    "hERG_CHEMBL240": {
+     "mean_top5": 0.32002075512511946,
+     "max": 0.36363636363636365,
+     "n_compared": 1481,
+     "z": 1.7204313190581462,
+     "self_in_class": false,
+     "n_excluded": 5
+    },
+    "SERT_CHEMBL228": {
+     "mean_top5": 0.3377199382863495,
+     "max": 0.4117647058823529,
+     "n_compared": 1563,
+     "z": 0.794475343713052,
+     "self_in_class": false,
+     "n_excluded": 1
+    }
+   }
+  },
+  "norfenfluramine": {
+   "smiles": "CC(Cc1cccc(c1)C(F)(F)F)N",
+   "inchikey": "MLBHFBKZUPLWBD-UHFFFAOYSA-N",
+   "primary_target": "5HT2B_CHEMBL1833",
+   "scores": {
+    "5HT2B_CHEMBL1833": {
+     "mean_top5": 0.3026755852842809,
+     "max": 0.34615384615384615,
+     "n_compared": 1213,
+     "z": 1.2177627685052401,
+     "self_in_class": false,
+     "n_excluded": 5
+    },
+    "hERG_CHEMBL240": {
+     "mean_top5": 0.2945189332795265,
+     "max": 0.3050847457627119,
+     "n_compared": 1481,
+     "z": 1.2529863804100316,
+     "self_in_class": false,
+     "n_excluded": 5
+    },
+    "SERT_CHEMBL228": {
+     "mean_top5": 0.3665403976052921,
+     "max": 0.45652173913043476,
+     "n_compared": 1563,
+     "z": 1.0351935939191579,
+     "self_in_class": false,
+     "n_excluded": 1
+    }
+   }
+  },
+  "benfluorex": {
+   "smiles": "O=C(OCCNC(C)Cc1cccc(c1)C(F)(F)F)c1ccccc1",
+   "inchikey": "CJAVTWRYCDNHSM-UHFFFAOYSA-N",
+   "primary_target": "5HT2B_CHEMBL1833",
+   "scores": {
+    "5HT2B_CHEMBL1833": {
+     "mean_top5": 0.2695488116560343,
+     "max": 0.2972972972972973,
+     "n_compared": 1213,
+     "z": 0.6420115272256351,
+     "self_in_class": false,
+     "n_excluded": 5
+    },
+    "hERG_CHEMBL240": {
+     "mean_top5": 0.32586593018266424,
+     "max": 0.37735849056603776,
+     "n_compared": 1481,
+     "z": 1.8275725857764564,
+     "self_in_class": false,
+     "n_excluded": 5
+    },
+    "SERT_CHEMBL228": {
+     "mean_top5": 0.32133389706388094,
+     "max": 0.3709677419354839,
+     "n_compared": 1563,
+     "z": 0.6576135703725683,
+     "self_in_class": false,
+     "n_excluded": 1
+    }
+   }
+  },
+  "terfenadine": {
+   "smiles": "CC(C)(C)C1=CC=C(C=C1)C(CCCN2CCC(CC2)C(C3=CC=CC=C3)(C4=CC=CC=C4)O)O",
+   "inchikey": "GUGOEEXESWIERI-UHFFFAOYSA-N",
+   "primary_target": "hERG_CHEMBL240",
+   "scores": {
+    "5HT2B_CHEMBL1833": {
+     "mean_top5": 0.33028846153846153,
+     "max": 0.453125,
+     "n_compared": 1212,
+     "z": 1.6976811558814424,
+     "self_in_class": true,
+     "n_excluded": 6
+    },
+    "hERG_CHEMBL240": {
+     "mean_top5": 0.5741407998201477,
+     "max": 0.8913043478260869,
+     "n_compared": 1481,
+     "z": 6.378417302214541,
+     "self_in_class": true,
+     "n_excluded": 4
+    },
+    "SERT_CHEMBL228": {
+     "mean_top5": 0.38380248274173057,
+     "max": 0.3968253968253968,
+     "n_compared": 1563,
+     "z": 1.1793723831246847,
+     "self_in_class": false,
+     "n_excluded": 1
+    }
+   }
+  },
+  "fexofenadine": {
+   "smiles": "OC(c1ccccc1)(c1ccccc1)C1CCN(CCCC(O)c2ccc(cc2)C(C)(C)C(=O)O)CC1",
+   "inchikey": "RWTNPBWLLIMQHL-UHFFFAOYSA-N",
+   "primary_target": "hERG_CHEMBL240",
+   "scores": {
+    "5HT2B_CHEMBL1833": {
+     "mean_top5": 0.4161309647243151,
+     "max": 0.803921568627451,
+     "n_compared": 1213,
+     "z": 3.189644373261016,
+     "self_in_class": false,
+     "n_excluded": 6
+    },
+    "hERG_CHEMBL240": {
+     "mean_top5": 0.5297278987624832,
+     "max": 0.82,
+     "n_compared": 1481,
+     "z": 5.564334844271543,
+     "self_in_class": false,
+     "n_excluded": 4
+    },
+    "SERT_CHEMBL228": {
+     "mean_top5": 0.39384615384615385,
+     "max": 0.4153846153846154,
+     "n_compared": 1563,
+     "z": 1.2632605303310458,
+     "self_in_class": false,
+     "n_excluded": 1
+    }
+   }
+  }
+ },
+ "ensembles": {
+  "fenfluramine": {
+   "target": "5HT2B_CHEMBL1833",
+   "metabolite": "norfenfluramine",
+   "parent_z": 0.35056273931247195,
+   "metabolite_z": 1.2177627685052401,
+   "ensemble_max_z": 1.2177627685052401,
+   "ensemble_mean_z": 0.784162753908856,
+   "parent_mean_top5": 0.25277983691623424,
+   "metabolite_mean_top5": 0.3026755852842809
+  },
+  "benfluorex": {
+   "target": "5HT2B_CHEMBL1833",
+   "metabolite": "norfenfluramine",
+   "parent_z": 0.6420115272256351,
+   "metabolite_z": 1.2177627685052401,
+   "ensemble_max_z": 1.2177627685052401,
+   "ensemble_mean_z": 0.9298871478654376,
+   "parent_mean_top5": 0.2695488116560343,
+   "metabolite_mean_top5": 0.3026755852842809
+  },
+  "terfenadine": {
+   "target": "hERG_CHEMBL240",
+   "metabolite": "fexofenadine",
+   "parent_z": 6.378417302214541,
+   "metabolite_z": 5.564334844271543,
+   "ensemble_max_z": 6.378417302214541,
+   "ensemble_mean_z": 5.971376073243042,
+   "parent_mean_top5": 0.5741407998201477,
+   "metabolite_mean_top5": 0.5297278987624832
+  }
+ }
+}

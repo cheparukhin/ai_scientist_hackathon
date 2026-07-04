@@ -1,0 +1,25 @@
+drug            culprit      category  ProTox localization verdict
+--------------------------------------------------------------------------------------------------------------
+pergolide       5-HT2B       buried    PARTIAL/UNCONFIRMED
+cabergoline     5-HT2B       buried    PARTIAL/UNCONFIRMED
+fenfluramine    5-HT2B       buried    PARTIAL/UNCONFIRMED
+dexfenfluramine 5-HT2B       buried    PARTIAL/UNCONFIRMED
+methysergide    5-HT2B       buried    PARTIAL/UNCONFIRMED
+rimonabant      CB1          buried    PARTIAL/UNCONFIRMED
+taranabant      CB1          buried    PARTIAL/UNCONFIRMED
+alosetron       5-HT3        buried    NO
+sibutramine     NET          buried    NO
+mibefradil      Cav1.2       buried    NO
+terfenadine     hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+cisapride       hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+astemizole      hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+grepafloxacin   hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+sertindole      hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+thioridazine    hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+terodiline      hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+droperidol      hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+sparfloxacin    hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+mesoridazine    hERG         cardiac_herg ORGAN-LEVEL ONLY (no hERG target/assay)
+
+buried n=10 culprits: Counter({'5-HT2B': 5, 'CB1': 2, '5-HT3': 1, 'NET': 1, 'Cav1.2': 1})
+cardiac_herg n=10 culprits: Counter({'hERG': 10})

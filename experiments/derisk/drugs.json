@@ -1,0 +1,162 @@
+{
+ "pergolide": {
+  "smiles": "CCCN1C[C@H](CSC)C[C@@H]2c3cccc4[nH]cc(c34)C[C@H]21",
+  "inchikey": "YEHCICAEULNIGD-MZMPZRCHSA-N",
+  "culprit_target": "5-HT2B",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvular fibrosis",
+  "category": "buried"
+ },
+ "cabergoline": {
+  "smiles": "C=CCN1C[C@H](C(=O)N(CCCN(C)C)C(=O)NCC)C[C@@H]2c3cccc4[nH]cc(c34)C[C@H]21",
+  "inchikey": "KORNTPPJEAJQIU-KJXAQDMKSA-N",
+  "culprit_target": "5-HT2B",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvular fibrosis",
+  "category": "buried"
+ },
+ "fenfluramine": {
+  "smiles": "CCNC(C)Cc1cccc(C(F)(F)F)c1",
+  "inchikey": "DBGIVFWFUFKIQN-UHFFFAOYSA-N",
+  "culprit_target": "5-HT2B",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvulopathy (metabolite-active)",
+  "category": "buried"
+ },
+ "dexfenfluramine": {
+  "smiles": "CCN[C@@H](C)Cc1cccc(C(F)(F)F)c1",
+  "inchikey": "DBGIVFWFUFKIQN-VIFPVBQESA-N",
+  "culprit_target": "5-HT2B",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "valvulopathy (metabolite-active)",
+  "category": "buried"
+ },
+ "methysergide": {
+  "smiles": "CC[C@@H](CO)NC(=O)[C@@H]1C=C2c3cccc4c3c(cn4C)C[C@H]2N(C)C1",
+  "inchikey": "KPJZHOPZRAFDTN-ZRGWGRIASA-N",
+  "culprit_target": "5-HT2B",
+  "culprit_chembl_id": "CHEMBL1833",
+  "organ": "retroperitoneal/valve fibrosis",
+  "category": "buried"
+ },
+ "rimonabant": {
+  "smiles": "Cc1c(C(=O)NN2CCCCC2)nn(-c2ccc(Cl)cc2Cl)c1-c1ccc(Cl)cc1",
+  "inchikey": "JZCPYUJPEARBJL-UHFFFAOYSA-N",
+  "culprit_target": "CB1",
+  "culprit_chembl_id": "CHEMBL218",
+  "organ": "psychiatric / suicidality",
+  "category": "buried"
+ },
+ "taranabant": {
+  "smiles": "C[C@H](NC(=O)C(C)(C)Oc1ccc(C(F)(F)F)cn1)[C@@H](Cc1ccc(Cl)cc1)c1cccc(C#N)c1",
+  "inchikey": "QLYKJCMUNUWAGO-GAJHUEQPSA-N",
+  "culprit_target": "CB1",
+  "culprit_chembl_id": "CHEMBL218",
+  "organ": "psychiatric",
+  "category": "buried"
+ },
+ "alosetron": {
+  "smiles": "Cc1[nH]cnc1CN1CCc2c(c3ccccc3n2C)C1=O",
+  "inchikey": "JSWZEAMFRNKZNL-UHFFFAOYSA-N",
+  "culprit_target": "5-HT3",
+  "culprit_chembl_id": "CHEMBL1899",
+  "organ": "ischemic colitis",
+  "category": "buried"
+ },
+ "sibutramine": {
+  "smiles": "CC(C)CC(N(C)C)C1(c2ccc(Cl)cc2)CCC1",
+  "inchikey": "UNAANXDKBXWMLN-UHFFFAOYSA-N",
+  "culprit_target": "NET",
+  "culprit_chembl_id": "CHEMBL222",
+  "organ": "cardiovascular (BP/HR)",
+  "category": "buried"
+ },
+ "mibefradil": {
+  "smiles": "COCC(=O)O[C@]1(CCN(C)CCCc2nc3ccccc3[nH]2)CCc2cc(F)ccc2[C@@H]1C(C)C",
+  "inchikey": "HBNPJJILLOYFJU-VMPREFPWSA-N",
+  "culprit_target": "Cav1.2",
+  "culprit_chembl_id": "CHEMBL1940",
+  "organ": "cardiac (T-type Ca) + DDI",
+  "category": "buried"
+ },
+ "terfenadine": {
+  "smiles": "CC(C)(C)c1ccc(C(O)CCCN2CCC(C(O)(c3ccccc3)c3ccccc3)CC2)cc1",
+  "inchikey": "GUGOEEXESWIERI-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "cisapride": {
+  "smiles": "COc1cc(N)c(Cl)cc1C(=O)N[C@@H]1CCN(CCCOc2ccc(F)cc2)C[C@@H]1OC",
+  "inchikey": "DCSUBABJRXZOMT-IRLDBZIGSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "astemizole": {
+  "smiles": "COc1ccc(CCN2CCC(Nc3nc4ccccc4n3Cc3ccc(F)cc3)CC2)cc1",
+  "inchikey": "GXDALQBWZGODGZ-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "grepafloxacin": {
+  "smiles": "Cc1c(F)c(N2CCNC(C)C2)cc2c1c(=O)c(C(=O)O)cn2C1CC1",
+  "inchikey": "AIJTTZAVMXIJGM-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "sertindole": {
+  "smiles": "O=C1NCCN1CCN1CCC(c2cn(-c3ccc(F)cc3)c3ccc(Cl)cc23)CC1",
+  "inchikey": "GZKLJWGUPQBVJQ-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "thioridazine": {
+  "smiles": "CSc1ccc2c(c1)N(CCC1CCCCN1C)c1ccccc1S2",
+  "inchikey": "KLBQZWRITKRQQV-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "terodiline": {
+  "smiles": "CC(CC(c1ccccc1)c1ccccc1)NC(C)(C)C",
+  "inchikey": "UISARWKNNNHPGI-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "droperidol": {
+  "smiles": "O=C(CCCN1CC=C(n2c(=O)[nH]c3ccccc32)CC1)c1ccc(F)cc1",
+  "inchikey": "RMEDXOLNCUSCGS-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "sparfloxacin": {
+  "smiles": "C[C@@H]1CN(c2c(F)c(N)c3c(=O)c(C(=O)O)cn(C4CC4)c3c2F)C[C@H](C)N1",
+  "inchikey": "DZZWHBIBMUVIIW-DTORHVGOSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ },
+ "mesoridazine": {
+  "smiles": "CN1CCCCC1CCN1c2ccccc2Sc2ccc(S(C)=O)cc21",
+  "inchikey": "SLVMESMUVMCQIY-UHFFFAOYSA-N",
+  "culprit_target": "hERG",
+  "culprit_chembl_id": "CHEMBL240",
+  "organ": "QT / TdP",
+  "category": "cardiac_herg"
+ }
+}
