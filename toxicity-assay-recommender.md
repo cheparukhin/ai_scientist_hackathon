@@ -11,7 +11,7 @@
 - **Event:** a bio × AI hackathon. Deliverable is an **MVP + investor/judge-facing demo** (see §6), not a validated product.
 - **How we got here:** this idea was chosen over an alternative — a *cross-specificity / immunogenicity risk tool for biologics* (antibody candidates, population-specific pre-sensitization, e.g. cetuximab/α-gal) — because the small-molecule tox tool is **more tractable**: all core datasets are downloadable CSVs and the MVP is retrieval + light reasoning with no model training required. The biologics idea is a possible fallback, not the current plan.
 - **Repo state:** **greenfield.** As of writing, `/Users/cheparukhin/hackathon/` contains only this doc — no code yet. Stack/infra not yet chosen.
-- **Guiding principle:** ship the **floor** (§4 Layer 1 ECFP4 baseline) first so there is always a working demo; treat learned embeddings, 3D, and AACT mining as differentiators/stretch.
+- **Guiding principle:** ship the **floor** (§4 Layer 1 ECFP4 baseline + class-conditional scoring) first so there is always a working demo; the **differentiator is rigor** — interpretable pharmacophore/physchem channels + a real validation protocol (§4 Rigor), *not* a black-box model. Learned embeddings, 3D shape, and AACT mining are stretch, gated on demonstrated lift.
 - **Parameters still to fill (TBD — not yet decided in-conversation):**
   - Timeframe / submission deadline.
   - Team size and strengths (eng vs. cheminformatics vs. bio) — affects how far up the stretch layers to reach.
@@ -26,7 +26,7 @@
 - **Input:** a small-molecule drug candidate (SMILES; optionally 3D conformer).
 - **Reference database:** molecules with known organ-specific toxicity, weighted toward those that **failed clinical trials or were withdrawn *for toxicity*** (not just assay-positive compounds).
 - **Output:**
-  1. A **per-modality risk vector** — `{liver: 0.71, cardio: 0.20, hERG: 0.10, kidney: 0.05, ...}`.
+  1. A **per-modality risk vector** — `{liver: 0.71, cardio: 0.20, hERG: 0.10, kidney: 0.05, ...}` (relative enrichment / likelihood-ratio scores, **not** probabilities of harm — see §4 Layer 3).
   2. A **ranked in-vitro assay panel** — e.g. *"prioritize hERG + iPSC-cardiomyocyte (driven by 0.71 similarity to \[drug X, DICTrank-Most-concern]); then hepatocyte spheroid (0.58)."*
   3. An **evidence trail** — the nearest failed drugs, the organ they failed in, and the **shared structural motif / toxicophore** driving the match.
 
@@ -185,7 +185,7 @@ Equivalently: a class-conditional k-NN posterior `P(tox_m | structure)`, or an *
 | Hematologic / neuro / lung | organ-appropriate primary/iPSC model (from neighbor labels) |
 
 ### Layer 5 — Explainability, agent, visualization
-- **Toxicophore attribution** — return the substructure / motif driving each match (*"shares an aromatic sulfonamide + exposed tertiary amine with cholestatic-injury compounds"*). Methods: fingerprint-bit → atom mapping (trivial for ECFP), or attention / integrated gradients / GNNExplainer for the learned model. **Highest-leverage single feature** — it's the defense against "isn't this just fingerprint similarity?"
+- **Toxicophore attribution** — return the substructure / motif driving each match (*"shares an aromatic sulfonamide + exposed tertiary amine with cholestatic-injury compounds"*). Methods: fingerprint-bit → atom mapping (trivial for ECFP) and pharmacophore-feature mapping — both interpretable by construction; attribution methods (integrated gradients, GNNExplainer) apply only if a learned channel is later added. **Highest-leverage single feature** — it's the defense against "isn't this just fingerprint similarity?"
 - **LLM agent** interprets retrieved evidence into a report (retrieval + reasoning; **no model training needed for v1**). Optional multi-role framing for the pitch: Retriever → Evidence → Hypothesis → Experiment-planner.
 - **Visualization** — candidate at center, historical neighbors around it, organ-colored (🔴liver 🔵kidney 🟢heart); click a node → why it failed, shared motif, literature, suggested assay.
 
@@ -234,15 +234,17 @@ This is what separates the tool from a nice-looking demo. Minimum defensible eva
 
 ## 6. Demo / pitch (investor-facing)
 
-Don't claim "our AI predicts toxicity better than pharma" (needs years of validation). Claim: **"our AI reasons like an experienced med chemist — finds non-obvious precedents, explains them, and recommends the next experiment."** Demo flow:
+Don't claim "our AI predicts toxicity better than pharma" (needs years of validation). Claim: **"our AI reasons like an experienced med chemist — surfaces non-obvious clinically-failed precedents, shows *why*, recommends the next experiment, and we can show it generalizes."** Demo flow:
 
 1. Paste a candidate (e.g. a kinase inhibitor).
-2. *Analyzing structure… searching N clinically-failed compounds… found non-obvious cluster.*
-3. Reasoning: *"shares a 3D arrangement of aromatic rings + tertiary amine with cholestatic-injury compounds; the scaffold differs, so fingerprint search would miss this."*
-4. Ranked assay panel (⭐⭐⭐ hepatocytes → ⭐⭐ BSEP → ⭐ iPSC-cardiomyocyte).
-5. Organ-colored neighbor network; click to inspect a failed drug.
+2. *Analyzing structure… scoring against N clinically-failed vs. matched safe drugs…*
+3. **Class-conditional result:** *"~4× more similar to liver-failure drugs than to safe drugs"* — the honest signal, not just "resembles a toxic drug."
+4. **Why (the killer step):** *"driven by a shared pharmacophore — basic amine + lipophilic aromatic — with cholestatic-injury compounds; the 2D scaffold differs, so plain fingerprint search ranks these far away. On our scaffold-split holdout this channel beats ECFP."* → backs the "non-obvious" claim with a *validated* example, not a vibe.
+5. **Ranked assay panel** — ⭐⭐⭐ hepatocytes → ⭐⭐ BSEP → ⭐ iPSC-cardiomyocyte, each tagged with the driving neighbor + label tier.
+6. **Trust signal:** paste an out-of-domain molecule → the tool **abstains** ("outside applicability domain") instead of bluffing.
+7. Organ-colored neighbor network; click a node to inspect a failed drug.
 
-**Value prop:** broad safety panels are expensive — *"move renal assays to the front of the queue"* saves cost, time, animal studies, and catches liabilities earlier. Easier to validate than binary safety claims because it **prioritizes tests**.
+**Value prop:** broad safety panels are expensive — *"move renal assays to the front of the queue"* saves cost, time, animal studies, and catches liabilities earlier. Easier to validate than binary safety claims because it **prioritizes tests** — and the class-conditional scoring + scaffold-split evidence are what make the prioritization *credible* rather than a black box.
 
 ---
 
