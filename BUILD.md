@@ -101,7 +101,7 @@ Add `app/data/panel_actives.json` to `.gitignore` (regenerable cache).
 - `narrative_report(result)` → grounded paragraph: names the shared mechanism, the linked failed drugs, and the recommended first assay + why (severity + "resembles drugs withdrawn for X"). Pass ONLY the structured result; instruct no fabrication. Graceful templated fallback if no API key.
 - **Acceptance:** for rimonabant, the narrative names CB1 / psychiatric liability, ≥1 real linked failed drug, and recommends the CB1 counter-screen first — with zero invented facts.
 
-### [ ] M4 — Streamlit demo (`streamlit_app.py`)
+### [x] M4 — Streamlit demo (`streamlit_app.py`)
 - SMILES input + example buttons: rimonabant, pergolide, terfenadine (anchor), cyclosporine (abstain), one novel drug-like molecule.
 - Render: the reordered assay plan table (assay, our rank, default rank, delta, action tag), the assays-to-culprit headline, the evidence trail, the LLM narrative, and abstain/known-analog banners.
 - **Acceptance:** `.venv/bin/streamlit run app/streamlit_app.py` serves; all 5 example molecules render correctly; cyclosporine shows the abstain banner.

@@ -265,9 +265,12 @@ def build_plan(result, fp=None):
 
     flagged_keys = [r["target_key"] for r in rows if r["flagged"]]
 
-    # headline = the top flagged assay (the one our reordering moves to catch the
-    # program-ending liability first). Falls back to rank-1 assay if nothing flagged.
-    head_row = next((r for r in rows if r["flagged"]), rows[0])
+    # headline = the program-ending liability our reordering surfaces first. Layer-3b:
+    # resembling a T1 clinical failure AT a target (grounded) outranks resembling a benign
+    # ligand - so prefer the top flagged target the candidate resembles a *failed drug* at
+    # (e.g. pergolide -> 5-HT2B, not its therapeutic D2). Fall back to top flagged, then rank-1.
+    head_row = next((r for r in rows if r["flagged"] and r["grounded"]),
+                    next((r for r in rows if r["flagged"]), rows[0]))
     headline = {
         "assay_name": head_row["assay_name"],
         "target_key": head_row["target_key"],
