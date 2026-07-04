@@ -20,6 +20,7 @@ import json
 from core import EXAMPLES, build_plan, score_candidate  # noqa: E402
 from agent import narrative_report  # noqa: E402
 from render import mol_png  # noqa: E402
+import validation as V  # noqa: E402
 
 _REF_FAILURES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                              "data", "reference_failures.json")))
@@ -74,6 +75,34 @@ with st.expander("⚠️ Scope & limits — read before trusting this"):
         "- **No score here is a probability of harm** — everything is enrichment z-score / "
         "0–100 priority index / rank."
     )
+
+# ---- validation panel (N4) ----
+with st.expander("📊 Validation — measured on 20 historical failures (leave-one-out)"):
+    st.markdown(
+        f"All numbers below are measured, not asserted — cited to "
+        f"`{V.FINDINGS_CITATION}` and `{V.SEC4_CITATION}`. Strict leave-one-out: a drug and "
+        f"every reference sharing its culprit target are removed before scoring it.\n\n"
+        f"**Buried off-target liabilities (n=10) — the validated slice:**\n"
+        f"- Mean assays-to-culprit: **{V.MEAN_ASSAYS_TO_CULPRIT_DEFAULT} → "
+        f"{V.MEAN_ASSAYS_TO_CULPRIT_OURS}** (default panel → ours)\n"
+        f"- Killer assay in top-3: **{V.TOP3_OURS}** vs **{V.TOP3_DEFAULT} (default)**\n"
+        f"- **{V.MONEY_WINS} genuine non-obvious wins** (pergolide, cabergoline, methysergide → "
+        f"5-HT2B; rimonabant, taranabant → CB1; alosetron → 5-HT3)\n\n"
+        f"**Per-target discrimination (AUC, §4):** hERG {V.PER_TARGET_AUC['hERG']}, "
+        f"SERT {V.PER_TARGET_AUC['SERT']}, AChE {V.PER_TARGET_AUC['AChE']}, "
+        f"MAO-A {V.PER_TARGET_AUC['MAO-A']}.\n\n"
+        f"**Scaffold-split:** {V.SCAFFOLD_POOLED} pooled / {V.SCAFFOLD_NOVEL_ISOLATED} "
+        f"novel-isolated.  **Ablation:** naive {V.ABLATION_NAIVE} vs R4 {V.ABLATION_R4}."
+    )
+    st.markdown("**Killer-assay rank — default panel vs ours (10 buried drugs):**")
+    rank_df = pd.DataFrame(
+        [{"Default panel": d, "Ours": o} for _drug, d, o in V.BURIED_RANK_PAIRS],
+        index=[drug for drug, _d, _o in V.BURIED_RANK_PAIRS],
+    )
+    st.bar_chart(rank_df)
+    st.caption("Lower is better (rank 1 = killer assay run first). Fenfluramine / "
+               "dexfenfluramine / sibutramine are metabolite-active — the documented boundary "
+               "of a parent-structure method.")
 
 # ---- input ----
 if "smiles" not in st.session_state:

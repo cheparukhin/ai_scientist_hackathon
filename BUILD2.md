@@ -145,7 +145,7 @@ app/
   on hERG (validation anchor only); (d) advantage is conditional on novelty (known-analog flag).
 - **Acceptance:** AppTest → an expander labelled with "Scope" exists (`at.expander` non-empty).
 
-### [ ] N4 — Validation panel (`streamlit_app.py`)
+### [x] N4 — Validation panel (`streamlit_app.py`)
 - Add a "Validation — measured on 20 historical failures (leave-one-out)" panel/expander with
   the FINDINGS numbers **verbatim, cited to `experiments/derisk/expanded/FINDINGS.md`**:
   buried mean assays-to-culprit **11.3 → 3.8**, top-3 **7/10 vs 1/10 (default)**, **6 non-obvious
