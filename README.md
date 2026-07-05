@@ -84,10 +84,21 @@ hides rimonabant *and its withdrawn cousins*. Now the nearest single *failed dru
 matching still recovers CB1 at **z ≈ +10.8** from *other* CB1 ligands that never failed — evidence
 the signal is the shared binding mechanism, not memorization of the drug itself.
 
-The early research compared this against 2D fingerprint matching,
-feature/pharmacophore fingerprints, and 3D shape matching. Off-target class
-matching is the useful core for novel chemotypes because it can recover a shared
-binding mechanism even when no single failed drug looks similar.
+### Why this and not 3D (or pharmacophores)?
+
+The engine is **2D throughout — it has never used 3D**. During de-risking we evaluated the fancier
+alternatives head-to-head and let the evidence decide (`experiments/`):
+
+- **3D shape matching** (USRCAT, 30 conformers per molecule; `experiments/usrcat_experiment.py`) —
+  improved retrieval rank for **4/7** failure-pairs but **worsened 3/7**, with a single clean
+  rescue. A weak, unreliable supplement, ~30× the compute — **tested and not adopted.**
+- **Feature / pharmacophore fingerprints** (FCFP4, Gobbi) — only a 1.3–1.5× lift, absolute
+  similarity still ~0.15–0.25 — **doesn't rescue the mechanistic links.**
+
+Off-target class matching (2D ECFP4 against the whole ligand class) is the core that won: it
+recovers a shared binding mechanism for novel chemotypes even when no single failed drug looks
+similar, and it's cheap. So there was no "switch away from 3D" — **3D was a candidate method we
+rejected on evidence, never the shipped engine.**
 
 ## What The Evidence Supports
 
