@@ -19,6 +19,12 @@ except ModuleNotFoundError:  # when imported as app.agent
 
 MODEL = "claude-opus-4-8"
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+try:
+    _REF = json.load(open(os.path.join(_HERE, "data", "reference_failures.json")))
+except Exception:
+    _REF = {}
+
 SYSTEM = (
     "You are a medicinal-chemistry safety advisor writing one short paragraph for a "
     "drug-discovery team. You are given ONLY structured evidence retrieved by a "
@@ -31,6 +37,11 @@ SYSTEM = (
     "(hepatotoxicity) toxicity - do not imply the molecule is 'clear'; note this scope limit.\n"
     "- If the evidence says the candidate is a known analog of a failed drug, say a simple "
     "structure lookup already flags it and the tool adds most value on genuinely novel molecules.\n"
+    "- If evidence includes demo_mode with recovered_its_liability=false, the leave-one-out demo "
+    "HID the drug AND its structural cousins and the tool could NOT recover the hidden liability; "
+    "say so honestly - the top assay shown is a different, weaker signal, and frame it as the "
+    "engine's honest limit. Do NOT present it as a success. If recovered_its_liability=true, you "
+    "MAY note the liability was recovered without the drug (or its family) being visible.\n"
     "- Name the shared mechanism/off-target, the linked failed drug(s), and recommend the "
     "first assay to run and why (severity + resemblance to withdrawn/failed drugs).\n"
     "- If model_predicted_modules are present, you MAY add ONE sentence on any liver, "
@@ -106,6 +117,19 @@ def _evidence_from(result, plan, m2=None):
         "weak_coverage": result["flags"]["weak_coverage"],
         "scope_note": "Off-target-mediated failures only; blind to metabolite and hepatotoxicity.",
     }
+    # Demo (leave-one-out) mode: did we recover the SAME liability we hid? If the headline
+    # target is NOT the hidden drug's real culprit, the mechanism was carried by the excluded
+    # cousins and we must report that honestly (never as a success).
+    matched = result.get("loo_matched_ref")
+    if result.get("loo") and matched:
+        rmeta = _REF.get(matched, {})
+        culprit_key = rmeta.get("culprit_target_key")
+        ev["demo_mode"] = {
+            "hidden_drug": matched,
+            "hidden_culprit_target": rmeta.get("culprit_target"),
+            "hidden_culprit_organ": rmeta.get("organ"),
+            "recovered_its_liability": bool(culprit_key and culprit_key == head["target_key"]),
+        }
     m2s = _m2_summary(m2)
     if m2s:
         ev["model_predicted_modules"] = m2s
@@ -120,7 +144,23 @@ def _fallback(ev):
                 "It falls outside the chemical space the tool can judge, so no test ranking is "
                 "offered. The tool is in any case blind to metabolite-driven and liver toxicity.")
     top = ev["top_liability"]
+    demo = ev.get("demo_mode")
     parts = []
+
+    # Demo mode that did NOT recover the hidden liability: lead with the honest limit and stop —
+    # the top assay shown is a different (therapeutic / weaker) signal, not a win.
+    if demo and not demo["recovered_its_liability"]:
+        return (
+            f"Demo mode hid {demo['hidden_drug'].title()} and its close structural cousins. With "
+            f"them gone, the tool could not re-derive its real {demo['hidden_culprit_target']} "
+            f"liability ({demo['hidden_culprit_organ']}) — that signal was carried almost entirely "
+            f"by the cousins we removed. The strongest remaining match is the {top['assay']} "
+            f"(moved to #{top['our_rank']} from #{top['default_panel_rank']}), but that is a "
+            f"different, weaker signal, not the hidden mechanism. This is the engine's honest limit "
+            f"under a strict leave-one-out: it earns its keep on novel chemotypes whose off-target "
+            f"has other known ligands, not on drugs whose only lookalikes are their own withdrawn "
+            f"family. Scope: off-target effects only; blind to metabolite-driven and liver toxicity.")
+
     if not top["any_liability_flagged"]:
         parts.append(
             f"No strong off-target liability was flagged for this candidate; the highest-priority "
@@ -139,6 +179,11 @@ def _fallback(ev):
             cite = linked[0].get("citation")
             if cite:
                 parts.append(f"Source: {cite}")
+        elif demo and demo["recovered_its_liability"]:
+            parts.append(
+                f"This is the proof point: demo mode hid {demo['hidden_drug'].title()} and every "
+                f"known failure at this target, yet the {top['assay']} ranking was recovered from "
+                f"other molecules alone — not from recognising the candidate itself.")
         else:
             parts.append(
                 "That ranking comes from other molecules linked to this target in the database, not "
