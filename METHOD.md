@@ -38,7 +38,7 @@ each off-target** (its ChEMBL ligands), taking the mean of the top-5 similaritie
 A candidate can resemble **no single failed drug** yet still match a target's *ligand class* — and
 that class match is what flags the shared mechanism. Validated in E4: comparing to the class,
 terfenadine scores **0.57 (z = +6.4)** at hERG versus **0.19** pairwise; across 6 drugs the correct
-mechanism was the top-scoring target for **4/6** and above background for **all 6**.
+mechanism was the top-scoring of the 3 tested targets for **4/6** and above background for **all 6**.
 
 **Worked example — rimonabant at CB1** (reproducible in-app under *Show the calculation*):
 

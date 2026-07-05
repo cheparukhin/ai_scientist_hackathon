@@ -268,9 +268,11 @@ if run or smiles:
             extra = ""
             if hr != 1:
                 top_assay = plan["rows"][0]["assay_name"]
-                extra = (f" The **{top_assay}** scores higher on raw class similarity and leads our "
-                         f"plan, but the **{head['assay_name']}** is where your candidate resembles a "
-                         f"drug that *actually failed in the clinic* — so it's the liability we surface.")
+                extra = (f" The **{top_assay}** ranks above it in our plan (higher "
+                         f"severity-weighted resemblance, often the drug's own on-target "
+                         f"pharmacology), but the **{head['assay_name']}** is where your candidate "
+                         f"resembles a drug that *actually failed in the clinic* — so it's the "
+                         f"liability we surface.")
             st.markdown(
                 f"This candidate resembles drugs that **failed or were withdrawn in the clinic** "
                 f"for **{organ}**. A standard panel runs that test **#{head['default_rank']}** — "
