@@ -95,9 +95,21 @@ mc, lc, rc = st.columns(3)
 with mc:
     with st.expander("Method — how the score is computed"):
         st.markdown(
+            "**The key idea — same 2D similarity, different question.** Comparing a candidate to each "
+            "known *failed drug* one-by-one barely works: a molecule rarely looks like the specific "
+            "drug it will fail alongside (2D similarity of real failure-pairs is only ~0.05–0.19). So "
+            "instead of *candidate → single failed drug*, we score **candidate → the whole class of "
+            "molecules known to hit each off-target**. A candidate can resemble *no single failed "
+            "drug* yet still match that target's ligand *class* — which is what flags the shared "
+            "mechanism. The similarity metric is the ordinary 2D one; **what changed is the reference "
+            "set we compare against.**\n\n"
+        )
+        st.markdown(
             f"The candidate is scored against an **18-target secondary-pharmacology safety panel** "
             f"(aligned to Bowes et al., *Nat Rev Drug Discov* 2012). For **each** target:\n\n"
-            f"1. **Fingerprint** the candidate — ECFP4 (Morgan radius 2, 2048-bit; RDKit).\n"
+            f"1. **Fingerprint** the candidate — ECFP4 (Morgan radius 2, 2048-bit; RDKit). This turns "
+            f"the structure into a bit-vector of its substructures; **Tanimoto similarity** = the "
+            f"fraction of substructures two molecules share (0 = nothing in common, 1 = identical).\n"
             f"2. **Compare to that target's known actives** from **ChEMBL** (pChEMBL ≥ 6; "
             f"IC50 / Ki / Kd) — e.g. 1,483 hERG binders, 1,266 CB1 binders.\n"
             f"3. **Resemblance** = the **mean of the top-5 Tanimoto similarities** to those actives. "
@@ -308,12 +320,29 @@ if run or smiles:
         n_act = sum(1 for ik, _f in eng.target_fps[tkey] if ik not in _excl)
         removed_note = (f"  _(demo mode removed {n_full - n_act} of them — this drug and its "
                         f"mechanistic cousins — before scoring)_" if n_act < n_full else "")
+        na_name = (result["nearest_analog"]["name"] or "—")
+        na_sim = result["nearest_analog"]["sim"] or 0.0
         with st.expander("Show the calculation for this test"):
             st.markdown(
-                f"Scoring the candidate at **{tsym}** ({head['assay_name']}):\n\n"
+                f"**Same 2D similarity, two different references** — this is the whole idea:\n\n"
+                f"| Approach | What it compares | Result |\n"
+                f"|---|---|---|\n"
+                f"| Naive (drug-to-drug) | candidate → nearest single *failed drug* | "
+                f"{na_name.title()} @ **{na_sim:.0%}** |\n"
+                f"| **Class matching (ours)** | candidate → **{n_act:,}** known {tsym} binders, "
+                f"mean top-5 | raw {raw:.3f} → **z {head_z:+.1f}** |\n"
+            )
+            if na_sim < 0.5 and head_z >= 2:
+                st.markdown(
+                    f"→ The candidate resembles **no single failed drug** (naive matching would miss "
+                    f"it), yet strongly matches the **{tsym} ligand class**. That gap is exactly what "
+                    f"this tool adds."
+                )
+            st.markdown(
+                f"**The class-matching arithmetic at {tsym} ({head['assay_name']}):**\n\n"
                 f"1. Candidate fingerprint: ECFP4 (Morgan r=2, 2048-bit).\n"
                 f"2. Mean of the **top-5 Tanimoto** similarities to the **{n_act:,} known {tsym} "
-                f"binders** used from ChEMBL (pChEMBL ≥ 6)  =  **{raw:.3f}**{removed_note}.\n"
+                f"binders** from ChEMBL (pChEMBL ≥ 6)  =  **{raw:.3f}**{removed_note}.\n"
                 f"3. Same measure across the **{_N_BG}-drug background**: mean **{bg_mean:.3f}**, "
                 f"SD **{bg_sd:.3f}**.\n"
                 f"4. **z = ({raw:.3f} − {bg_mean:.3f}) / {bg_sd:.3f} = {head_z:+.1f} σ**  "

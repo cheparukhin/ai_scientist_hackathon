@@ -39,9 +39,20 @@ app uses a deterministic grounded fallback.
 
 ## How The Main Engine Works
 
-The main engine is **off-target class matching**:
+The main engine is **off-target class matching**.
 
-1. For each safety-panel target, collect known active molecules from ChEMBL.
+**First, the point that trips people up: we did *not* abandon 2D similarity — we changed what we
+compare it against.** The early research found that comparing a candidate to each known *failed
+drug* one-by-one barely works: a molecule rarely looks like the specific drug it will fail alongside
+(pairwise 2D similarity of real failure-pairs is only **0.05–0.19**). The fix keeps the same 2D
+ECFP4 Tanimoto metric but swaps the reference set — from *candidate → single failed drug* to
+**candidate → the whole class of molecules known to hit each off-target**. A candidate can resemble
+*no single failed drug* yet still match a target's ligand class, and that class match is what flags
+the shared mechanism.
+
+Concretely, for each safety-panel target:
+
+1. Collect known active molecules for that target from ChEMBL (the "class").
 2. Compare the candidate to the whole active class, not just one failed drug.
 3. Use the mean top-5 ECFP4 Tanimoto similarity as the target score.
 4. Convert that score to a z-score against a fixed 25-drug background of ordinary marketed drugs.
@@ -65,9 +76,13 @@ is reproducible under *Show the calculation* in the app:
 
 In words: rimonabant is **~11 standard deviations** more similar to known CB1 binders than a
 typical marketed drug. That is **similarity-enrichment, not a probability of harm** — no dose,
-exposure, or metabolism is modelled. Turn on **Demo mode** and the tool hides rimonabant *and its
-withdrawn cousins*, yet still recovers CB1 at **z ≈ +10.8** from *other* CB1 ligands — evidence the
-signal is the shared mechanism, not memorization of the drug itself.
+exposure, or metabolism is modelled.
+
+**This is also where naive matching and class matching separate.** Turn on **Demo mode**: the tool
+hides rimonabant *and its withdrawn cousins*. Now the nearest single *failed drug* is only
+**0.17** Tanimoto (naive drug-to-drug matching would see nothing and miss the liability), yet class
+matching still recovers CB1 at **z ≈ +10.8** from *other* CB1 ligands that never failed — evidence
+the signal is the shared binding mechanism, not memorization of the drug itself.
 
 The early research compared this against 2D fingerprint matching,
 feature/pharmacophore fingerprints, and 3D shape matching. Off-target class
