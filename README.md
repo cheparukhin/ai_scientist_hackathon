@@ -44,8 +44,30 @@ The main engine is **off-target class matching**:
 1. For each safety-panel target, collect known active molecules from ChEMBL.
 2. Compare the candidate to the whole active class, not just one failed drug.
 3. Use the mean top-5 ECFP4 Tanimoto similarity as the target score.
-4. Convert that score to a z-score against a background set.
-5. Rank assays after applying severity and actionability weights.
+4. Convert that score to a z-score against a fixed 25-drug background of ordinary marketed drugs.
+5. Rank assays by that z weighted by a per-target severity tier, then map the top target to its named assay.
+
+### Worked example — rimonabant at CB1 (the exact numbers the app shows)
+
+Rimonabant was withdrawn for psychiatric/suicidality acting through the **CB1** receptor —
+a liability a default panel wouldn't counter-screen until position **#15**. Every step below
+is reproducible under *Show the calculation* in the app:
+
+| Step | Value |
+|---|---|
+| Candidate fingerprint | ECFP4 (Morgan r=2, 2048-bit) |
+| Known CB1 binders compared (ChEMBL, pChEMBL ≥ 6) | 1,266 |
+| Mean of the top-5 Tanimoto to that class (raw score) | 0.940 |
+| Background over 25 ordinary drugs: mean / SD | 0.229 / 0.062 |
+| **z = (0.940 − 0.229) / 0.062** | **+11.4** |
+| Flagged (z ≥ 2)? | yes |
+| Default panel rank → our rank | **#15 → #1** |
+
+In words: rimonabant is **~11 standard deviations** more similar to known CB1 binders than a
+typical marketed drug. That is **similarity-enrichment, not a probability of harm** — no dose,
+exposure, or metabolism is modelled. Turn on **Demo mode** and the tool hides rimonabant *and its
+withdrawn cousins*, yet still recovers CB1 at **z ≈ +10.8** from *other* CB1 ligands — evidence the
+signal is the shared mechanism, not memorization of the drug itself.
 
 The early research compared this against 2D fingerprint matching,
 feature/pharmacophore fingerprints, and 3D shape matching. Off-target class

@@ -49,6 +49,12 @@ priority; Layer-4 target→assay map; descriptor-box abstain gate
 MAX-aggregation. Liver/mito/reactive-metabolite checks are lower-confidence organ-tox modules and
 do not change the validated off-target headline.
 
+> **Why app numbers differ slightly from `experiments/`.** The app scores against a **live ChEMBL
+> fetch** (`panel_actives.json`), while the experiment scripts froze a snapshot. So a z-score can
+> shift a little between the two — e.g. terfenadine→hERG is **≈ +6.6 in the app** vs **+6.4 in the
+> E4 snapshot** (`experiments/score.py`). The pipeline and conclusions are identical; only the
+> underlying ChEMBL active set is refreshed.
+
 ## Honesty guardrails (enforced in code + copy)
 
 - Scores are **z-score / N× / rank / 0–100 priority — never P(harm)**.
