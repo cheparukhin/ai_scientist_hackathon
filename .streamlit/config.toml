@@ -1,0 +1,15 @@
+[theme]
+# Clean clinical/scientific palette — indigo accent on near-white, high contrast.
+base = "light"
+primaryColor = "#4f46e5"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f4f5fb"
+textColor = "#14142b"
+font = "sans serif"
+
+[server]
+# Steadier for a live demo: no auto-rerun mid-talk, keep the tab warm.
+runOnSave = false
+
+[browser]
+gatherUsageStats = false

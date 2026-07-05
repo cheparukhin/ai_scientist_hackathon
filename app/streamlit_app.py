@@ -20,6 +20,27 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from core import EXAMPLES, build_plan, score_candidate, get_engine  # noqa: E402
 from agent import narrative_report  # noqa: E402
+
+
+@st.cache_data(show_spinner=False)
+def _narrative(_result, _plan, _m2, cache_key):  # noqa: E402
+    """Cache the (possibly slow) LLM narrative by a stable content key, so revisiting
+    the same molecule during a live demo is instant instead of a fresh Opus call.
+    The dict args are underscore-prefixed so Streamlit keys only on `cache_key`."""
+    return narrative_report(_result, _plan, _m2)
+
+
+def _narrative_key(result, plan, m2):
+    return json.dumps({
+        "s": result.get("canonical_smiles"),
+        "loo": result.get("loo"),
+        "status": result.get("status"),
+        "bt": result.get("best_target"),
+        "bz": result.get("best_z"),
+        "met": (result.get("metabolite") or {}).get("canonical_smiles"),
+        "plan": bool(plan),
+        "m2": bool(m2),
+    }, sort_keys=True)
 from render import mol_png, mechanism_graph_dot  # noqa: E402
 from outcome_modules import outcome_panel  # noqa: E402
 import validation as V  # noqa: E402
@@ -189,7 +210,7 @@ if run or smiles:
                        "are deliberately refused.")
         with st.spinner("Writing summary…"):
             st.markdown("##### Plain-English summary")
-            st.write(narrative_report(result))
+            st.write(_narrative(result, None, None, _narrative_key(result, None, None)))
         st.stop()
 
     # ---------------- OK ----------------
@@ -453,7 +474,7 @@ if run or smiles:
     st.markdown("### Plain-English summary")
     key_set = bool(os.environ.get("ANTHROPIC_API_KEY"))
     with st.spinner("Writing summary…"):
-        st.write(narrative_report(result, plan, m2))
+        st.write(_narrative(result, plan, m2, _narrative_key(result, plan, m2)))
     if not key_set:
         st.caption("_Auto-generated from the evidence above (deterministic). "
                    "Set ANTHROPIC_API_KEY for the LLM-written version._")
