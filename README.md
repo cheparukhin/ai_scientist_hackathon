@@ -31,6 +31,8 @@ app uses a deterministic grounded fallback.
 
 | File | Use it for |
 |---|---|
+| [`METHOD.md`](METHOD.md) | **The design story in one page** — why the engine is what it is (start here for "how it works"). |
+| [`DEMO.md`](DEMO.md) | The guided ~4-minute demo click-path. |
 | [`SUMMARY.md`](SUMMARY.md) | One-page product and evidence summary. |
 | [`app/README.md`](app/README.md) | How to run, test, and understand the demo app. |
 | [`experiments/README.md`](experiments/README.md) | Map of the reproducible experiments and their outputs. |
