@@ -29,7 +29,8 @@ A tight ~4-minute click path. Every number below is what the app actually render
 
 ## Beat 3 — Pergolide: consequence beats likelihood  *(click Pergolide, Demo mode OFF)*
 - Verdict: **▶ Run the 5-HT2B counter-screen first** — rank **#11 → #2**, the fen-phen valvulopathy mechanism.
-- The teaching point: "Pergolide's *strongest* raw resemblance is actually to D2 — its **therapeutic** target. The tool still puts **5-HT2B valvulopathy** first, because it's grounded in drugs that *died* for it. Consequence, weighted over raw similarity."
+- Verdict reads: **"Prioritize the 5-HT2B counter-screen — we run it #2."** A standard panel wouldn't reach it until **#11**.
+- The teaching point: "Pergolide's *strongest* raw resemblance is to **D2 — its therapeutic target** — which our plan lists at #1. But the tool **surfaces 5-HT2B** as the liability to watch, because that's where the candidate resembles a drug that was *actually withdrawn* (valvulopathy). Raw similarity ranks the plan; clinical grounding tells you which flag matters." (The app says this in-line under the verdict.)
 
 ## Beat 4 — A genuinely novel candidate  *(click Novel candidate)*
 - Verdict: a **class-level** match (D2 binder class), and the copy says plainly: *"a class-level structural match, not a link to a specific clinical failure — but still worth screening early."*

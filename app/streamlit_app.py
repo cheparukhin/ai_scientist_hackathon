@@ -84,10 +84,10 @@ ENDPOINT_PLAIN = {"hepatotox": "Liver injury", "mito": "Mitochondrial"}
 # ======================================================================================
 st.title("🧪 Which safety test should you run first?")
 st.markdown(
-    "Paste a drug candidate. This tool **reorders its safety tests** so the one most likely "
-    "to end the program runs first — by matching it to real drugs that were **withdrawn or "
-    "failed in the clinic** for the same off-target reason. It tells you *what to run first*, "
-    "not whether a molecule is safe."
+    "Paste a drug candidate. This tool checks whether it resembles the **known binders of each "
+    "safety off-target** — the targets that sank real **withdrawn or failed drugs** — and "
+    "**reorders the safety panel** so the test most likely to end the program runs first. It "
+    "tells you *what to run first*, not whether a molecule is safe."
 )
 
 # collapsed method / limits / track-record — visible but out of the way
@@ -119,9 +119,12 @@ with mc:
             f"the mean resemblance of a fixed **{_N_BG}-drug background** of ordinary marketed drugs "
             f"(metformin, aspirin, …). **z = (candidate − background mean) / background SD**; "
             f"**z ≥ 2 flags** a target.\n\n"
-            f"Tests are ranked by **z weighted by a per-target severity tier**; the headline is the "
-            f"highest-severity target where the candidate resembles a drug that *actually failed in "
-            f"the clinic*. The **z-score is similarity-enrichment, not a probability of harm** — no "
+            f"Tests are ranked by **z weighted by a per-target severity tier**. The **headline** — "
+            f"the one liability we feature — is the highest-*priority* target where the candidate "
+            f"resembles a drug that *actually failed in the clinic* (grounding). It **may not be the "
+            f"plan's #1**: a higher raw-similarity target (sometimes the drug's own therapeutic "
+            f"target) can lead the list, while the headline flags the clinically-grounded liability. "
+            f"The **z-score is similarity-enrichment, not a probability of harm** — no "
             f"dose, exposure, or metabolism is modelled. Every result includes the raw numbers "
             f"(open *Show the calculation* under any result)."
         )
@@ -254,15 +257,27 @@ if run or smiles:
     with top_r:
         organ = head["organ"]
         tsym_head = head["target_key"].split("_")[0]
+        hr = head["our_rank"]
+        # "Run first" only when the headline really is our #1; otherwise name its true position.
+        lead = (f"▶ Run the {head['assay_name']} first" if hr == 1
+                else f"▶ Prioritize the {head['assay_name']} — we run it #{hr}")
         if flagged_head and not is_herg and grounded_head:
-            st.subheader(f"▶ Run the {head['assay_name']} first")
+            st.subheader(lead)
+            # When the grounded killer isn't our #1, a higher raw-similarity target leads the
+            # plan (often the drug's own on-target pharmacology). Say so — don't hide it.
+            extra = ""
+            if hr != 1:
+                top_assay = plan["rows"][0]["assay_name"]
+                extra = (f" The **{top_assay}** scores higher on raw class similarity and leads our "
+                         f"plan, but the **{head['assay_name']}** is where your candidate resembles a "
+                         f"drug that *actually failed in the clinic* — so it's the liability we surface.")
             st.markdown(
                 f"This candidate resembles drugs that **failed or were withdrawn in the clinic** "
                 f"for **{organ}**. A standard panel runs that test **#{head['default_rank']}** — "
-                f"we move it to **#{head['our_rank']}**."
+                f"we run it **#{head['our_rank']}**.{extra}"
             )
         elif flagged_head and not is_herg:
-            st.subheader(f"▶ Run the {head['assay_name']} first")
+            st.subheader(lead)
             if loo and result.get("loo_matched_ref"):
                 st.markdown(
                     f"With the known failed drugs at this target **hidden** (demo mode), the "
@@ -362,13 +377,14 @@ if run or smiles:
             f"{na['name'].title()} and re-derives the answer from scratch."
         )
 
-    # ---------------- WHY: the failed drugs it resembles ----------------
-    st.markdown("### Why — the real failed drugs it resembles")
+    # ---------------- WHY: real drugs that failed at this off-target ----------------
+    st.markdown("### Why — real drugs that failed at this off-target")
     head_evidence = head_row["evidence"] if (head_row and flagged_head) else []
     if head_evidence:
         st.markdown(
-            f"Its structure matches known binders of the off-target behind **{head['organ']}**. "
-            f"Drugs that hit this target and **failed or were withdrawn**:"
+            f"Your candidate matches the **known binders of the off-target** behind "
+            f"**{head['organ']}**. These are drugs that hit that same target and **failed or were "
+            f"withdrawn** in the clinic:"
         )
         ev_df = pd.DataFrame([{
             "Failed drug": e["name"].title(),

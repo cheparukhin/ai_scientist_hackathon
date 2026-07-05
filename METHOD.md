@@ -57,10 +57,14 @@ matching still recovers CB1 at **z ≈ +10.8** from *other* CB1 ligands that nev
 ## From a score to a decision
 Two more layers turn per-target enrichment into an assay plan:
 
-- **Consequence, not just likelihood.** Each off-target carries a severity/action tier, so a
-  high-severity liability grounded in *actually withdrawn* drugs outranks a benign high-similarity
-  hit. (This is why pergolide correctly headlines **5-HT2B valvulopathy**, above its higher raw
-  similarity to its own *therapeutic* D2 target.)
+- **Consequence, not just likelihood.** Two signals do different jobs. A per-target **severity
+  tier** gently reweights the plan order (a high-severity target isn't buried under a marginally
+  higher-scoring low-severity one). Separately, the **headline** — the one liability we feature — is
+  the highest-priority target where the candidate resembles a drug that *actually failed in the
+  clinic* (grounding), which need not be the plan's #1. Example: pergolide's raw similarity is
+  highest to its own *therapeutic* **D2** target, so D2 leads the plan; but the tool **headlines
+  5-HT2B valvulopathy** (our #2, vs the default panel's #11) because that's where pergolide
+  resembles an actually-withdrawn drug. Raw similarity ranks the plan; grounding chooses the flag.
 - **Map to a named assay** and tell the truth about confidence: mechanism-linked vs lower-confidence
   organ-tox modules vs **abstain** (out of applicability domain) vs **known-analog** (a plain lookup
   would already catch it).
