@@ -12,8 +12,8 @@ experiments/score.py / experiments/derisk/expanded/exp_score.py):
   3. known-analog flag: max single Tanimoto to any reference_failures drug >= 0.5.
   4. Metabolite: if given, score parent AND metabolite, aggregate per target by MAX.
 
-Honesty guardrails (BUILD.md sec 2) live in M2/UI copy; this module returns z-scores,
-N-fold enrichment and ranks - never a probability of harm.
+Honesty guardrails (see app/README "Honesty guardrails") live in M2/UI copy; this module
+returns z-scores, N-fold enrichment and ranks - never a probability of harm.
 """
 import json
 import math

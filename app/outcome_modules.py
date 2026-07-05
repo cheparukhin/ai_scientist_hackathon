@@ -7,7 +7,7 @@ Two model-predicted modules the validated M1 assays-to-culprit engine is blind t
     (mean-top5 ECFP4 Tanimoto to the endpoint's curated actives, z vs the SAME 25-drug
     background as core). This is similarity-ENRICHMENT, NOT P(harm).
 
-HONESTY (BUILD2 §2): everything here is z-score / similarity, never a probability. Tag
+HONESTY (see app/README "Honesty guardrails"): everything here is z-score / similarity, never a probability. Tag
 tier="model-predicted"; render below and visually separated from the M1 plan; never merge
 into the assays-to-culprit headline.
 """

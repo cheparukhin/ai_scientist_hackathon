@@ -69,6 +69,24 @@ Two more layers turn per-target enrichment into an assay plan:
   organ-tox modules vs **abstain** (out of applicability domain) vs **known-analog** (a plain lookup
   would already catch it).
 
+## Datasets — exactly what the shipped tool uses
+Every number above comes from these, and only these (counts are what's in the repo/cache):
+
+| Dataset | Provides | Role | Source / license |
+|---|---|---|---|
+| **ChEMBL** activities | **20,494** actives (pChEMBL ≥ 6; IC50/Ki/Kd) across the 18 panel off-targets, 70–1,563 per target | the ligand **classes** we score against — the engine's core | ChEMBL, CC-BY-SA (regenerable cache, gitignored) |
+| **Bowes et al. 2012**, *Nat Rev Drug Discov* | the 18-target secondary-pharmacology **safety panel** (`panel.json`) | defines *which* off-targets and their assays | published paper |
+| **Reference failure set** | **20** drugs withdrawn/failed/restricted for a panel off-target (5-HT2B, 5-HT3, CB1, Cav1.2, NET, hERG), each with a PMID + regulatory citation | the **clinical grounding** — severity + evidence + the known-analog flag | hand-curated from public PMIDs / regulatory records (`build_reference.py`) |
+| **Background set** | **25** ordinary marketed drugs (metformin, aspirin, …) | the z-score **denominator** (a lightweight stand-in comparator) | curated; a production build would swap in DILIrank/DICTrank No-concern classes |
+| **DILIrank / FDA-LTKB** | **20** hepatotoxic actives | lower-confidence **liver** read-across module | FDA public |
+| **Mitochondrial toxicants** (Nadanaciva & Will, 2007) | **12** actives | lower-confidence **mito** read-across module | published paper |
+| **RDKit BRENK/NIH catalog + 14 curated SMARTS** | reactive-substructure patterns | reactive-metabolite **structural alerts** (hypotheses) | RDKit (open) |
+| **Baseline panel order** | the default "standard practice" assay sequence | the **baseline** we reorder against and measure *assays-until-culprit* against | curated from standard secondary-pharmacology practice |
+
+**Two evidence tiers, kept separate by design.** The **validated off-target core** runs on ChEMBL + the reference failures + the background. The **liver / mito / reactive-metabolite** modules run on the DILIrank / mito / alert sets and are labelled *lower-confidence* everywhere — they never enter the validated ranking.
+
+**Licensing is clean for the MVP:** it uses only ChEMBL (CC-BY-SA), FDA-public tables, published papers, and open RDKit. The non-commercial sources in the memo's roadmap (DrugBank, SIDER, OFFSIDES) are **not** used here.
+
 ## What the validation proved — and its honest bounds
 - **The win, quantified (n=20 historical failures):** for buried off-target liabilities, *assays
   until culprit* fell from **11.3 → 3.8**; the killer test landed top-3 for **7/10** candidates vs

@@ -98,7 +98,7 @@ FDA-curated *ranked* lists — highest-quality organ-resolved labels; backbone o
 **PubChem** (name→structure resolution — verified reliable, note API now returns `SMILES`/`ConnectivitySMILES` properties), **ChEMBL** (CC-BY-SA; structures + bioactivity; MCP), **DrugBank** (annotations; non-commercial).
 
 ### 3e. Matched lower-liability comparator (the denominator — do not call it "safe")
-The class-conditional score needs a denominator. **"Approved" ≠ "safe."** Use **per-organ No-concern classes** (DILIrank *No-DILI-concern*, DICTrank *No-DICT-concern*) as the comparator, matched to the toxic set by scaffold / physchem / route where possible. In the de-risking we used a fixed 24-drug background set (see `experiments/score.py`) as a lightweight stand-in; a production build should upgrade to the matched No-concern comparator.
+The class-conditional score needs a denominator. **"Approved" ≠ "safe."** Use **per-organ No-concern classes** (DILIrank *No-DILI-concern*, DICTrank *No-DICT-concern*) as the comparator, matched to the toxic set by scaffold / physchem / route where possible. In the de-risking we used a fixed 25-drug background set (see `experiments/score.py`) as a lightweight stand-in; a production build should upgrade to the matched No-concern comparator.
 
 ---
 

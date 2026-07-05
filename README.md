@@ -31,13 +31,12 @@ app uses a deterministic grounded fallback.
 
 | File | Use it for |
 |---|---|
-| [`METHOD.md`](METHOD.md) | **The design story in one page** — why the engine is what it is (start here for "how it works"). |
+| [`METHOD.md`](METHOD.md) | **How it works, in one page** — the design story, the exact datasets used, and the honest bounds (start here). |
 | [`DEMO.md`](DEMO.md) | The guided ~4-minute demo click-path. |
 | [`SUMMARY.md`](SUMMARY.md) | One-page product and evidence summary. |
 | [`app/README.md`](app/README.md) | How to run, test, and understand the demo app. |
 | [`experiments/README.md`](experiments/README.md) | Map of the reproducible experiments and their outputs. |
-| [`toxicity-assay-recommender.md`](toxicity-assay-recommender.md) | Long-form research memo and pitch rationale. |
-| [`BUILD.md`](BUILD.md), [`BUILD2.md`](BUILD2.md) | Historical implementation specs for the MVP and phase-2 polish. |
+| [`toxicity-assay-recommender.md`](toxicity-assay-recommender.md) | Long-form research memo, novelty analysis, risks, and roadmap. |
 
 ## How The Main Engine Works
 

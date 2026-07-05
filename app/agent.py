@@ -2,7 +2,7 @@
 
 narrative_report(result, plan=None) -> str
 
-The agent is GROUNDED (BUILD.md sec 2.7): it receives ONLY the retrieved structured
+The agent is GROUNDED: it receives ONLY the retrieved structured
 evidence (targets, ranks, linked failed drugs + citations, flags) and is instructed to
 invent no drugs, mechanisms, or citations. If ANTHROPIC_API_KEY is unset or the SDK call
 fails, it degrades to a deterministic templated report so the app still runs.
