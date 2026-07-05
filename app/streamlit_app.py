@@ -197,7 +197,15 @@ if run or smiles:
     head = plan["headline"]
     head_row = next((r for r in plan["rows"] if r["target_key"] == head["target_key"]), None)
     flagged_head = bool(head["any_flagged"])
+    grounded_head = bool(head_row and head_row["grounded"])
     is_herg = head["target_key"] == "hERG_CHEMBL240"
+
+    # In demo mode, did we recover the SAME liability we hid? (headline target == the hidden
+    # drug's real culprit target). If not, the hidden drug's mechanism was carried by the
+    # cousins we removed — we say so honestly instead of claiming a false "proof point".
+    loo_ref_meta = _REF_FAILURES.get(result.get("loo_matched_ref") or "")
+    loo_culprit_key = loo_ref_meta.get("culprit_target_key") if loo_ref_meta else None
+    loo_recovered = bool(loo_culprit_key and loo_culprit_key == head["target_key"])
 
     # demo-mode confirmation
     if loo and result.get("loo_matched_ref"):
@@ -212,12 +220,31 @@ if run or smiles:
     # ---------------- VERDICT CARD ----------------
     with top_r:
         organ = head["organ"]
-        if flagged_head and not is_herg:
+        tsym_head = head["target_key"].split("_")[0]
+        if flagged_head and not is_herg and grounded_head:
             st.subheader(f"▶ Run the {head['assay_name']} first")
             st.markdown(
-                f"This candidate looks like drugs that failed for **{organ}**. A standard panel "
-                f"runs that test **#{head['default_rank']}** — we move it to **#{head['our_rank']}**."
+                f"This candidate resembles drugs that **failed or were withdrawn in the clinic** "
+                f"for **{organ}**. A standard panel runs that test **#{head['default_rank']}** — "
+                f"we move it to **#{head['our_rank']}**."
             )
+        elif flagged_head and not is_herg:
+            st.subheader(f"▶ Run the {head['assay_name']} first")
+            if loo and result.get("loo_matched_ref"):
+                st.markdown(
+                    f"With the known failed drugs at this target **hidden** (demo mode), the "
+                    f"candidate still lands on the **{tsym_head} binder class** (**{organ}**) "
+                    f"from the *remaining* molecules alone. A standard panel runs that test "
+                    f"**#{head['default_rank']}** — we move it to **#{head['our_rank']}**."
+                )
+            else:
+                st.markdown(
+                    f"This candidate resembles the known **{tsym_head} binder class** "
+                    f"(**{organ}**). No drug in our failed-drug set sits at this target, so this "
+                    f"is a **class-level structural match, not a link to a specific clinical "
+                    f"failure** — but it's still worth screening early. A standard panel runs "
+                    f"that test **#{head['default_rank']}** — we move it to **#{head['our_rank']}**."
+                )
         elif flagged_head and is_herg:
             st.subheader(f"▶ {head['assay_name']} (already standard)")
             st.markdown(
@@ -309,12 +336,26 @@ if run or smiles:
                 ic1.image(cand_png, caption="Your candidate", width=280)
                 ic2.image(drug_png, caption=f"{head_drug.title()} — failed for {head_evidence[0]['organ']}",
                           width=280)
-    elif flagged_head and loo and result.get("loo_matched_ref"):
+    elif loo and result.get("loo_matched_ref") and loo_recovered and flagged_head:
         st.success(
             f"**This is the proof point.** We hid every known failed drug for this target, yet "
             f"the tool still ranked the **{head['assay_name']}** first — recovered purely from "
             f"other molecules in the database, not from recognising "
             f"{result['loo_matched_ref'].title()} itself."
+        )
+    elif loo and result.get("loo_matched_ref") and not loo_recovered:
+        drug = result["loo_matched_ref"].title()
+        culprit_organ = (loo_ref_meta or {}).get("organ", "its known liability")
+        culprit_name = (loo_ref_meta or {}).get("culprit_target", loo_culprit_key or "its off-target")
+        st.info(
+            f"**Honest demo result.** With **{drug}** *and its close structural cousins* hidden, "
+            f"the tool could **not** re-derive its real **{culprit_name}** liability "
+            f"(*{culprit_organ}*) from what's left — that signal was carried almost entirely by "
+            f"the cousins we removed. The strongest remaining match is the "
+            f"**{head['assay_name']}**. This is the engine's honest limit under a strict "
+            f"leave-one-out: it wins on **novel** chemotypes whose off-target has *other* known "
+            f"ligands, not on drugs whose only lookalikes are their own withdrawn family. "
+            f"_Try **Rimonabant** in demo mode for a clean self-recovery._"
         )
     else:
         st.caption("No known failed drug is closely linked to the top-ranked test for this candidate.")

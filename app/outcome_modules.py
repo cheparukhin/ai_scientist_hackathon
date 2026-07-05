@@ -4,7 +4,7 @@ Two model-predicted modules the validated M1 assays-to-culprit engine is blind t
   - reactive_alerts(smiles): reactive-metabolite structural ALERTS (hypotheses, not
     predictions) - RDKit BRENK/NIH FilterCatalog + curated bioactivation SMARTS.
   - outcome_scores(smiles): hepatotox / mito read-across - SAME R4 backbone as core.py
-    (mean-top5 ECFP4 Tanimoto to the endpoint's curated actives, z vs the SAME 24-drug
+    (mean-top5 ECFP4 Tanimoto to the endpoint's curated actives, z vs the SAME 25-drug
     background as core). This is similarity-ENRICHMENT, NOT P(harm).
 
 HONESTY (BUILD2 §2): everything here is z-score / similarity, never a probability. Tag
@@ -45,7 +45,7 @@ def _fp(smi):
 
 
 class _OutcomeEngine:
-    """Loads curated outcome actives + the shared 24-drug background once."""
+    """Loads curated outcome actives + the shared 25-drug background once."""
 
     def __init__(self):
         self.actives = json.load(open(os.path.join(DATA, "outcome_actives.json")))
@@ -62,7 +62,7 @@ class _OutcomeEngine:
                     lst.append((d["name"], f, d["citation"]))
             self.endpoint_fps[ep] = lst
 
-        # SAME 24-drug background as core.py
+        # SAME 25-drug background as core.py
         self.bg_fps = []
         for name, smi in background.items():
             if name.startswith("_"):

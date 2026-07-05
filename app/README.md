@@ -39,9 +39,10 @@ degrades to a deterministic, fully-grounded templated report and still runs.
 
 ## Method (reused from `experiments/`, not reinvented)
 
-The main engine is **off-target class matching**.
+The main engine is **off-target class matching**. The app ships an 18-target MVP subset of
+the 37 serviceable Bowes/SAFETYscan panel targets (coverage census in `experiments/`).
 Per panel target: mean-top5 ECFP4 (Morgan r=2, 2048-bit) Tanimoto to that target's ChEMBL
-actives, z-scored vs a 24-drug background (`experiments/score.py`). **No leave-one-out** on the
+actives, z-scored vs a 25-drug background (`experiments/score.py`). **No leave-one-out** on the
 live path; leave-one-out exists only for demo/validation mode. Layer-3b severity re-weight →
 priority; Layer-4 target→assay map; descriptor-box abstain gate
 (`experiments/derisk/abstain/calibrate_ad.py`); known analog flag at Tanimoto ≥ 0.5; metabolite
@@ -66,9 +67,11 @@ app/
                    panel_actives.json (gitignored cache)
   fetch_panel.py   builds panel_actives.json from ChEMBL
   build_reference.py  builds reference_failures.json from experiments/derisk/drugs.json + citations
+  build_outcomes.py   validates/normalizes outcome_actives.json + reactive_alerts.json
   core.py          score_candidate() + build_plan() — the engine
   outcome_modules.py lower-confidence liver/mito/reactive-metabolite checks
   render.py        molecule drawings + mechanism graph
+  validation.py    the measured-numbers panel (cited to experiments/derisk FINDINGS)
   agent.py         narrative_report() — grounded Anthropic SDK, templated fallback
   streamlit_app.py the demo UI
   tests/          core, outcome-module, and Streamlit render checks

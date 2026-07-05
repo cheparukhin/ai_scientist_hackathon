@@ -7,7 +7,7 @@ experiments/score.py / experiments/derisk/expanded/exp_score.py):
   1. Parse + canonicalize. Run the descriptor-box ABSTAIN gate
      (experiments/derisk/abstain/calibrate_ad.py). No nearest-neighbour rule.
   2. Per panel target: mean-top5 ECFP4 (Morgan r=2, 2048-bit) Tanimoto to that
-     target's ChEMBL actives, z-scored vs the 24-drug background. **No leave-one-out**
+     target's ChEMBL actives, z-scored vs the 25-drug background. **No leave-one-out**
      (a real novel candidate removes nothing).
   3. known-analog flag: max single Tanimoto to any reference_failures drug >= 0.5.
   4. Metabolite: if given, score parent AND metabolite, aggregate per target by MAX.
